@@ -48,7 +48,7 @@ const Navbar = () => {
           <div className="container flex flex-col gap-4">
             <a href="https://mccullarproperties.com/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 py-3 border-b border-luxury-khaki/10">
               <span className="text-luxury-khaki text-xs uppercase tracking-wide">Proudly Brokered By</span>
-              <img src="/lovable-uploads/9a513a12-c1b4-46c7-a49e-f3dd8e0857a8.png" alt="McCullar Properties Group" className="h-6 w-auto" />
+              <img alt="McCullar Properties Group" className="h-6 w-auto" src="/lovable-uploads/6635c4f1-9b1d-4ef5-949a-4b78d5df568e.png" />
             </a>
             <a href="#services" className="text-white font-medium py-2 border-b border-luxury-khaki/10 uppercase text-sm tracking-wider" onClick={() => setMobileMenuOpen(false)}>Services</a>
             <a href="#properties" className="text-white font-medium py-2 border-b border-luxury-khaki/10 uppercase text-sm tracking-wider" onClick={() => setMobileMenuOpen(false)}>Properties</a>
