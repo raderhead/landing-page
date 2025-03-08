@@ -1,14 +1,12 @@
-
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Award, Building, CheckCircle, Briefcase, BadgeDollarSign, Key, Percent, FileCheck } from "lucide-react";
-
 const AboutSection = () => {
   return <section id="about" className="section bg-luxury-black text-white">
       <div className="container">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
-            <Badge className="bg-luxury-gold text-luxury-black mb-4 uppercase tracking-wider font-medium">About Josh Rader</Badge>
+            
             <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">Licensed Commercial Real Estate Agent in Abilene, Texas</h2>
             <p className="text-lg mb-6 text-white/80 leading-relaxed">
               With over 10 years of experience in the Abilene commercial real estate market, Josh Rader has established himself as a trusted advisor to businesses, investors, and property owners throughout the region.
@@ -100,5 +98,4 @@ const AboutSection = () => {
       </div>
     </section>;
 };
-
 export default AboutSection;
