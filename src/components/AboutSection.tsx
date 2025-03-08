@@ -1,7 +1,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Award, Building, CheckCircle, Briefcase, BadgeDollarSign, Key, FilePercent, FileCheck } from "lucide-react";
+import { Award, Building, CheckCircle, Briefcase, BadgeDollarSign, Key, Percent, FileCheck } from "lucide-react";
 
 const AboutSection = () => {
   return <section id="about" className="section bg-luxury-black text-white">
@@ -74,7 +74,7 @@ const AboutSection = () => {
                   <span>Owner Financing Experience</span>
                 </div>
                 <div className="flex items-start">
-                  <FilePercent className="h-5 w-5 text-luxury-gold mr-2 mt-1 flex-shrink-0" />
+                  <Percent className="h-5 w-5 text-luxury-gold mr-2 mt-1 flex-shrink-0" />
                   <span>Conventional Loan Experience</span>
                 </div>
               </div>
