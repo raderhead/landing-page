@@ -1,7 +1,7 @@
-
 import { Button } from "@/components/ui/button";
 import { MapPin, Building, ArrowRight } from "lucide-react";
 import { useRef, useEffect, useState } from 'react';
+import { Link } from "react-router-dom";
 
 const properties = [
   {
@@ -50,7 +50,6 @@ const PropertiesSection = () => {
 
   return (
     <section id="properties" ref={sectionRef} className="section bg-black relative overflow-hidden">
-      {/* Subtle Parallax Background Elements */}
       <div className="absolute top-0 left-0 w-24 h-24 rounded-full bg-luxury-gold/5 -translate-x-1/2 parallax-layer"
         style={{ transform: `translateX(${scrollY * 0.03}px) translateY(${scrollY * 0.02}px)` }}>
       </div>
@@ -114,10 +113,12 @@ const PropertiesSection = () => {
         </div>
         
         <div className="mt-12 text-center">
-          <Button variant="default" size="lg" className="bg-luxury-gold hover:bg-luxury-khaki text-luxury-black rounded-sm hover-scale group">
-            View All Properties
-            <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
-          </Button>
+          <Link to="/properties">
+            <Button variant="default" size="lg" className="bg-luxury-gold hover:bg-luxury-khaki text-luxury-black rounded-sm hover-scale group">
+              View All Properties
+              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
+            </Button>
+          </Link>
         </div>
       </div>
     </section>
