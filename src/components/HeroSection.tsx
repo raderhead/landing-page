@@ -1,25 +1,18 @@
-
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, Phone } from "lucide-react";
-
 const HeroSection = () => {
-  return (
-    <section className="relative min-h-screen flex items-center pt-20 pb-12 overflow-hidden">
+  return <section className="relative min-h-screen flex items-center pt-20 pb-12 overflow-hidden">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-r from-luxury-black/95 to-luxury-charcoal/90 z-10"></div>
-        <img 
-          src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?ixlib=rb-1.2.1&auto=format&fit=crop&q=80" 
-          alt="Luxury Commercial Building in Abilene" 
-          className="w-full h-full object-cover"
-        />
+        <img src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?ixlib=rb-1.2.1&auto=format&fit=crop&q=80" alt="Luxury Commercial Building in Abilene" className="w-full h-full object-cover" />
       </div>
       
       <div className="container relative z-20">
         <div className="max-w-3xl">
           <div className="flex items-center gap-2 text-luxury-khaki mb-4 opacity-0 animate-fade-in">
-            <MapPin className="h-5 w-5" />
-            <span className="font-medium uppercase tracking-wider text-sm">Abilene, TX Commercial Real Estate</span>
+            
+            
           </div>
           
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 opacity-0 animate-fade-in-delay-1 leading-tight">
@@ -60,8 +53,6 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default HeroSection;
