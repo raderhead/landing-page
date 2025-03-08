@@ -13,32 +13,32 @@ const services = [
   {
     icon: <Store className="h-12 w-12 text-luxury-gold" />,
     title: "Retail Leasing",
-    description: "Find the perfect retail space for your business in high-traffic areas of Abilene."
+    description: "Discover prime retail leasing spaces in Abilene's busiest commercial districts with high foot traffic and excellent visibility."
   },
   {
     icon: <Building className="h-12 w-12 text-luxury-gold" />,
     title: "Office Leasing",
-    description: "Professional office spaces that meet your business needs and budget."
+    description: "Premium office spaces available for lease in Abilene to fit diverse business needs and budgets in desirable locations."
   },
   {
     icon: <Warehouse className="h-12 w-12 text-luxury-gold" />,
     title: "Industrial Properties",
-    description: "Warehouses and manufacturing spaces with the right specifications and location."
+    description: "High-quality warehouses and industrial properties for lease or sale in Abilene with strategic access to major transportation routes."
   },
   {
     icon: <Building2 className="h-12 w-12 text-luxury-gold" />,
     title: "Property Investment",
-    description: "Identify lucrative commercial property investment opportunities in growing areas."
+    description: "Strategic commercial real estate investment opportunities in Abilene's growing market with potential for strong returns."
   },
   {
     icon: <BarChart4 className="h-12 w-12 text-luxury-gold" />,
     title: "Market Analysis",
-    description: "In-depth analysis of the Abilene commercial real estate market to inform your decisions."
+    description: "Comprehensive commercial real estate market analyses tailored specifically for Abilene investors and property owners."
   },
   {
     icon: <Handshake className="h-12 w-12 text-luxury-gold" />,
     title: "Buyer/Seller Representation",
-    description: "Expert negotiation and guidance throughout the buying or selling process."
+    description: "Experienced guidance for buying and selling commercial real estate properties in Abilene with expert negotiation services."
   }
 ];
 
