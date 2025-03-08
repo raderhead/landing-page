@@ -85,16 +85,9 @@ const AboutSection = () => {
             </Button>
           </div>
           
-          <div className="space-y-8">
-            <div className="relative">
-              <div className="absolute -top-4 -left-4 w-full h-full border-2 border-luxury-gold rounded-md"></div>
-              <img alt="Josh Rader, Commercial Real Estate Agent" className="w-full h-auto rounded-md relative z-10 shadow-xl" src="/lovable-uploads/74826a44-a772-484e-9817-643df8c6fe70.png" />
-            </div>
-            
-            <a href="https://mccullarproperties.com/" target="_blank" rel="noopener noreferrer" className="bg-luxury-dark p-4 rounded-md flex flex-col items-center border border-luxury-khaki/30 hover:border-luxury-gold/50 transition-colors">
-              <p className="text-luxury-khaki font-medium mb-2 text-center text-sm">Proudly Brokered By</p>
-              <img src="/lovable-uploads/9a513a12-c1b4-46c7-a49e-f3dd8e0857a8.png" alt="McCullar Properties Group" className="h-16 w-auto" />
-            </a>
+          <div className="relative">
+            <div className="absolute -top-4 -left-4 w-full h-full border-2 border-luxury-gold rounded-md"></div>
+            <img alt="Josh Rader, Commercial Real Estate Agent" className="w-full h-auto rounded-md relative z-10 shadow-xl" src="/lovable-uploads/74826a44-a772-484e-9817-643df8c6fe70.png" />
           </div>
         </div>
       </div>

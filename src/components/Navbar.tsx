@@ -18,10 +18,26 @@ const Navbar = () => {
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-luxury-black shadow-md py-2' : 'bg-transparent py-4'}`}>
       <nav className="container flex items-center justify-between">
-        <a href="/" className="flex items-center gap-2 text-white">
-          <Building className="h-8 w-8 text-luxury-gold" />
-          <span className="font-bold text-xl">Josh Rader</span>
-        </a>
+        <div className="flex items-center gap-4">
+          <a href="/" className="flex items-center gap-2 text-white">
+            <Building className="h-8 w-8 text-luxury-gold" />
+            <span className="font-bold text-xl">Josh Rader</span>
+          </a>
+          
+          <a 
+            href="https://mccullarproperties.com/" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="hidden md:flex items-center gap-2 border-l border-luxury-gold/30 pl-4"
+          >
+            <span className="text-luxury-khaki text-xs uppercase tracking-wide">Proudly Brokered By</span>
+            <img 
+              src="/lovable-uploads/9a513a12-c1b4-46c7-a49e-f3dd8e0857a8.png" 
+              alt="McCullar Properties Group" 
+              className="h-8 w-auto" 
+            />
+          </a>
+        </div>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8">
@@ -45,6 +61,19 @@ const Navbar = () => {
       {mobileMenuOpen && (
         <div className="md:hidden bg-luxury-dark py-4 border-t border-luxury-khaki/20">
           <div className="container flex flex-col gap-4">
+            <a 
+              href="https://mccullarproperties.com/" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="flex items-center justify-center gap-2 py-3 border-b border-luxury-khaki/10"
+            >
+              <span className="text-luxury-khaki text-xs uppercase tracking-wide">Proudly Brokered By</span>
+              <img 
+                src="/lovable-uploads/9a513a12-c1b4-46c7-a49e-f3dd8e0857a8.png" 
+                alt="McCullar Properties Group" 
+                className="h-6 w-auto" 
+              />
+            </a>
             <a href="#services" className="text-white font-medium py-2 border-b border-luxury-khaki/10 uppercase text-sm tracking-wider" onClick={() => setMobileMenuOpen(false)}>Services</a>
             <a href="#properties" className="text-white font-medium py-2 border-b border-luxury-khaki/10 uppercase text-sm tracking-wider" onClick={() => setMobileMenuOpen(false)}>Properties</a>
             <a href="#about" className="text-white font-medium py-2 border-b border-luxury-khaki/10 uppercase text-sm tracking-wider" onClick={() => setMobileMenuOpen(false)}>About</a>
