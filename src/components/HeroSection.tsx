@@ -1,12 +1,9 @@
-
 import { useEffect, useState, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, Phone } from "lucide-react";
-
 const HeroSection = () => {
   const [scrollY, setScrollY] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
-  
   useEffect(() => {
     const handleScroll = () => {
       if (sectionRef.current) {
@@ -17,25 +14,18 @@ const HeroSection = () => {
         }
       }
     };
-    
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  return (
-    <section ref={sectionRef} className="relative min-h-screen flex items-center pt-20 pb-12 overflow-hidden">
+  return <section ref={sectionRef} className="relative min-h-screen flex items-center pt-20 pb-12 overflow-hidden">
       {/* Background Image with Parallax Effect */}
       <div className="absolute inset-0 z-0">
-        <div 
-          className="absolute inset-0 bg-gradient-to-r from-luxury-black/95 to-luxury-charcoal/90 z-10"
-          style={{ transform: `translateY(${scrollY * 0.1}px)` }}
-        ></div>
-        <img 
-          src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?ixlib=rb-1.2.1&auto=format&fit=crop&q=80" 
-          alt="Luxury Commercial Building in Abilene" 
-          className="w-full h-full object-cover"
-          style={{ transform: `translateY(${scrollY * 0.2}px) scale(${1 + scrollY * 0.0005})` }}
-        />
+        <div className="absolute inset-0 bg-gradient-to-r from-luxury-black/95 to-luxury-charcoal/90 z-10" style={{
+        transform: `translateY(${scrollY * 0.1}px)`
+      }}></div>
+        <img src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?ixlib=rb-1.2.1&auto=format&fit=crop&q=80" alt="Luxury Commercial Building in Abilene" className="w-full h-full object-cover" style={{
+        transform: `translateY(${scrollY * 0.2}px) scale(${1 + scrollY * 0.0005})`
+      }} />
       </div>
       
       <div className="container relative z-20">
@@ -47,9 +37,7 @@ const HeroSection = () => {
             Elevate Your <span className="text-luxury-gold hover-glow inline-block">Commercial Investment</span> in Abilene
           </h1>
           
-          <p className="text-xl text-white/80 mb-8 max-w-2xl opacity-0 animate-fade-in-delay-2 leading-relaxed">
-            Josh Rader is a licensed commercial real estate agent specializing in helping businesses and investors find premium locations in Abilene and the surrounding areas.
-          </p>
+          <p className="text-xl text-white/80 mb-8 max-w-2xl opacity-0 animate-fade-in-delay-2 leading-relaxed">Josh Rader is a licensed commercial real estate agent specializing in helping businesses and investors find premium locations in Abilene.</p>
           
           <div className="flex flex-col sm:flex-row gap-4 opacity-0 animate-fade-in-delay-3">
             <Button size="lg" className="bg-luxury-gold hover:bg-luxury-khaki text-luxury-black rounded-sm px-8 hover-scale group">
@@ -81,8 +69,6 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default HeroSection;
