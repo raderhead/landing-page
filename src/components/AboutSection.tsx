@@ -1,11 +1,8 @@
-
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Award, GraduationCap, Building, CheckCircle, Briefcase } from "lucide-react";
-
 const AboutSection = () => {
-  return (
-    <section id="about" className="section bg-realestate-navy text-white">
+  return <section id="about" className="section bg-realestate-navy text-white">
       <div className="container">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
@@ -66,26 +63,16 @@ const AboutSection = () => {
           <div className="space-y-6">
             <div className="relative">
               <div className="absolute -top-4 -left-4 w-full h-full border-2 border-realestate-accent rounded-lg"></div>
-              <img 
-                src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-                alt="Josh Rader, Commercial Real Estate Agent" 
-                className="w-full h-auto rounded-lg relative z-10 shadow-xl"
-              />
+              <img alt="Josh Rader, Commercial Real Estate Agent" className="w-full h-auto rounded-lg relative z-10 shadow-xl" src="/lovable-uploads/c2e581df-7d6b-471f-b099-b60298ead0a3.png" />
             </div>
             
             <div className="bg-white p-6 rounded-lg flex flex-col items-center">
               <p className="text-realestate-navy font-medium mb-4 text-center">Proudly with</p>
-              <img 
-                src="/lovable-uploads/9a513a12-c1b4-46c7-a49e-f3dd8e0857a8.png" 
-                alt="McCullar Properties Group" 
-                className="h-20 w-auto"
-              />
+              <img src="/lovable-uploads/9a513a12-c1b4-46c7-a49e-f3dd8e0857a8.png" alt="McCullar Properties Group" className="h-20 w-auto" />
             </div>
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default AboutSection;
