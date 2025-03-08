@@ -7,6 +7,7 @@ import {
   BarChart4, 
   Handshake 
 } from "lucide-react";
+import { useRef, useEffect, useState } from 'react';
 
 const services = [
   {
@@ -42,9 +43,34 @@ const services = [
 ];
 
 const ServicesSection = () => {
+  const [scrollY, setScrollY] = useState(0);
+  const sectionRef = useRef<HTMLElement>(null);
+  
+  useEffect(() => {
+    const handleScroll = () => {
+      if (sectionRef.current) {
+        const rect = sectionRef.current.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          setScrollY(window.scrollY);
+        }
+      }
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <section id="services" className="section bg-luxury-dark">
-      <div className="container">
+    <section id="services" ref={sectionRef} className="section bg-luxury-dark relative overflow-hidden">
+      {/* Subtle Parallax Background Elements */}
+      <div className="absolute top-40 left-0 w-64 h-64 rounded-full bg-luxury-gold/5 -translate-x-1/2 parallax-layer"
+        style={{ transform: `translateX(${scrollY * 0.05}px) translateY(${scrollY * 0.02}px)` }}>
+      </div>
+      <div className="absolute bottom-20 right-0 w-80 h-80 rounded-full bg-luxury-gold/5 translate-x-1/2 parallax-layer"
+        style={{ transform: `translateX(${-scrollY * 0.04}px) translateY(${-scrollY * 0.01}px)` }}>
+      </div>
+      
+      <div className="container relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <h2 className="section-title text-white">Premium Real Estate Services</h2>
           <p className="section-subtitle text-luxury-khaki">
@@ -56,10 +82,14 @@ const ServicesSection = () => {
           {services.map((service, index) => (
             <div 
               key={index} 
-              className="bg-luxury-charcoal p-8 rounded-md shadow-md hover:shadow-lg transition-shadow border border-luxury-khaki/10"
+              className="bg-luxury-charcoal p-8 rounded-md shadow-md hover:shadow-lg transition-all duration-500 border border-luxury-khaki/10 hover:border-luxury-gold/30 hover:bg-luxury-charcoal/80 hover:-translate-y-2"
+              style={{ 
+                transitionDelay: `${index * 50}ms`,
+                transform: `translateY(${Math.min(15, Math.max(-15, (scrollY - 800) * 0.02 * (index % 3 - 1)))}px)`
+              }}
             >
-              <div className="mb-4">{service.icon}</div>
-              <h3 className="text-xl font-bold mb-3 text-white">{service.title}</h3>
+              <div className="mb-4 transform transition-transform duration-500 hover:scale-110 hover:text-luxury-gold">{service.icon}</div>
+              <h3 className="text-xl font-bold mb-3 text-white hover:text-luxury-gold transition-colors">{service.title}</h3>
               <p className="text-luxury-khaki/80">{service.description}</p>
             </div>
           ))}

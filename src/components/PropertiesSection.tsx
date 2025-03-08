@@ -1,6 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { MapPin, Building, ArrowRight } from "lucide-react";
+import { useRef, useEffect, useState } from 'react';
 
 const properties = [
   {
@@ -30,9 +31,34 @@ const properties = [
 ];
 
 const PropertiesSection = () => {
+  const [scrollY, setScrollY] = useState(0);
+  const sectionRef = useRef<HTMLElement>(null);
+  
+  useEffect(() => {
+    const handleScroll = () => {
+      if (sectionRef.current) {
+        const rect = sectionRef.current.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          setScrollY(window.scrollY);
+        }
+      }
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <section id="properties" className="section bg-black">
-      <div className="container">
+    <section id="properties" ref={sectionRef} className="section bg-black relative overflow-hidden">
+      {/* Subtle Parallax Background Elements */}
+      <div className="absolute top-0 left-0 w-24 h-24 rounded-full bg-luxury-gold/5 -translate-x-1/2 parallax-layer"
+        style={{ transform: `translateX(${scrollY * 0.03}px) translateY(${scrollY * 0.02}px)` }}>
+      </div>
+      <div className="absolute bottom-20 right-0 w-40 h-40 rounded-full bg-luxury-gold/10 translate-x-1/2 parallax-layer"
+        style={{ transform: `translateX(${-scrollY * 0.04}px) translateY(${-scrollY * 0.01}px)` }}>
+      </div>
+      
+      <div className="container relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <h2 className="section-title text-white">Featured Properties</h2>
           <p className="section-subtitle text-luxury-khaki">
@@ -44,23 +70,27 @@ const PropertiesSection = () => {
           {properties.map((property, index) => (
             <div 
               key={index} 
-              className="bg-luxury-dark rounded-md overflow-hidden shadow-md hover:shadow-lg transition-shadow border border-luxury-khaki/10"
+              className="bg-luxury-dark rounded-md overflow-hidden shadow-md hover:shadow-lg transition-all duration-500 hover:shadow-luxury-gold/20 hover:-translate-y-2 hover:scale-[1.02] border border-luxury-khaki/10 group"
+              style={{ 
+                transitionDelay: `${index * 50}ms`,
+                transform: `translateY(${Math.min(20, Math.max(-20, (scrollY - 1200) * 0.03 * (index % 3 - 1)))}px)`
+              }}
             >
               <div className="relative h-64 overflow-hidden">
                 <img 
                   src={property.image} 
                   alt={property.title} 
-                  className="w-full h-full object-cover transition-transform hover:scale-105 duration-300"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
-                <div className="absolute top-4 right-4 bg-luxury-gold text-luxury-black py-1 px-3 rounded-sm text-sm font-medium">
+                <div className="absolute top-4 right-4 bg-luxury-gold text-luxury-black py-1 px-3 rounded-sm text-sm font-medium group-hover:scale-110 transition-transform">
                   {property.type}
                 </div>
               </div>
               
               <div className="p-6">
-                <h3 className="text-xl font-bold mb-2 text-white">{property.title}</h3>
+                <h3 className="text-xl font-bold mb-2 text-white group-hover:text-luxury-gold transition-colors">{property.title}</h3>
                 <div className="flex items-center text-luxury-khaki mb-4">
-                  <MapPin className="h-4 w-4 mr-1" />
+                  <MapPin className="h-4 w-4 mr-1 group-hover:text-luxury-gold transition-colors" />
                   <span className="text-sm">{property.address}</span>
                 </div>
                 
@@ -75,7 +105,7 @@ const PropertiesSection = () => {
                   </div>
                 </div>
                 
-                <Button variant="outline" className="w-full border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm">
+                <Button variant="outline" className="w-full border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm group-hover:bg-luxury-gold/10 transition-all">
                   View Details
                 </Button>
               </div>
@@ -84,9 +114,9 @@ const PropertiesSection = () => {
         </div>
         
         <div className="mt-12 text-center">
-          <Button variant="default" size="lg" className="bg-luxury-gold hover:bg-luxury-khaki text-luxury-black rounded-sm">
+          <Button variant="default" size="lg" className="bg-luxury-gold hover:bg-luxury-khaki text-luxury-black rounded-sm hover-scale group">
             View All Properties
-            <ArrowRight className="ml-2 h-5 w-5" />
+            <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
           </Button>
         </div>
       </div>

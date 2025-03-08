@@ -72,3 +72,43 @@
     @apply px-6 py-3 font-medium rounded-sm transition-all duration-300;
   }
 }
+
+/* Parallax and hover effect utilities */
+@layer components {
+  .parallax {
+    @apply transition-transform duration-700 ease-out will-change-transform;
+  }
+  
+  .hover-lift {
+    @apply transition-all duration-300 hover:-translate-y-2 hover:shadow-xl;
+  }
+  
+  .hover-glow {
+    @apply transition-all duration-300 hover:shadow-[0_0_15px_rgba(212,184,123,0.5)];
+  }
+  
+  .hover-border-glow {
+    @apply transition-all duration-300 border border-transparent hover:border-luxury-gold/50;
+  }
+  
+  .hover-scale {
+    @apply transition-all duration-300 hover:scale-105;
+  }
+  
+  .hover-bold {
+    @apply transition-all duration-200 hover:font-semibold;
+  }
+  
+  .hover-underline-grow {
+    @apply relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-luxury-gold after:transition-all after:duration-300 hover:after:w-full;
+  }
+  
+  .fade-in {
+    @apply opacity-0 animate-fade-in;
+  }
+  
+  .parallax-layer {
+    @apply will-change-transform;
+    transform: translateZ(0);
+  }
+}
