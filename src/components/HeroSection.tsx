@@ -1,4 +1,3 @@
-
 import { useEffect, useState, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, Phone } from "lucide-react";
@@ -58,7 +57,8 @@ const HeroSection = () => {
         <div className="container grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="text-center hover-lift p-4">
             <p className="text-3xl font-bold text-luxury-gold">10+ Years</p>
-            <p className="text-luxury-khaki">Experience in Abilene</p>
+            <p className="text-luxury-khaki">Experience in
+Commercial Real Estate</p>
           </div>
           <div className="text-center hover-lift p-4">
             <p className="text-3xl font-bold text-luxury-gold">$50M+</p>
