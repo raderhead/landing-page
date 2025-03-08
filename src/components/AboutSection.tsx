@@ -1,6 +1,8 @@
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Award, Building, CheckCircle, Briefcase } from "lucide-react";
+import { Award, Building, CheckCircle, Briefcase, BadgeDollarSign, Key, FilePercent, FileCheck } from "lucide-react";
+
 const AboutSection = () => {
   return <section id="about" className="section bg-luxury-black text-white">
       <div className="container">
@@ -55,6 +57,29 @@ const AboutSection = () => {
               </div>
             </div>
             
+            {/* New financing experience section */}
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold mb-4 text-luxury-gold">Financing Expertise</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="flex items-start">
+                  <BadgeDollarSign className="h-5 w-5 text-luxury-gold mr-2 mt-1 flex-shrink-0" />
+                  <span>10+ Years as a Commercial Real Estate Investor</span>
+                </div>
+                <div className="flex items-start">
+                  <FileCheck className="h-5 w-5 text-luxury-gold mr-2 mt-1 flex-shrink-0" />
+                  <span>SBA Acquisition Experience</span>
+                </div>
+                <div className="flex items-start">
+                  <Key className="h-5 w-5 text-luxury-gold mr-2 mt-1 flex-shrink-0" />
+                  <span>Owner Financing Experience</span>
+                </div>
+                <div className="flex items-start">
+                  <FilePercent className="h-5 w-5 text-luxury-gold mr-2 mt-1 flex-shrink-0" />
+                  <span>Conventional Loan Experience</span>
+                </div>
+              </div>
+            </div>
+            
             <Button className="bg-luxury-gold hover:bg-luxury-khaki text-luxury-black border-none rounded-sm">
               Learn More About Josh
             </Button>
@@ -75,4 +100,5 @@ const AboutSection = () => {
       </div>
     </section>;
 };
+
 export default AboutSection;
