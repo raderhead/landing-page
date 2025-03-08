@@ -1,3 +1,4 @@
+
 import { useEffect, useState, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, Phone } from "lucide-react";
@@ -44,8 +45,8 @@ const HeroSection = () => {
               View Properties
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
-            <Button size="lg" variant="outline" className="border-white rounded-sm px-8 hover-border-glow text-slate-200 bg-zinc-950 hover:bg-zinc-800">
-              <Phone className="mr-2 h-5 w-5 group-hover:rotate-12 transition-transform" />
+            <Button size="lg" variant="outline" className="border-white rounded-sm px-8 hover-border-glow text-slate-200 bg-zinc-950 hover:bg-zinc-800 hover:text-luxury-gold hover:scale-105 transition-all duration-300 group">
+              <Phone className="mr-2 h-5 w-5 group-hover:rotate-12 transition-transform text-luxury-khaki group-hover:text-luxury-gold" />
               Schedule a Consultation
             </Button>
           </div>
