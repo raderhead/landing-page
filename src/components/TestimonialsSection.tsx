@@ -24,11 +24,11 @@ const testimonials = [
 
 const TestimonialsSection = () => {
   return (
-    <section className="section bg-realestate-light">
+    <section className="section bg-luxury-charcoal">
       <div className="container">
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <h2 className="section-title">What Clients Say</h2>
-          <p className="section-subtitle">
+          <h2 className="section-title text-white">Client Testimonials</h2>
+          <p className="section-subtitle text-luxury-khaki">
             Hear from businesses and investors who have worked with Josh to find their ideal commercial properties
           </p>
         </div>
@@ -37,20 +37,20 @@ const TestimonialsSection = () => {
           {testimonials.map((testimonial, index) => (
             <div 
               key={index} 
-              className="bg-white p-6 rounded-lg shadow-md relative"
+              className="bg-luxury-dark p-8 rounded-md shadow-md relative border border-luxury-khaki/10"
             >
-              <Quote className="h-10 w-10 text-realestate-accent/20 absolute top-6 right-6" />
-              <p className="text-realestate-gray mb-6 relative z-10">"{testimonial.quote}"</p>
+              <Quote className="h-12 w-12 text-luxury-gold/20 absolute top-6 right-6" />
+              <p className="text-luxury-khaki mb-8 relative z-10 leading-relaxed">"{testimonial.quote}"</p>
               
               <div className="flex items-center">
                 <img 
                   src={testimonial.image} 
                   alt={testimonial.name} 
-                  className="w-12 h-12 rounded-full mr-4"
+                  className="w-12 h-12 rounded-full mr-4 border border-luxury-gold/30"
                 />
                 <div>
-                  <p className="font-bold text-realestate-navy">{testimonial.name}</p>
-                  <p className="text-sm text-realestate-gray">{testimonial.title}</p>
+                  <p className="font-bold text-white">{testimonial.name}</p>
+                  <p className="text-sm text-luxury-khaki/70">{testimonial.title}</p>
                 </div>
               </div>
             </div>

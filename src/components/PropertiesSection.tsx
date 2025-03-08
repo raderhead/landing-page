@@ -4,7 +4,7 @@ import { MapPin, Building, ArrowRight } from "lucide-react";
 
 const properties = [
   {
-    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1497366858526-0766cadbe8fa?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
     title: "Downtown Office Building",
     address: "123 Pine Street, Abilene, TX",
     type: "Office",
@@ -12,7 +12,7 @@ const properties = [
     price: "$1,200,000"
   },
   {
-    image: "https://images.unsplash.com/photo-1565623833408-d77e39b88af6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1613310023042-ad79320c00ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
     title: "Retail Space on Main",
     address: "456 Main Street, Abilene, TX",
     type: "Retail",
@@ -20,7 +20,7 @@ const properties = [
     price: "$3,500/month"
   },
   {
-    image: "https://images.unsplash.com/photo-1553164600-45ece794f0da?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1623298460174-371443cc454c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
     title: "Industrial Warehouse",
     address: "789 Industry Blvd, Abilene, TX",
     type: "Industrial",
@@ -31,11 +31,11 @@ const properties = [
 
 const PropertiesSection = () => {
   return (
-    <section id="properties" className="section bg-white">
+    <section id="properties" className="section bg-black">
       <div className="container">
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <h2 className="section-title">Featured Properties</h2>
-          <p className="section-subtitle">
+          <h2 className="section-title text-white">Featured Properties</h2>
+          <p className="section-subtitle text-luxury-khaki">
             Explore our selection of premium commercial properties available in Abilene, TX
           </p>
         </div>
@@ -44,7 +44,7 @@ const PropertiesSection = () => {
           {properties.map((property, index) => (
             <div 
               key={index} 
-              className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
+              className="bg-luxury-dark rounded-md overflow-hidden shadow-md hover:shadow-lg transition-shadow border border-luxury-khaki/10"
             >
               <div className="relative h-64 overflow-hidden">
                 <img 
@@ -52,30 +52,30 @@ const PropertiesSection = () => {
                   alt={property.title} 
                   className="w-full h-full object-cover transition-transform hover:scale-105 duration-300"
                 />
-                <div className="absolute top-4 right-4 bg-realestate-blue text-white py-1 px-3 rounded-full text-sm font-medium">
+                <div className="absolute top-4 right-4 bg-luxury-gold text-luxury-black py-1 px-3 rounded-sm text-sm font-medium">
                   {property.type}
                 </div>
               </div>
               
               <div className="p-6">
-                <h3 className="text-xl font-bold mb-2 text-realestate-navy">{property.title}</h3>
-                <div className="flex items-center text-realestate-gray mb-4">
+                <h3 className="text-xl font-bold mb-2 text-white">{property.title}</h3>
+                <div className="flex items-center text-luxury-khaki mb-4">
                   <MapPin className="h-4 w-4 mr-1" />
                   <span className="text-sm">{property.address}</span>
                 </div>
                 
                 <div className="grid grid-cols-2 gap-4 mb-6">
                   <div>
-                    <p className="text-sm text-realestate-gray">Size</p>
-                    <p className="font-medium">{property.size}</p>
+                    <p className="text-sm text-luxury-khaki/70">Size</p>
+                    <p className="font-medium text-white">{property.size}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-realestate-gray">Price</p>
-                    <p className="font-medium">{property.price}</p>
+                    <p className="text-sm text-luxury-khaki/70">Price</p>
+                    <p className="font-medium text-white">{property.price}</p>
                   </div>
                 </div>
                 
-                <Button variant="outline" className="w-full border-realestate-blue text-realestate-blue hover:bg-realestate-blue hover:text-white">
+                <Button variant="outline" className="w-full border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm">
                   View Details
                 </Button>
               </div>
@@ -84,7 +84,7 @@ const PropertiesSection = () => {
         </div>
         
         <div className="mt-12 text-center">
-          <Button variant="default" size="lg" className="bg-realestate-blue hover:bg-realestate-navy">
+          <Button variant="default" size="lg" className="bg-luxury-gold hover:bg-luxury-khaki text-luxury-black rounded-sm">
             View All Properties
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>

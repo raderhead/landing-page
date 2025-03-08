@@ -63,12 +63,17 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				realestate: {
-					'blue': '#0A3161',
-					'navy': '#152238',
-					'gray': '#586A84',
-					'light': '#F5F7FA',
-					'accent': '#D68C45'
+				luxury: {
+					'black': '#121212',
+					'dark': '#1E1E1E',
+					'charcoal': '#2A2A2A',
+					'slate': '#404040',
+					'gray': '#707070',
+					'khaki': '#B5A98C',
+					'gold': '#D4B87B',
+					'cream': '#F5F5F0',
+					'navy': '#1A2A3A',
+					'white': '#FFFFFF',
 				},
 			},
 			borderRadius: {

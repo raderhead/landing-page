@@ -41,58 +41,58 @@ const ContactSection = () => {
   };
   
   return (
-    <section id="contact" className="section bg-white">
+    <section id="contact" className="section bg-luxury-dark">
       <div className="container">
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <h2 className="section-title">Contact Josh</h2>
-          <p className="section-subtitle">
+          <h2 className="section-title text-white">Contact Josh</h2>
+          <p className="section-subtitle text-luxury-khaki">
             Ready to find your ideal commercial property? Get in touch with Josh today
           </p>
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div>
-            <div className="bg-realestate-light p-8 rounded-lg mb-8">
-              <h3 className="text-2xl font-bold mb-6 text-realestate-navy">Contact Information</h3>
+            <div className="bg-luxury-black p-8 rounded-md mb-8 border border-luxury-khaki/10">
+              <h3 className="text-2xl font-bold mb-6 text-white">Contact Information</h3>
               
               <div className="space-y-6">
                 <div className="flex items-start">
-                  <div className="bg-realestate-blue p-3 rounded-full mr-4">
-                    <Phone className="h-5 w-5 text-white" />
+                  <div className="bg-luxury-gold p-3 rounded-sm mr-4">
+                    <Phone className="h-5 w-5 text-luxury-black" />
                   </div>
                   <div>
-                    <p className="font-medium text-realestate-navy">Phone</p>
-                    <p className="text-realestate-gray">(325) 555-1234</p>
+                    <p className="font-medium text-white">Phone</p>
+                    <p className="text-luxury-khaki">(325) 555-1234</p>
                   </div>
                 </div>
                 
                 <div className="flex items-start">
-                  <div className="bg-realestate-blue p-3 rounded-full mr-4">
-                    <Mail className="h-5 w-5 text-white" />
+                  <div className="bg-luxury-gold p-3 rounded-sm mr-4">
+                    <Mail className="h-5 w-5 text-luxury-black" />
                   </div>
                   <div>
-                    <p className="font-medium text-realestate-navy">Email</p>
-                    <p className="text-realestate-gray">josh.rader@example.com</p>
+                    <p className="font-medium text-white">Email</p>
+                    <p className="text-luxury-khaki">josh.rader@example.com</p>
                   </div>
                 </div>
                 
                 <div className="flex items-start">
-                  <div className="bg-realestate-blue p-3 rounded-full mr-4">
-                    <MapPin className="h-5 w-5 text-white" />
+                  <div className="bg-luxury-gold p-3 rounded-sm mr-4">
+                    <MapPin className="h-5 w-5 text-luxury-black" />
                   </div>
                   <div>
-                    <p className="font-medium text-realestate-navy">Office Address</p>
-                    <p className="text-realestate-gray">123 Commercial Ave, Suite 200<br />Abilene, TX 79601</p>
+                    <p className="font-medium text-white">Office Address</p>
+                    <p className="text-luxury-khaki">123 Commercial Ave, Suite 200<br />Abilene, TX 79601</p>
                   </div>
                 </div>
                 
                 <div className="flex items-start">
-                  <div className="bg-realestate-blue p-3 rounded-full mr-4">
-                    <Clock className="h-5 w-5 text-white" />
+                  <div className="bg-luxury-gold p-3 rounded-sm mr-4">
+                    <Clock className="h-5 w-5 text-luxury-black" />
                   </div>
                   <div>
-                    <p className="font-medium text-realestate-navy">Business Hours</p>
-                    <p className="text-realestate-gray">Monday - Friday: 9:00 AM - 5:00 PM<br />Saturday: By appointment</p>
+                    <p className="font-medium text-white">Business Hours</p>
+                    <p className="text-luxury-khaki">Monday - Friday: 9:00 AM - 5:00 PM<br />Saturday: By appointment</p>
                   </div>
                 </div>
               </div>
@@ -100,12 +100,12 @@ const ContactSection = () => {
           </div>
           
           <div>
-            <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg border border-gray-200 shadow-sm">
-              <h3 className="text-2xl font-bold mb-6 text-realestate-navy">Send a Message</h3>
+            <form onSubmit={handleSubmit} className="bg-luxury-black p-8 rounded-md border border-luxury-khaki/10 shadow-sm">
+              <h3 className="text-2xl font-bold mb-6 text-white">Send a Message</h3>
               
               <div className="space-y-4">
                 <div>
-                  <label htmlFor="name" className="block mb-2 text-sm font-medium text-realestate-navy">Your Name</label>
+                  <label htmlFor="name" className="block mb-2 text-sm font-medium text-white">Your Name</label>
                   <Input
                     id="name"
                     name="name"
@@ -113,11 +113,12 @@ const ContactSection = () => {
                     onChange={handleChange}
                     placeholder="John Doe"
                     required
+                    className="bg-luxury-charcoal border-luxury-khaki/20 text-white focus:border-luxury-gold focus:ring-luxury-gold/50"
                   />
                 </div>
                 
                 <div>
-                  <label htmlFor="email" className="block mb-2 text-sm font-medium text-realestate-navy">Email Address</label>
+                  <label htmlFor="email" className="block mb-2 text-sm font-medium text-white">Email Address</label>
                   <Input
                     id="email"
                     name="email"
@@ -126,22 +127,24 @@ const ContactSection = () => {
                     onChange={handleChange}
                     placeholder="john@example.com"
                     required
+                    className="bg-luxury-charcoal border-luxury-khaki/20 text-white focus:border-luxury-gold focus:ring-luxury-gold/50"
                   />
                 </div>
                 
                 <div>
-                  <label htmlFor="phone" className="block mb-2 text-sm font-medium text-realestate-navy">Phone Number</label>
+                  <label htmlFor="phone" className="block mb-2 text-sm font-medium text-white">Phone Number</label>
                   <Input
                     id="phone"
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
                     placeholder="(555) 123-4567"
+                    className="bg-luxury-charcoal border-luxury-khaki/20 text-white focus:border-luxury-gold focus:ring-luxury-gold/50"
                   />
                 </div>
                 
                 <div>
-                  <label htmlFor="message" className="block mb-2 text-sm font-medium text-realestate-navy">Your Message</label>
+                  <label htmlFor="message" className="block mb-2 text-sm font-medium text-white">Your Message</label>
                   <Textarea
                     id="message"
                     name="message"
@@ -150,10 +153,11 @@ const ContactSection = () => {
                     placeholder="I'm interested in commercial property in downtown Abilene..."
                     rows={4}
                     required
+                    className="bg-luxury-charcoal border-luxury-khaki/20 text-white focus:border-luxury-gold focus:ring-luxury-gold/50"
                   />
                 </div>
                 
-                <Button type="submit" className="w-full bg-realestate-blue hover:bg-realestate-navy text-white">
+                <Button type="submit" className="w-full bg-luxury-gold hover:bg-luxury-khaki text-luxury-black rounded-sm">
                   Send Message
                 </Button>
               </div>
