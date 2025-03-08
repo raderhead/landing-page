@@ -73,7 +73,7 @@ const AboutSection = () => {
               </div>
               <div className="flex items-center bg-luxury-charcoal px-4 py-2 rounded-sm hover-lift hover:bg-luxury-charcoal/70 group">
                 <Briefcase className="h-5 w-5 text-luxury-gold mr-2 group-hover:rotate-12 transition-transform" />
-                <span className="group-hover:text-luxury-gold transition-colors">Business Owner</span>
+                <span className="group-hover:text-luxury-gold transition-colors">Multiple Business Owner</span>
               </div>
               <div className="flex items-center bg-luxury-charcoal px-4 py-2 rounded-sm hover-lift hover:bg-luxury-charcoal/70 group">
                 <Building className="h-5 w-5 text-luxury-gold mr-2 group-hover:rotate-12 transition-transform" />

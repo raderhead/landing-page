@@ -44,7 +44,7 @@ const HeroSection = () => {
               View Properties
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 rounded-sm px-8 hover-border-glow">
+            <Button size="lg" variant="outline" className="border-white rounded-sm px-8 hover-border-glow text-slate-200 bg-zinc-950 hover:bg-zinc-800">
               <Phone className="mr-2 h-5 w-5 group-hover:rotate-12 transition-transform" />
               Schedule a Consultation
             </Button>
