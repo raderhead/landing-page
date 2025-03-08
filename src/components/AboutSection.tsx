@@ -1,7 +1,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Award, GraduationCap, Building, CheckCircle } from "lucide-react";
+import { Award, GraduationCap, Building, CheckCircle, Briefcase } from "lucide-react";
 
 const AboutSection = () => {
   return (
@@ -14,6 +14,15 @@ const AboutSection = () => {
             <p className="text-lg mb-6 text-white/90">
               With over 10 years of experience in the Abilene commercial real estate market, Josh Rader has established himself as a trusted advisor to businesses, investors, and property owners throughout the region.
             </p>
+            
+            <div className="mb-6 text-white/90">
+              <p className="mb-4">
+                As a multi-business owner, Josh brings firsthand experience in choosing and operating commercial spaces. From launching Bodegish, Firehouse Fitness, and multiple other businesses, he understands what it takes for businesses to thrive in the right location.
+              </p>
+              <p>
+                Josh specializes in commercial real estate, helping business owners find the right space and working with investors to identify smart commercial property opportunities. His deep understanding of business operations and market trends makes him a valuable resource for those looking to lease, buy, or invest.
+              </p>
+            </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
               <div className="flex items-start">
@@ -40,8 +49,8 @@ const AboutSection = () => {
                 <span>Top Producer 2022</span>
               </div>
               <div className="flex items-center bg-white/10 px-4 py-2 rounded-md">
-                <GraduationCap className="h-5 w-5 text-realestate-accent mr-2" />
-                <span>CCIM Member</span>
+                <Briefcase className="h-5 w-5 text-realestate-accent mr-2" />
+                <span>Business Owner</span>
               </div>
               <div className="flex items-center bg-white/10 px-4 py-2 rounded-md">
                 <Building className="h-5 w-5 text-realestate-accent mr-2" />
@@ -54,13 +63,24 @@ const AboutSection = () => {
             </Button>
           </div>
           
-          <div className="relative">
-            <div className="absolute -top-4 -left-4 w-full h-full border-2 border-realestate-accent rounded-lg"></div>
-            <img 
-              src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-              alt="Josh Rader, Commercial Real Estate Agent" 
-              className="w-full h-auto rounded-lg relative z-10 shadow-xl"
-            />
+          <div className="space-y-6">
+            <div className="relative">
+              <div className="absolute -top-4 -left-4 w-full h-full border-2 border-realestate-accent rounded-lg"></div>
+              <img 
+                src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
+                alt="Josh Rader, Commercial Real Estate Agent" 
+                className="w-full h-auto rounded-lg relative z-10 shadow-xl"
+              />
+            </div>
+            
+            <div className="bg-white p-6 rounded-lg flex flex-col items-center">
+              <p className="text-realestate-navy font-medium mb-4 text-center">Proudly with</p>
+              <img 
+                src="/lovable-uploads/9a513a12-c1b4-46c7-a49e-f3dd8e0857a8.png" 
+                alt="McCullar Properties Group" 
+                className="h-20 w-auto"
+              />
+            </div>
           </div>
         </div>
       </div>
