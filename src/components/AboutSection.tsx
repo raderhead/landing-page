@@ -17,7 +17,7 @@ const AboutSection = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  return <section id="about" ref={sectionRef} className="section bg-luxury-black text-white relative overflow-hidden">
+  return <section id="about" ref={sectionRef} className="section bg-luxury-black text-white relative overflow-hidden py-0">
       {/* Subtle Parallax Background Elements */}
       <div className="absolute top-0 left-1/4 w-32 h-32 rounded-full bg-luxury-gold/5 parallax-layer" style={{
       transform: `translateY(${scrollY * 0.03}px)`
