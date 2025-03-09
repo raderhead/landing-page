@@ -28,7 +28,7 @@ const AboutSection = () => {
     }}>
       </div>
       
-      <div className="container relative z-10">
+      <div className="container relative z-10 py-[45px]">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div style={{
           transform: `translateY(${(scrollY - 1800) * 0.03}px)`
