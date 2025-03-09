@@ -33,7 +33,7 @@ const AboutSection = () => {
           <div style={{
           transform: `translateY(${(scrollY - 1800) * 0.03}px)`
         }}>
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">Licensed Commercial Real Estate Agent in Abilene, Texas</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">Who is Josh Rader?</h2>
             <p className="text-lg mb-6 text-white/80 leading-relaxed">
               With over 10 years of experience in the Abilene commercial real estate market, Josh Rader has established himself as a trusted advisor to businesses, investors, and property owners throughout the region.
             </p>
