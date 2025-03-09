@@ -1,9 +1,12 @@
+
 import { useEffect, useState, useRef } from 'react';
 import { Button } from "@/components/ui/button";
-import { ArrowRight, MapPin, Phone } from "lucide-react";
+import { ArrowRight, MapPin, Phone, Award, Building, Users } from "lucide-react";
+
 const HeroSection = () => {
   const [scrollY, setScrollY] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
+
   useEffect(() => {
     const handleScroll = () => {
       if (sectionRef.current) {
@@ -17,27 +20,37 @@ const HeroSection = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  return <section ref={sectionRef} className="relative min-h-screen flex items-center pt-20 pb-12 overflow-hidden">
+
+  return <section id="hero" ref={sectionRef} className="relative min-h-screen flex items-center pt-20 pb-12 overflow-hidden">
       {/* Background Image with Parallax Effect */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-r from-luxury-black/95 to-luxury-charcoal/90 z-10" style={{
         transform: `translateY(${scrollY * 0.1}px)`
       }}></div>
-        <img src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?ixlib=rb-1.2.1&auto=format&fit=crop&q=80" alt="Luxury Commercial Building in Abilene" className="w-full h-full object-cover" style={{
-        transform: `translateY(${scrollY * 0.2}px) scale(${1 + scrollY * 0.0005})`
-      }} />
+        <img 
+          src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?ixlib=rb-1.2.1&auto=format&fit=crop&q=80" 
+          alt="Luxury Commercial Real Estate in Abilene, Texas - Josh Rader" 
+          className="w-full h-full object-cover" 
+          style={{
+            transform: `translateY(${scrollY * 0.2}px) scale(${1 + scrollY * 0.0005})`
+          }} 
+        />
       </div>
       
       <div className="container relative z-20">
         <div className="max-w-3xl">
           <div className="flex items-center gap-2 text-luxury-khaki mb-4 opacity-0 animate-fade-in">
+            <MapPin className="h-5 w-5" />
+            <span className="text-sm font-medium tracking-wider">ABILENE, TEXAS</span>
           </div>
           
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 opacity-0 animate-fade-in-delay-1 leading-tight">
-            Elevate Your <span className="text-luxury-gold hover-glow inline-block">Commercial Investment</span> in Abilene
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 opacity-0 animate-fade-in-delay-1 leading-relaxed">
+            Maximize Your <span className="text-luxury-gold hover-glow inline-block">Commercial Investments</span> in Abilene
           </h1>
           
-          <p className="text-xl text-white/80 mb-8 max-w-2xl opacity-0 animate-fade-in-delay-2 leading-relaxed">Josh Rader is a licensed commercial real estate agent specializing in helping businesses and investors find premium locations in Abilene.</p>
+          <p className="text-xl text-white/90 mb-8 max-w-2xl opacity-0 animate-fade-in-delay-2 leading-relaxed">
+            Josh Rader, a trusted commercial real estate agent with McCullar Properties, guides businesses and investors to premium locations in Abilene and beyond.
+          </p>
           
           <div className="flex flex-col sm:flex-row gap-4 opacity-0 animate-fade-in-delay-3">
             <Button size="lg" className="bg-luxury-gold hover:bg-luxury-khaki text-luxury-black rounded-sm px-8 hover-scale group">
@@ -52,24 +65,33 @@ const HeroSection = () => {
         </div>
       </div>
       
-      {/* Stats banner with hover effects */}
+      {/* Stats banner with enhanced visual design */}
       <div className="absolute bottom-0 left-0 right-0 bg-luxury-dark py-8 z-20 border-t border-luxury-khaki/20">
         <div className="container grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="text-center hover-lift p-4">
+          <div className="text-center hover-lift p-4 flex flex-col items-center">
+            <div className="bg-luxury-charcoal p-3 rounded-full mb-3 hover:bg-luxury-gold/20 transition-colors">
+              <Award className="h-6 w-6 text-luxury-gold" />
+            </div>
             <p className="text-3xl font-bold text-luxury-gold">10+ Years</p>
-            <p className="text-luxury-khaki">Experience in
-Commercial Real Estate</p>
+            <p className="text-luxury-khaki mt-1">Experience in Commercial Real Estate</p>
           </div>
-          <div className="text-center hover-lift p-4">
+          <div className="text-center hover-lift p-4 flex flex-col items-center">
+            <div className="bg-luxury-charcoal p-3 rounded-full mb-3 hover:bg-luxury-gold/20 transition-colors">
+              <Building className="h-6 w-6 text-luxury-gold" />
+            </div>
             <p className="text-3xl font-bold text-luxury-gold">$50M+</p>
-            <p className="text-luxury-khaki">In Closed Transactions</p>
+            <p className="text-luxury-khaki mt-1">In Closed Transactions</p>
           </div>
-          <div className="text-center hover-lift p-4">
+          <div className="text-center hover-lift p-4 flex flex-col items-center">
+            <div className="bg-luxury-charcoal p-3 rounded-full mb-3 hover:bg-luxury-gold/20 transition-colors">
+              <Users className="h-6 w-6 text-luxury-gold" />
+            </div>
             <p className="text-3xl font-bold text-luxury-gold">100+</p>
-            <p className="text-luxury-khaki">Satisfied Clients</p>
+            <p className="text-luxury-khaki mt-1">Satisfied Clients</p>
           </div>
         </div>
       </div>
     </section>;
 };
+
 export default HeroSection;
