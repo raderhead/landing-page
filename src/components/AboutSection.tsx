@@ -1,10 +1,13 @@
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Award, Building, CheckCircle, Briefcase, BadgeDollarSign, Key, Percent, FileCheck } from "lucide-react";
 import { useRef, useEffect, useState } from 'react';
+
 const AboutSection = () => {
   const [scrollY, setScrollY] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
+
   useEffect(() => {
     const handleScroll = () => {
       if (sectionRef.current) {
@@ -17,6 +20,7 @@ const AboutSection = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
   return <section id="about" ref={sectionRef} className="section bg-luxury-black text-white relative overflow-hidden py-0">
       {/* Subtle Parallax Background Elements */}
       <div className="absolute top-0 left-1/4 w-32 h-32 rounded-full bg-luxury-gold/5 parallax-layer" style={{
@@ -35,15 +39,15 @@ const AboutSection = () => {
         }}>
             <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">Who is Josh Rader?</h2>
             <p className="text-lg mb-6 text-white/80 leading-relaxed">
-              With over 10 years of experience in the Abilene commercial real estate market, Josh Rader has established himself as a trusted advisor to businesses, investors, and property owners throughout the region.
+              Josh Rader is an experienced, licensed Texas real estate agent specializing in commercial properties across Abilene and surrounding areas.
             </p>
             
             <div className="mb-6 text-white/80 space-y-4">
               <p className="leading-relaxed">
-                As a multi-business owner, Josh brings firsthand experience in choosing and operating commercial spaces. From launching Bodegish, Firehouse Fitness, and multiple other businesses, he understands what it takes for businesses to thrive in the right location.
+                As a multi-business owner (Bodegish, Firehouse Fitness, and others), he deeply understands commercial spaces and helps investors and businesses strategically select and maximize their properties.
               </p>
               <p className="leading-relaxed">
-                Josh specializes in commercial real estate, helping business owners find the right space and working with investors to identify smart commercial property opportunities. His deep understanding of business operations and market trends makes him a valuable resource for those looking to lease, buy, or invest.
+                Recognized as a Top Producer (2022) with 100+ successful transactions, Josh offers expert guidance to lease, buy, or invest in Abilene's thriving commercial market.
               </p>
             </div>
             
@@ -81,7 +85,7 @@ const AboutSection = () => {
               </div>
             </div>
             
-            {/* New financing experience section */}
+            {/* Financing experience section */}
             <div className="mb-8">
               <h3 className="text-xl font-semibold mb-4 text-luxury-gold">Financing Expertise</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -105,7 +109,7 @@ const AboutSection = () => {
             </div>
             
             <Button className="bg-luxury-gold hover:bg-luxury-khaki text-luxury-black border-none rounded-sm hover-scale group">
-              Learn More About Josh
+              Contact Josh Today
             </Button>
           </div>
           
@@ -113,10 +117,15 @@ const AboutSection = () => {
           transform: `translateY(${(scrollY - 1800) * -0.03}px)`
         }}>
             <div className="absolute -top-4 -left-4 w-full h-full border-2 border-luxury-gold rounded-md hover:border-luxury-khaki transition-colors duration-500"></div>
-            <img alt="Josh Rader, Commercial Real Estate Agent" className="w-full h-auto rounded-md relative z-10 shadow-xl hover:shadow-luxury-gold/30 transition-shadow duration-500" src="/lovable-uploads/bd4ad840-cf8b-4ffb-a39b-d42c5ab101a0.jpg" />
+            <img 
+              alt="Josh Rader, Commercial Real Estate Agent in Abilene" 
+              className="w-full h-auto rounded-md relative z-10 shadow-xl hover:shadow-luxury-gold/30 transition-shadow duration-500" 
+              src="/lovable-uploads/bd4ad840-cf8b-4ffb-a39b-d42c5ab101a0.jpg" 
+            />
           </div>
         </div>
       </div>
     </section>;
 };
+
 export default AboutSection;
