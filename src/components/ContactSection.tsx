@@ -1,36 +1,39 @@
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
-
 const ContactSection = () => {
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
     message: ""
   });
-  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    const {
+      name,
+      value
+    } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
-  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // In a real application, you would send this data to your backend
     console.log("Form submitted:", formData);
-    
     toast({
       title: "Message Sent!",
-      description: "Thank you for reaching out. Josh will contact you shortly.",
+      description: "Thank you for reaching out. Josh will contact you shortly."
     });
-    
+
     // Reset form
     setFormData({
       name: "",
@@ -39,9 +42,7 @@ const ContactSection = () => {
       message: ""
     });
   };
-  
-  return (
-    <section id="contact" className="section bg-luxury-dark">
+  return <section id="contact" className="section bg-luxury-dark py-[50px]">
       <div className="container">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <h2 className="section-title text-white">Contact Josh</h2>
@@ -106,55 +107,22 @@ const ContactSection = () => {
               <div className="space-y-4">
                 <div>
                   <label htmlFor="name" className="block mb-2 text-sm font-medium text-white">Your Name</label>
-                  <Input
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    placeholder="John Doe"
-                    required
-                    className="bg-luxury-charcoal border-luxury-khaki/20 text-white focus:border-luxury-gold focus:ring-luxury-gold/50"
-                  />
+                  <Input id="name" name="name" value={formData.name} onChange={handleChange} placeholder="John Doe" required className="bg-luxury-charcoal border-luxury-khaki/20 text-white focus:border-luxury-gold focus:ring-luxury-gold/50" />
                 </div>
                 
                 <div>
                   <label htmlFor="email" className="block mb-2 text-sm font-medium text-white">Email Address</label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="john@example.com"
-                    required
-                    className="bg-luxury-charcoal border-luxury-khaki/20 text-white focus:border-luxury-gold focus:ring-luxury-gold/50"
-                  />
+                  <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} placeholder="john@example.com" required className="bg-luxury-charcoal border-luxury-khaki/20 text-white focus:border-luxury-gold focus:ring-luxury-gold/50" />
                 </div>
                 
                 <div>
                   <label htmlFor="phone" className="block mb-2 text-sm font-medium text-white">Phone Number</label>
-                  <Input
-                    id="phone"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    placeholder="(555) 123-4567"
-                    className="bg-luxury-charcoal border-luxury-khaki/20 text-white focus:border-luxury-gold focus:ring-luxury-gold/50"
-                  />
+                  <Input id="phone" name="phone" value={formData.phone} onChange={handleChange} placeholder="(555) 123-4567" className="bg-luxury-charcoal border-luxury-khaki/20 text-white focus:border-luxury-gold focus:ring-luxury-gold/50" />
                 </div>
                 
                 <div>
                   <label htmlFor="message" className="block mb-2 text-sm font-medium text-white">Your Message</label>
-                  <Textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    placeholder="I'm interested in commercial property in downtown Abilene..."
-                    rows={4}
-                    required
-                    className="bg-luxury-charcoal border-luxury-khaki/20 text-white focus:border-luxury-gold focus:ring-luxury-gold/50"
-                  />
+                  <Textarea id="message" name="message" value={formData.message} onChange={handleChange} placeholder="I'm interested in commercial property in downtown Abilene..." rows={4} required className="bg-luxury-charcoal border-luxury-khaki/20 text-white focus:border-luxury-gold focus:ring-luxury-gold/50" />
                 </div>
                 
                 <Button type="submit" className="w-full bg-luxury-gold hover:bg-luxury-khaki text-luxury-black rounded-sm">
@@ -165,8 +133,6 @@ const ContactSection = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default ContactSection;
