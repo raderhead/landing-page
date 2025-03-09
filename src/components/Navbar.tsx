@@ -1,19 +1,40 @@
+
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { Building, Menu, X, Phone, BookText } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Building, Menu, X, Phone, BookText, LogIn, User } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    
+    // Check if user is logged in
+    const checkUser = async () => {
+      const { data } = await supabase.auth.getSession();
+      setUser(data.session?.user || null);
+    };
+    
+    checkUser();
+    
+    // Listen for auth changes
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user || null);
+    });
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      authListener.subscription.unsubscribe();
+    };
   }, []);
 
   const handleScrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
@@ -30,6 +51,14 @@ const Navbar = () => {
       }
     } else {
       window.location.href = `/#${sectionId}`;
+    }
+  };
+
+  const handleAuthClick = () => {
+    if (user) {
+      navigate('/admin');
+    } else {
+      navigate('/auth');
     }
   };
 
@@ -66,6 +95,23 @@ const Navbar = () => {
             <Phone className="h-4 w-4 group-hover:rotate-12 transition-transform" />
             <span>Call Josh</span>
           </Button>
+          <Button 
+            onClick={handleAuthClick}
+            variant="outline" 
+            className="text-luxury-gold hover:text-luxury-black hover:bg-luxury-gold border-luxury-gold flex items-center gap-2 rounded-sm hover-scale group"
+          >
+            {user ? (
+              <>
+                <User className="h-4 w-4" />
+                <span>Admin</span>
+              </>
+            ) : (
+              <>
+                <LogIn className="h-4 w-4" />
+                <span>Login</span>
+              </>
+            )}
+          </Button>
         </div>
 
         <button className="md:hidden text-white hover:text-luxury-gold transition-colors hover-scale" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
@@ -97,6 +143,23 @@ const Navbar = () => {
             <Button className="bg-luxury-gold hover:bg-luxury-khaki text-luxury-black flex items-center justify-center gap-2 mt-2 rounded-sm hover-scale group">
               <Phone className="h-4 w-4 group-hover:rotate-12 transition-transform" />
               <span>Call Josh</span>
+            </Button>
+            <Button 
+              onClick={handleAuthClick}
+              variant="outline" 
+              className="text-luxury-gold hover:text-luxury-black hover:bg-luxury-gold border-luxury-gold flex items-center justify-center gap-2 mt-2 rounded-sm hover-scale group"
+            >
+              {user ? (
+                <>
+                  <User className="h-4 w-4" />
+                  <span>Admin</span>
+                </>
+              ) : (
+                <>
+                  <LogIn className="h-4 w-4" />
+                  <span>Login</span>
+                </>
+              )}
             </Button>
           </div>
         </div>}
