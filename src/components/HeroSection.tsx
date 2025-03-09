@@ -21,7 +21,7 @@ const HeroSection = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  return <section id="hero" ref={sectionRef} className="relative min-h-screen flex items-center pt-20 pb-32 overflow-hidden">
+  return <section id="hero" ref={sectionRef} className="relative min-h-screen flex items-center pt-20 pb-12 overflow-hidden">
       {/* Background Image with Parallax Effect */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-r from-luxury-black/95 to-luxury-charcoal/90 z-10" style={{
@@ -48,11 +48,11 @@ const HeroSection = () => {
             Maximize Your <span className="text-luxury-gold hover-glow inline-block">Commercial Investments</span> in Abilene
           </h1>
           
-          <p className="text-xl text-white/90 mb-12 max-w-2xl opacity-0 animate-fade-in-delay-2 leading-relaxed">
+          <p className="text-xl text-white/90 mb-8 max-w-2xl opacity-0 animate-fade-in-delay-2 leading-relaxed">
             Josh Rader, a trusted commercial real estate agent with McCullar Properties, guides businesses and investors to premium locations in Abilene and beyond.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 mb-16 opacity-0 animate-fade-in-delay-3">
+          <div className="flex flex-col sm:flex-row gap-4 opacity-0 animate-fade-in-delay-3">
             <Button size="lg" className="bg-luxury-gold hover:bg-luxury-khaki text-luxury-black rounded-sm px-8 hover-scale group">
               View Properties
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
