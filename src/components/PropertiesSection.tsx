@@ -2,38 +2,31 @@ import { Button } from "@/components/ui/button";
 import { MapPin, Building, ArrowRight } from "lucide-react";
 import { useRef, useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
-
-const properties = [
-  {
-    image: "https://images.unsplash.com/photo-1497366858526-0766cadbe8fa?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-    title: "Downtown Office Building",
-    address: "123 Pine Street, Abilene, TX",
-    type: "Office",
-    size: "5,000 sq ft",
-    price: "$1,200,000"
-  },
-  {
-    image: "https://images.unsplash.com/photo-1613310023042-ad79320c00ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-    title: "Retail Space on Main",
-    address: "456 Main Street, Abilene, TX",
-    type: "Retail",
-    size: "2,500 sq ft",
-    price: "$3,500/month"
-  },
-  {
-    image: "https://images.unsplash.com/photo-1623298460174-371443cc454c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-    title: "Industrial Warehouse",
-    address: "789 Industry Blvd, Abilene, TX",
-    type: "Industrial",
-    size: "12,000 sq ft",
-    price: "$850,000"
-  }
-];
-
+const properties = [{
+  image: "https://images.unsplash.com/photo-1497366858526-0766cadbe8fa?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+  title: "Downtown Office Building",
+  address: "123 Pine Street, Abilene, TX",
+  type: "Office",
+  size: "5,000 sq ft",
+  price: "$1,200,000"
+}, {
+  image: "https://images.unsplash.com/photo-1613310023042-ad79320c00ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+  title: "Retail Space on Main",
+  address: "456 Main Street, Abilene, TX",
+  type: "Retail",
+  size: "2,500 sq ft",
+  price: "$3,500/month"
+}, {
+  image: "https://images.unsplash.com/photo-1623298460174-371443cc454c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+  title: "Industrial Warehouse",
+  address: "789 Industry Blvd, Abilene, TX",
+  type: "Industrial",
+  size: "12,000 sq ft",
+  price: "$850,000"
+}];
 const PropertiesSection = () => {
   const [scrollY, setScrollY] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
-  
   useEffect(() => {
     const handleScroll = () => {
       if (sectionRef.current) {
@@ -43,18 +36,17 @@ const PropertiesSection = () => {
         }
       }
     };
-    
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  return (
-    <section id="properties" ref={sectionRef} className="section bg-black relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-24 h-24 rounded-full bg-luxury-gold/5 -translate-x-1/2 parallax-layer"
-        style={{ transform: `translateX(${scrollY * 0.03}px) translateY(${scrollY * 0.02}px)` }}>
+  return <section id="properties" ref={sectionRef} className="section bg-black relative overflow-hidden py-[45px]">
+      <div className="absolute top-0 left-0 w-24 h-24 rounded-full bg-luxury-gold/5 -translate-x-1/2 parallax-layer" style={{
+      transform: `translateX(${scrollY * 0.03}px) translateY(${scrollY * 0.02}px)`
+    }}>
       </div>
-      <div className="absolute bottom-20 right-0 w-40 h-40 rounded-full bg-luxury-gold/10 translate-x-1/2 parallax-layer"
-        style={{ transform: `translateX(${-scrollY * 0.04}px) translateY(${-scrollY * 0.01}px)` }}>
+      <div className="absolute bottom-20 right-0 w-40 h-40 rounded-full bg-luxury-gold/10 translate-x-1/2 parallax-layer" style={{
+      transform: `translateX(${-scrollY * 0.04}px) translateY(${-scrollY * 0.01}px)`
+    }}>
       </div>
       
       <div className="container relative z-10">
@@ -66,21 +58,12 @@ const PropertiesSection = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {properties.map((property, index) => (
-            <div 
-              key={index} 
-              className="bg-luxury-dark rounded-md overflow-hidden shadow-md hover:shadow-lg transition-all duration-500 hover:shadow-luxury-gold/20 hover:-translate-y-2 hover:scale-[1.02] border border-luxury-khaki/10 group"
-              style={{ 
-                transitionDelay: `${index * 50}ms`,
-                transform: `translateY(${Math.min(20, Math.max(-20, (scrollY - 1200) * 0.03 * (index % 3 - 1)))}px)`
-              }}
-            >
+          {properties.map((property, index) => <div key={index} className="bg-luxury-dark rounded-md overflow-hidden shadow-md hover:shadow-lg transition-all duration-500 hover:shadow-luxury-gold/20 hover:-translate-y-2 hover:scale-[1.02] border border-luxury-khaki/10 group" style={{
+          transitionDelay: `${index * 50}ms`,
+          transform: `translateY(${Math.min(20, Math.max(-20, (scrollY - 1200) * 0.03 * (index % 3 - 1)))}px)`
+        }}>
               <div className="relative h-64 overflow-hidden">
-                <img 
-                  src={property.image} 
-                  alt={property.title} 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
+                <img src={property.image} alt={property.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                 <div className="absolute top-4 right-4 bg-luxury-gold text-luxury-black py-1 px-3 rounded-sm text-sm font-medium group-hover:scale-110 transition-transform">
                   {property.type}
                 </div>
@@ -108,8 +91,7 @@ const PropertiesSection = () => {
                   View Details
                 </Button>
               </div>
-            </div>
-          ))}
+            </div>)}
         </div>
         
         <div className="mt-12 text-center">
@@ -121,8 +103,6 @@ const PropertiesSection = () => {
           </Link>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default PropertiesSection;
