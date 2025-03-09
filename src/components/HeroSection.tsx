@@ -21,7 +21,7 @@ const HeroSection = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  return <section id="hero" ref={sectionRef} className="relative min-h-screen flex items-center pt-20 pb-12 overflow-hidden">
+  return <section id="hero" ref={sectionRef} className="relative min-h-screen flex items-center pt-20 pb-32 overflow-hidden">
       {/* Background Image with Parallax Effect */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-r from-luxury-black/95 to-luxury-charcoal/90 z-10" style={{
@@ -38,7 +38,7 @@ const HeroSection = () => {
       </div>
       
       <div className="container relative z-20">
-        <div className="max-w-3xl">
+        <div className="max-w-3xl mb-20">
           <div className="flex items-center gap-2 text-luxury-khaki mb-4 opacity-0 animate-fade-in">
             <MapPin className="h-5 w-5" />
             <span className="text-sm font-medium tracking-wider">ABILENE, TEXAS</span>
@@ -65,8 +65,8 @@ const HeroSection = () => {
         </div>
       </div>
       
-      {/* Stats banner with enhanced visual design */}
-      <div className="absolute bottom-0 left-0 right-0 bg-luxury-dark py-8 z-20 border-t border-luxury-khaki/20">
+      {/* Stats banner with enhanced visual design - moved from absolute positioning to be part of the section flow */}
+      <div className="w-full bg-luxury-dark py-8 z-20 border-t border-luxury-khaki/20 mt-auto">
         <div className="container grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="text-center hover-lift p-4 flex flex-col items-center">
             <div className="bg-luxury-charcoal p-3 rounded-full mb-3 hover:bg-luxury-gold/20 transition-colors">
