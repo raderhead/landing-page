@@ -124,10 +124,10 @@ const AllProperties = () => {
             </a>
             
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Commercial Properties in <span className="text-luxury-gold">Abilene</span>
+              <span className="font-sans">Commercial Properties in</span> <span className="text-luxury-gold font-serif">Abilene</span>
             </h1>
             
-            <p className="text-luxury-khaki text-lg">
+            <p className="text-luxury-khaki text-lg font-sans">
               Browse our curated selection of premium commercial real estate opportunities in the Abilene market.
             </p>
           </div>
