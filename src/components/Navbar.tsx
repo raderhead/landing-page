@@ -70,9 +70,9 @@ const Navbar = () => {
         <div className="flex items-center gap-4">
           <a href="/" className="flex items-center gap-2 text-white group">
             <img 
-              src="/lovable-uploads/a53fd21d-337c-4f2f-90fa-0ca367f3804e.png" 
+              src="/lovable-uploads/ef3a3919-83aa-4b7d-8d5f-a9753d6114f0.png" 
               alt="Josh Rader" 
-              className="h-10 w-auto group-hover:scale-110 transition-transform drop-shadow-md"
+              className="h-12 w-auto group-hover:scale-110 transition-transform drop-shadow-md"
             />
           </a>
           
