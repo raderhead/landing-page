@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/use-toast";
 import { BlogPost } from '@/types/blog';
@@ -15,6 +15,28 @@ interface BlogEditorProps {
 
 const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: BlogEditorProps) => {
   const [saving, setSaving] = useState(false);
+  const [session, setSession] = useState<any>(null);
+
+  // Fetch the session on component mount
+  useEffect(() => {
+    const fetchSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      setSession(data.session);
+      console.log("Current session:", data.session);
+    };
+    
+    fetchSession();
+    
+    // Set up auth state change listener
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, newSession) => {
+      setSession(newSession);
+      console.log("Auth state changed:", event, newSession?.user?.id);
+    });
+    
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,12 +44,24 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
     try {
       setSaving(true);
       
+      // Basic validation
       if (!currentBlog.title || !currentBlog.excerpt || !currentBlog.formattedContent || !currentBlog.category) {
         throw new Error("Please fill all required fields");
       }
       
-      if (!userId) {
+      // Ensure the user is authenticated
+      const { data: sessionData } = await supabase.auth.getSession();
+      const currentSession = sessionData.session;
+      
+      if (!currentSession) {
         throw new Error("You must be logged in to save blog posts");
+      }
+      
+      const currentUserId = currentSession.user.id;
+      console.log("Current user ID for saving:", currentUserId);
+      
+      if (!currentUserId) {
+        throw new Error("Unable to identify current user");
       }
       
       const processedBlocks = currentBlog.formattedContent.map(block => {
@@ -62,7 +96,7 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
         excerpt: currentBlog.excerpt,
         content: htmlContent,
         blocksCount: processedBlocks.length,
-        author_id: userId
+        author_id: currentUserId // Use the current session user ID
       });
       
       if (currentBlog.id) {
@@ -78,7 +112,7 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
             image_url: currentBlog.image_url,
             category: currentBlog.category,
             updated_at: new Date().toISOString(),
-            author_id: userId
+            author_id: currentUserId // Use the current session user ID
           });
           
         if (error) {
@@ -102,7 +136,7 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
             formattedContent: processedBlocks,
             image_url: currentBlog.image_url,
             category: currentBlog.category,
-            author_id: userId
+            author_id: currentUserId // Use the current session user ID
           });
           
         if (error) {
