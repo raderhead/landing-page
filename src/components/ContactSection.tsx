@@ -1,47 +1,70 @@
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+
 const ContactSection = () => {
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
     message: ""
   });
+  const [loading, setLoading] = useState(false);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const {
-      name,
-      value
-    } = e.target;
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
   };
-  const handleSubmit = (e: React.FormEvent) => {
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
-    // In a real application, you would send this data to your backend
-    console.log("Form submitted:", formData);
-    toast({
-      title: "Message Sent!",
-      description: "Thank you for reaching out. Josh will contact you shortly."
-    });
+    try {
+      // Send data to Supabase Edge Function
+      const { data, error } = await supabase.functions.invoke('send-contact-email', {
+        body: formData
+      });
 
-    // Reset form
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      message: ""
-    });
+      if (error) {
+        throw error;
+      }
+
+      console.log("Email sent successfully:", data);
+      
+      toast({
+        title: "Message Sent!",
+        description: "Thank you for reaching out. Josh will contact you shortly."
+      });
+
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        message: ""
+      });
+    } catch (error) {
+      console.error("Error sending message:", error);
+      toast({
+        title: "Error Sending Message",
+        description: "There was a problem sending your message. Please try again later.",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
   };
+
   return <section id="contact" className="section bg-luxury-dark py-[50px]">
       <div className="container">
         <div className="text-center max-w-3xl mx-auto mb-12">
@@ -125,8 +148,12 @@ const ContactSection = () => {
                   <Textarea id="message" name="message" value={formData.message} onChange={handleChange} placeholder="I'm interested in commercial property in downtown Abilene..." rows={4} required className="bg-luxury-charcoal border-luxury-khaki/20 text-white focus:border-luxury-gold focus:ring-luxury-gold/50" />
                 </div>
                 
-                <Button type="submit" className="w-full bg-luxury-gold hover:bg-luxury-khaki text-luxury-black rounded-sm">
-                  Send Message
+                <Button 
+                  type="submit" 
+                  disabled={loading}
+                  className="w-full bg-luxury-gold hover:bg-luxury-khaki text-luxury-black rounded-sm flex items-center justify-center"
+                >
+                  {loading ? 'Sending...' : 'Send Message'}
                 </Button>
               </div>
             </form>
