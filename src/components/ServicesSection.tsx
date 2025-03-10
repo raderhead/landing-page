@@ -35,14 +35,23 @@ const ServicesSection = () => {
   const [scrollY, setScrollY] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
   
-  // Configure embla carousel with autoplay plugin
+  // Configure embla carousel with autoplay plugin - set loop to true and configured for continuous scrolling
+  const autoplayOptions = {
+    delay: 2000,          // Shorter delay between transitions
+    stopOnInteraction: false, // Don't stop on user interaction
+    stopOnMouseEnter: false,  // Don't stop on mouse enter
+    playOnInit: true       // Start playing immediately
+  };
+  
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { 
-      loop: true,
+      loop: true,          // Enable loop
       align: "start",
-      slidesToScroll: 1
+      slidesToScroll: 1,
+      speed: 8,           // Slower transition for smoother continuous flow
+      dragFree: true      // Enables momentum scrolling
     },
-    [Autoplay({ delay: 5000, stopOnInteraction: false })]
+    [Autoplay(autoplayOptions)]
   );
   
   useEffect(() => {
@@ -81,6 +90,7 @@ const ServicesSection = () => {
         <div className="mx-auto max-w-6xl relative px-4">
           <div className="relative" ref={emblaRef}>
             <div className="flex">
+              {/* Duplicate the services at the beginning for smoother loop transition */}
               {services.map((service, index) => (
                 <div 
                   key={index} 
