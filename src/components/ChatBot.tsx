@@ -27,8 +27,6 @@ const ChatBot = ({ initialSystemPrompt = "You are a helpful real estate assistan
   ]);
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const [apiKey, setApiKey] = useState<string | null>(null);
-  const [showKeyInput, setShowKeyInput] = useState(false);
 
   useEffect(() => {
     scrollToBottom();

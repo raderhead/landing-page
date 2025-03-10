@@ -49,7 +49,6 @@ serve(async (req) => {
     });
 
     console.log("Sending request to Perplexity API");
-    console.log("Messages:", JSON.stringify(formattedMessages));
     
     const response = await fetch('https://api.perplexity.ai/chat/completions', {
       method: 'POST',
@@ -80,6 +79,7 @@ serve(async (req) => {
 
     const data = await response.json();
     console.log("Received response from Perplexity API");
+    console.log("Response data:", JSON.stringify(data, null, 2));
 
     // Extract the response text
     let responseText = "";
