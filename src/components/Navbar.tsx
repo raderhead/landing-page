@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Menu, X, Phone, BookText, LogIn, User } from "lucide-react";
@@ -76,7 +77,7 @@ const Navbar = () => {
           </a>
           
           <a href="https://mccullarproperties.com/" target="_blank" rel="noopener noreferrer" className="hidden md:flex items-center gap-2 border-l border-luxury-gold/30 pl-3 group hover:bg-luxury-charcoal/30 transition-all p-1 rounded">
-            <img alt="McCullar Properties Group" className="h-7 w-auto group-hover:scale-105 transition-transform drop-shadow-sm" src="/lovable-uploads/bda42a85-fa69-47e4-b7d2-1900e3411ffb.png" />
+            <img alt="McCullar Properties Group" className="h-12 w-auto group-hover:scale-105 transition-transform drop-shadow-sm" src="/lovable-uploads/bda42a85-fa69-47e4-b7d2-1900e3411ffb.png" />
           </a>
         </div>
 
@@ -137,7 +138,7 @@ const Navbar = () => {
           <div className="container flex flex-col gap-3">
             <a href="https://mccullarproperties.com/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 py-2 border-b border-luxury-khaki/10 group hover:bg-luxury-charcoal/30 transition-all p-2 rounded">
               <span className="text-luxury-khaki text-xs uppercase tracking-wide group-hover:text-luxury-gold transition-colors">Proudly Brokered By</span>
-              <img alt="McCullar Properties Group" className="h-6 w-auto group-hover:scale-105 transition-transform" src="/lovable-uploads/6635c4f1-9b1d-4ef5-949a-4b78d5df568e.png" />
+              <img alt="McCullar Properties Group" className="h-10 w-auto group-hover:scale-105 transition-transform" src="/lovable-uploads/6635c4f1-9b1d-4ef5-949a-4b78d5df568e.png" />
             </a>
             <a href="#services" onClick={e => handleScrollToSection(e, 'services')} className="text-white font-medium py-2 border-b border-luxury-khaki/10 uppercase text-xs tracking-wider hover:pl-2 hover:text-luxury-gold transition-all">
               Services
