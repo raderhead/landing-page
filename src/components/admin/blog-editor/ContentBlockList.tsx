@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { BlogContentBlock, TEXT_COLORS, FONT_SIZES, TEXT_ALIGNMENTS } from '@/types/blog';
@@ -35,6 +36,60 @@ const ContentBlockList: React.FC<ContentBlockListProps> = ({
   formatTextForPreview,
   textareaRefs
 }) => {
+  const [currentFontSize, setCurrentFontSize] = useState("");
+  
+  useEffect(() => {
+    const checkSelectionFormatting = () => {
+      const selection = window.getSelection();
+      if (!selection || selection.rangeCount === 0 || !activeBlockId) return;
+      
+      // Check if selection contains a span with font size class
+      const range = selection.getRangeAt(0);
+      let currentNode = range.startContainer;
+      
+      // Navigate up to find if we're inside a span with a font size class
+      while (currentNode && currentNode.nodeType !== Node.ELEMENT_NODE) {
+        currentNode = currentNode.parentNode;
+      }
+      
+      if (currentNode && currentNode.nodeType === Node.ELEMENT_NODE) {
+        const element = currentNode as Element;
+        
+        // Check for font size classes
+        for (const size of FONT_SIZES) {
+          if (element.classList.contains(size.value)) {
+            setCurrentFontSize(size.value);
+            return;
+          }
+        }
+        
+        // If we're here, check parent elements for font size classes
+        let parent = element.parentElement;
+        while (parent) {
+          for (const size of FONT_SIZES) {
+            if (parent.classList.contains(size.value)) {
+              setCurrentFontSize(size.value);
+              return;
+            }
+          }
+          parent = parent.parentElement;
+        }
+      }
+      
+      // Reset if no font size found
+      setCurrentFontSize("");
+    };
+    
+    document.addEventListener('selectionchange', checkSelectionFormatting);
+    
+    // Initial check
+    checkSelectionFormatting();
+    
+    return () => {
+      document.removeEventListener('selectionchange', checkSelectionFormatting);
+    };
+  }, [activeBlockId]);
+
   const handleFormatCommand = (command: string) => {
     if (activeBlockId) {
       const selection = window.getSelection();
@@ -177,10 +232,17 @@ const ContentBlockList: React.FC<ContentBlockListProps> = ({
       
       try {
         setTimeout(() => {
-          const newRange = document.createRange();
-          newRange.selectNodeContents(span);
-          selection.removeAllRanges();
-          selection.addRange(newRange);
+          // Preserve selection after content change
+          const newSelection = window.getSelection();
+          if (newSelection) {
+            const newRange = document.createRange();
+            newRange.selectNodeContents(span);
+            newSelection.removeAllRanges();
+            newSelection.addRange(newRange);
+            
+            // Update current font size
+            setCurrentFontSize(fontSize);
+          }
         }, 10);
       } catch (e) {
         console.log("Could not restore selection", e);
@@ -264,11 +326,10 @@ const ContentBlockList: React.FC<ContentBlockListProps> = ({
         </div>
         
         <select
-          value=""
+          value={currentFontSize}
           onChange={(e) => {
             if (e.target.value) {
               handleFontSize(e.target.value);
-              e.target.value = ""; // Reset after selection
             }
           }}
           className="h-9 rounded-md border border-input bg-background px-2 text-sm"
