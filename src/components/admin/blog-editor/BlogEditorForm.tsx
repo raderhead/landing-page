@@ -1,10 +1,10 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Save } from "lucide-react";
 import { v4 as uuidv4 } from 'uuid';
+import { toast } from "@/components/ui/use-toast";
 import { BlogPost, BlogContentBlock, BLOG_CATEGORIES } from '@/types/blog';
 import ImageUpload from './ImageUpload';
 import ContentBlockList from './ContentBlockList';
@@ -136,39 +136,57 @@ const BlogEditorForm: React.FC<BlogEditorFormProps> = ({
 
   const applyFormatToSelection = (id: string, formatType: string, formatValue: string) => {
     const textarea = textareaRefs.current[id];
+
     if (!textarea) return;
-    
+
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
-    
+
     if (start === end) {
+      toast({ title: "Please select some text first." });
       return;
     }
-    
-    const block = contentBlocks.find(b => b.id === id);
-    if (!block) return;
-    
-    const selectedText = block.content.substring(start, end);
-    
-    let formattedText = "";
-    if (formatType === 'fontWeight' && formatValue === 'bold') {
-      formattedText = `<strong>${selectedText}</strong>`;
-    } else if (formatType === 'fontStyle' && formatValue === 'italic') {
-      formattedText = `<em>${selectedText}</em>`;
-    } else if (formatType === 'textDecoration' && formatValue === 'underline') {
-      formattedText = `<u>${selectedText}</u>`;
-    }
-    
-    const newContent = block.content.substring(0, start) + formattedText + block.content.substring(end);
-    
-    handleContentBlockChange(id, newContent);
-    
-    setTimeout(() => {
-      if (textarea) {
-        textarea.focus();
-        textarea.setSelectionRange(start, start + formattedText.length);
+
+    setContentBlocks(blocks => blocks.map(block => {
+      if (block.id !== id) return block;
+
+      const contentBefore = block.content.substring(0, start);
+      const selectedText = block.content.substring(start, end);
+      const contentAfter = block.content.substring(end);
+
+      let formattedText = selectedText;
+
+      switch (formatType) {
+        case 'fontWeight':
+          if (formatValue === 'bold') formattedText = `<strong>${selectedText}</strong>`;
+          break;
+        case 'fontStyle':
+          if (formatValue === 'italic') formattedText = `<em>${selectedText}</em>`;
+          break;
+        case 'textDecoration':
+          if (formatValue === 'underline') formattedText = `<u>${selectedText}</u>`;
+          break;
+        default:
+          formattedText = selectedText;
       }
-    }, 0);
+
+      const newContent = `${contentBefore}${formattedText}${contentAfter}`;
+      
+      setTimeout(() => {
+        if (textarea) {
+          textarea.focus();
+          textarea.setSelectionRange(
+            contentBefore.length, 
+            contentBefore.length + formattedText.length
+          );
+        }
+      }, 0);
+      
+      return {
+        ...block,
+        content: newContent
+      };
+    }));
   };
 
   const formatTextForPreview = (content: string) => {
@@ -198,13 +216,11 @@ const BlogEditorForm: React.FC<BlogEditorFormProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Update the currentBlog with the contentBlocks before saving
     setCurrentBlog(prev => ({
       ...prev,
       formattedContent: contentBlocks
     }));
     
-    // Call the parent onSave method
     await onSave(e);
   };
 
