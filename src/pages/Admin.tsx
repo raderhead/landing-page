@@ -1,9 +1,10 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
-import { LogOut, Plus, Pen, FileText } from "lucide-react";
+import { LogOut, Plus, FileText } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BlogEditor from "@/components/admin/BlogEditor";
@@ -223,11 +224,13 @@ const Admin = () => {
           </div>
         ) : null}
         
-        <BlogList 
-          blogs={blogs}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
+        <div className="bg-luxury-khaki/10 p-6 rounded-lg">
+          <BlogList 
+            blogs={blogs}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
+        </div>
       </main>
       <Footer />
     </div>
