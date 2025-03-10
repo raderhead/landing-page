@@ -16,6 +16,7 @@ interface ContentBlockListProps {
   setActiveBlockId: (id: string) => void;
   applyFormatToSelection: (id: string, formatType: string, formatValue: string) => void;
   formatTextForPreview: (content: string) => React.ReactNode;
+  textareaRefs: React.MutableRefObject<{[key: string]: HTMLTextAreaElement | null}>;
 }
 
 const ContentBlockList: React.FC<ContentBlockListProps> = ({
@@ -28,7 +29,8 @@ const ContentBlockList: React.FC<ContentBlockListProps> = ({
   addContentBlock,
   setActiveBlockId,
   applyFormatToSelection,
-  formatTextForPreview
+  formatTextForPreview,
+  textareaRefs
 }) => {
   return (
     <div className="border border-input rounded-md p-4 space-y-4">
@@ -44,6 +46,7 @@ const ContentBlockList: React.FC<ContentBlockListProps> = ({
           onSetActiveBlock={setActiveBlockId}
           formatTextForPreview={formatTextForPreview}
           onFormatSelection={applyFormatToSelection}
+          textareaRef={el => textareaRefs.current[block.id] = el}
         />
       ))}
       

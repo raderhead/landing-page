@@ -1,9 +1,8 @@
 
-import React, { useRef } from 'react';
+import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { BlogContentBlock, TEXT_COLORS, FONT_SIZES, TEXT_ALIGNMENTS } from "@/types/blog";
 import { 
@@ -21,6 +20,7 @@ interface ContentBlockProps {
   onSetActiveBlock: (id: string) => void;
   formatTextForPreview: (content: string) => React.ReactNode;
   onFormatSelection: (id: string, formatType: string, formatValue: string) => void;
+  textareaRef: (el: HTMLTextAreaElement | null) => void;
 }
 
 const ContentBlock: React.FC<ContentBlockProps> = ({
@@ -32,10 +32,9 @@ const ContentBlock: React.FC<ContentBlockProps> = ({
   onRemoveBlock,
   onSetActiveBlock,
   formatTextForPreview,
-  onFormatSelection
+  onFormatSelection,
+  textareaRef
 }) => {
-  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-  
   return (
     <div 
       className={cn(

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -63,8 +64,8 @@ const BlogEditorForm: React.FC<BlogEditorFormProps> = ({
   };
 
   const handleContentBlockChange = (id: string, content: string) => {
-    setContentBlocks(blocks => 
-      blocks.map(block => 
+    setContentBlocks(prevBlocks => 
+      prevBlocks.map(block => 
         block.id === id ? { ...block, content } : block
       )
     );
@@ -146,47 +147,43 @@ const BlogEditorForm: React.FC<BlogEditorFormProps> = ({
       toast({ title: "Please select some text first." });
       return;
     }
-
-    setContentBlocks(blocks => blocks.map(block => {
-      if (block.id !== id) return block;
-
-      const contentBefore = block.content.substring(0, start);
-      const selectedText = block.content.substring(start, end);
-      const contentAfter = block.content.substring(end);
-
-      let formattedText = selectedText;
-
-      switch (formatType) {
-        case 'fontWeight':
-          if (formatValue === 'bold') formattedText = `<strong>${selectedText}</strong>`;
-          break;
-        case 'fontStyle':
-          if (formatValue === 'italic') formattedText = `<em>${selectedText}</em>`;
-          break;
-        case 'textDecoration':
-          if (formatValue === 'underline') formattedText = `<u>${selectedText}</u>`;
-          break;
-        default:
-          formattedText = selectedText;
+    
+    // Get the content block
+    const block = contentBlocks.find(b => b.id === id);
+    if (!block) return;
+    
+    // Extract content parts
+    const contentBefore = block.content.substring(0, start);
+    const selectedText = block.content.substring(start, end);
+    const contentAfter = block.content.substring(end);
+    
+    // Format the selected text
+    let formattedText = selectedText;
+    
+    if (formatType === 'fontWeight' && formatValue === 'bold') {
+      formattedText = `<strong>${selectedText}</strong>`;
+    } else if (formatType === 'fontStyle' && formatValue === 'italic') {
+      formattedText = `<em>${selectedText}</em>`;
+    } else if (formatType === 'textDecoration' && formatValue === 'underline') {
+      formattedText = `<u>${selectedText}</u>`;
+    }
+    
+    // Combine the parts
+    const newContent = contentBefore + formattedText + contentAfter;
+    
+    // Update the content block
+    handleContentBlockChange(id, newContent);
+    
+    // Set focus back to the textarea and position cursor after the formatted text
+    setTimeout(() => {
+      if (textarea) {
+        textarea.focus();
+        textarea.setSelectionRange(
+          contentBefore.length + formattedText.length, 
+          contentBefore.length + formattedText.length
+        );
       }
-
-      const newContent = `${contentBefore}${formattedText}${contentAfter}`;
-      
-      setTimeout(() => {
-        if (textarea) {
-          textarea.focus();
-          textarea.setSelectionRange(
-            contentBefore.length, 
-            contentBefore.length + formattedText.length
-          );
-        }
-      }, 0);
-      
-      return {
-        ...block,
-        content: newContent
-      };
-    }));
+    }, 0);
   };
 
   const formatTextForPreview = (content: string) => {
@@ -280,6 +277,7 @@ const BlogEditorForm: React.FC<BlogEditorFormProps> = ({
           setActiveBlockId={setActiveBlockId}
           applyFormatToSelection={applyFormatToSelection}
           formatTextForPreview={formatTextForPreview}
+          textareaRefs={textareaRefs}
         />
       </div>
       
