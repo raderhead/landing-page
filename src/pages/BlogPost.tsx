@@ -61,10 +61,11 @@ const BlogPost = () => {
   // Function to render content with preserved line breaks
   const renderContentWithLineBreaks = (content: string) => {
     if (!content) return null;
+    
+    // Split by \n and wrap each line in spans
     return content.split('\n').map((line, i) => (
-      <span key={i}>
-        {line}
-        {i < content.split('\n').length - 1 && <br />}
+      <span key={i} className="block">
+        {line.length > 0 ? line : <br />}
       </span>
     ));
   };

@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,6 +22,7 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
   const [uploading, setUploading] = useState(false);
   const [contentBlocks, setContentBlocks] = useState<BlogContentBlock[]>([]);
   const [activeBlockId, setActiveBlockId] = useState<string | null>(null);
+  const textareaRefs = useRef<{[key: string]: HTMLTextAreaElement | null}>({});
   
   const categories = [
     "Market Trends", "Leasing", "Investment", "Due Diligence", "Property Management"
@@ -128,22 +129,54 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
     );
   };
 
-  const toggleBlockStyle = (id: string, styleProp: string, value: string) => {
-    setContentBlocks(blocks => 
-      blocks.map(block => {
-        if (block.id === id) {
-          const currentValue = block.style?.[styleProp];
-          return { 
-            ...block, 
-            style: { 
-              ...block.style,
-              [styleProp]: currentValue === value ? undefined : value 
-            } 
-          };
-        }
-        return block;
-      })
-    );
+  const applyFormatToSelection = (id: string, formatType: string, formatValue: string) => {
+    const textarea = textareaRefs.current[id];
+    if (!textarea) return;
+    
+    // Get the current selection
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    
+    // If there's no selection, don't apply formatting
+    if (start === end) {
+      toast({
+        title: "No text selected",
+        description: "Please select some text to format",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    // Get the current block content
+    const block = contentBlocks.find(b => b.id === id);
+    if (!block) return;
+    
+    // Get the selected text
+    const selectedText = block.content.substring(start, end);
+    
+    // Create HTML-like formatting
+    let formattedText = "";
+    if (formatType === 'fontWeight' && formatValue === 'bold') {
+      formattedText = `<strong>${selectedText}</strong>`;
+    } else if (formatType === 'fontStyle' && formatValue === 'italic') {
+      formattedText = `<em>${selectedText}</em>`;
+    } else if (formatType === 'textDecoration' && formatValue === 'underline') {
+      formattedText = `<u>${selectedText}</u>`;
+    }
+    
+    // Replace the selected text with the formatted text
+    const newContent = block.content.substring(0, start) + formattedText + block.content.substring(end);
+    
+    // Update the block content
+    handleContentBlockChange(id, newContent);
+    
+    // Set the selection to include the formatted text
+    setTimeout(() => {
+      if (textarea) {
+        textarea.focus();
+        textarea.setSelectionRange(start, start + formattedText.length);
+      }
+    }, 0);
   };
 
   const handleBlockTypeChange = (id: string, newType: BlogContentBlock['type']) => {
@@ -212,8 +245,20 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
         throw new Error("Please fill all required fields");
       }
       
+      // Process the content blocks to handle HTML-like formatting tags
+      const processedBlocks = contentBlocks.map(block => {
+        // Process the content to handle HTML tags
+        let processedContent = block.content;
+        
+        // Create a copy of the block with processed content
+        return {
+          ...block,
+          content: processedContent
+        };
+      });
+      
       // Generate HTML content from blocks for backward compatibility
-      const htmlContent = contentBlocks.map(block => {
+      const htmlContent = processedBlocks.map(block => {
         switch(block.type) {
           case 'heading':
             return `<h3>${block.content}</h3>`;
@@ -237,7 +282,7 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
             title: currentBlog.title,
             excerpt: currentBlog.excerpt,
             content: htmlContent,
-            formattedContent: contentBlocks,
+            formattedContent: processedBlocks,
             image_url: currentBlog.image_url,
             category: currentBlog.category,
             updated_at: new Date().toISOString()
@@ -257,7 +302,7 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
             title: currentBlog.title,
             excerpt: currentBlog.excerpt,
             content: htmlContent,
-            formattedContent: contentBlocks,
+            formattedContent: processedBlocks,
             image_url: currentBlog.image_url,
             category: currentBlog.category,
             author_id: userId
@@ -281,14 +326,30 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
     }
   };
 
-  // Function to determine if a style is active
-  const isStyleActive = (block: BlogContentBlock, styleProp: string, value: string) => {
-    return block.style?.[styleProp] === value;
+  // Function to format text based on HTML-like tags for preview
+  const formatTextForPreview = (content: string) => {
+    if (!content) return null;
+
+    // Replace HTML-like tags with styled spans
+    let formattedContent = content
+      .replace(/<strong>(.*?)<\/strong>/g, '<span class="font-bold">$1</span>')
+      .replace(/<em>(.*?)<\/em>/g, '<span class="italic">$1</span>')
+      .replace(/<u>(.*?)<\/u>/g, '<span class="underline">$1</span>');
+    
+    // Replace newlines with <br /> tags
+    formattedContent = formattedContent.split('\n').map((line, i, arr) => (
+      <React.Fragment key={i}>
+        <span dangerouslySetInnerHTML={{ __html: line }} />
+        {i < arr.length - 1 && <br />}
+      </React.Fragment>
+    ));
+    
+    return formattedContent;
   };
 
   // Function to preserve line breaks in preview
   const formatContentWithLineBreaks = (content: string) => {
-    if (!content) return "";
+    if (!content) return null;
     return content.split('\n').map((line, i) => (
       <React.Fragment key={i}>
         {line}
@@ -426,6 +487,7 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
                 ) : (
                   <Textarea
                     id={`block-${block.id}`}
+                    ref={(el) => textareaRefs.current[block.id] = el}
                     value={block.content || ''}
                     onChange={(e) => handleContentBlockChange(block.id, e.target.value)}
                     placeholder={
@@ -487,8 +549,8 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
                       type="button"
                       variant="ghost"
                       size="sm"
-                      onClick={() => toggleBlockStyle(block.id, 'fontWeight', 'bold')}
-                      className={isStyleActive(block, 'fontWeight', 'bold') ? "bg-luxury-gold/20" : ""}
+                      onClick={() => applyFormatToSelection(block.id, 'fontWeight', 'bold')}
+                      title="Bold (select text first)"
                     >
                       <Bold className="h-3 w-3" />
                     </Button>
@@ -496,8 +558,8 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
                       type="button"
                       variant="ghost"
                       size="sm"
-                      onClick={() => toggleBlockStyle(block.id, 'fontStyle', 'italic')}
-                      className={isStyleActive(block, 'fontStyle', 'italic') ? "bg-luxury-gold/20" : ""}
+                      onClick={() => applyFormatToSelection(block.id, 'fontStyle', 'italic')}
+                      title="Italic (select text first)"
                     >
                       <Italic className="h-3 w-3" />
                     </Button>
@@ -505,8 +567,8 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
                       type="button"
                       variant="ghost"
                       size="sm"
-                      onClick={() => toggleBlockStyle(block.id, 'textDecoration', 'underline')}
-                      className={isStyleActive(block, 'textDecoration', 'underline') ? "bg-luxury-gold/20" : ""}
+                      onClick={() => applyFormatToSelection(block.id, 'textDecoration', 'underline')}
+                      title="Underline (select text first)"
                     >
                       <Underline className="h-3 w-3" />
                     </Button>
@@ -543,9 +605,6 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
                       className={cn(
                         block.style?.fontSize || 'text-base',
                         block.style?.align ? `text-${block.style.align}` : 'text-left',
-                        block.style?.fontWeight === 'bold' ? 'font-bold' : '',
-                        block.style?.fontStyle === 'italic' ? 'italic' : '',
-                        block.style?.textDecoration === 'underline' ? 'underline' : '',
                       )}
                       style={{ color: block.style?.color || '#121212' }}
                     >
@@ -558,7 +617,13 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
                           ))}
                         </ul>
                       ) : (
-                        formatContentWithLineBreaks(block.content)
+                        <div dangerouslySetInnerHTML={{ 
+                          __html: block.content
+                            .replace(/\n/g, '<br />')
+                            .replace(/<strong>(.*?)<\/strong>/g, '<span class="font-bold">$1</span>')
+                            .replace(/<em>(.*?)<\/em>/g, '<span class="italic">$1</span>')
+                            .replace(/<u>(.*?)<\/u>/g, '<span class="underline">$1</span>')
+                        }} />
                       )}
                     </div>
                   </div>
