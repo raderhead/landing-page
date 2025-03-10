@@ -121,16 +121,28 @@
     @apply border-0 shadow-none focus-visible:ring-1 focus-visible:ring-primary/30;
   }
   
-  /* Form input styles for darker themed UI */
-  .dark-input {
-    @apply bg-luxury-charcoal border-0 text-white focus:ring-1 focus:ring-luxury-gold/50;
+  /* New utility classes for admin panel */
+  .admin-header {
+    @apply bg-luxury-black/95 backdrop-blur-sm shadow-md;
   }
   
-  .dark-textarea {
-    @apply bg-luxury-charcoal border-0 text-white focus:ring-1 focus:ring-luxury-gold/50 resize-none;
+  .admin-container {
+    @apply bg-gradient-to-b from-background to-muted/30;
   }
   
-  .gold-button {
-    @apply bg-luxury-gold hover:bg-luxury-gold/90 text-luxury-black font-medium transition-all duration-300;
+  .admin-title-container {
+    @apply border-b border-luxury-gold/10 shadow-sm;
+  }
+  
+  .admin-card-enhanced {
+    @apply bg-white rounded-lg border border-luxury-khaki/20 shadow-sm hover:shadow-md transition-all;
+  }
+  
+  .admin-section-title {
+    @apply text-xl font-medium text-foreground;
+  }
+  
+  .admin-section-subtitle {
+    @apply text-sm text-muted-foreground;
   }
 }

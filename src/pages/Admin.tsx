@@ -158,7 +158,7 @@ const Admin = () => {
 
   if (loading && blogs.length === 0) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background admin-container">
         <Navbar />
         <div className="container py-20">
           <div className="flex justify-center items-center min-h-[50vh]">
@@ -174,22 +174,22 @@ const Admin = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background admin-container">
       <Navbar />
       <main className="container py-16 max-w-5xl">
         <div className="mb-8">
-          <div className="p-6 mb-6 bg-white rounded-lg shadow-sm">
+          <div className="p-6 mb-6 bg-white rounded-lg shadow-sm admin-title-container">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div>
-                <h1 className="text-2xl font-semibold text-foreground mb-1">Blog Management</h1>
-                <p className="text-muted-foreground text-sm">Create and manage your blog content</p>
+                <h1 className="text-2xl font-semibold text-foreground mb-1 font-serif">Blog Management</h1>
+                <p className="text-muted-foreground text-sm font-sans">Create and manage your blog content</p>
               </div>
               <div className="flex flex-col sm:flex-row gap-3">
                 {!isEditing ? (
                   <Button 
                     onClick={handleNewBlog}
                     size="sm"
-                    className="bg-primary hover:bg-primary/90"
+                    className="bg-luxury-gold hover:bg-luxury-khaki text-luxury-black font-medium"
                   >
                     <Plus className="h-4 w-4 mr-1" /> New Post
                   </Button>
@@ -198,6 +198,7 @@ const Admin = () => {
                   variant="outline" 
                   size="sm"
                   onClick={handleSignOut}
+                  className="border-luxury-khaki/50 text-luxury-slate hover:bg-luxury-khaki/10"
                 >
                   <LogOut className="h-4 w-4 mr-1" /> Sign Out
                 </Button>
@@ -207,7 +208,12 @@ const Admin = () => {
         </div>
         
         {isEditing ? (
-          <div className="bg-white rounded-lg shadow-sm border overflow-hidden mb-10">
+          <div className="bg-white rounded-lg shadow-md border border-luxury-khaki/20 overflow-hidden mb-10">
+            <div className="border-b border-luxury-khaki/10 bg-luxury-cream/50 px-4 py-3 flex items-center">
+              <h2 className="font-medium text-luxury-slate">
+                {currentBlog.id ? 'Edit Post' : 'Create New Post'}
+              </h2>
+            </div>
             <BlogEditor 
               currentBlog={currentBlog}
               setCurrentBlog={setCurrentBlog}

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Building, Menu, X, Phone, BookText, LogIn, User } from "lucide-react";
@@ -18,7 +17,6 @@ const Navbar = () => {
     };
     window.addEventListener('scroll', handleScroll);
     
-    // Check if user is logged in
     const checkUser = async () => {
       const { data } = await supabase.auth.getSession();
       setUser(data.session?.user || null);
@@ -26,7 +24,6 @@ const Navbar = () => {
     
     checkUser();
     
-    // Listen for auth changes
     const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user || null);
     });
@@ -62,39 +59,53 @@ const Navbar = () => {
     }
   };
 
-  return <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-luxury-black shadow-md py-2' : 'bg-transparent py-4'}`}>
+  const isAdminPage = location.pathname.includes('/admin');
+  const navbarClass = isAdminPage 
+    ? `fixed top-0 left-0 right-0 z-50 transition-all duration-300 admin-header py-3`
+    : `fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-luxury-black shadow-md py-2' : 'bg-transparent py-4'}`;
+
+  return <header className={navbarClass}>
       <nav className="container flex items-center justify-between">
         <div className="flex items-center gap-4">
           <a href="/" className="flex items-center gap-2 text-white group">
-            <Building className="h-8 w-8 text-luxury-gold group-hover:scale-110 transition-transform" />
-            <span className="font-bold text-xl group-hover:text-luxury-gold transition-colors">Josh Rader</span>
+            <Building className="h-8 w-8 text-luxury-gold group-hover:scale-110 transition-transform drop-shadow-md" />
+            <span className="font-bold text-xl group-hover:text-luxury-gold transition-colors drop-shadow-md">Josh Rader</span>
           </a>
           
           <a href="https://mccullarproperties.com/" target="_blank" rel="noopener noreferrer" className="hidden md:flex items-center gap-2 border-l border-luxury-gold/30 pl-4 group hover:bg-luxury-charcoal/30 transition-all p-1 rounded">
-            <img alt="McCullar Properties Group" className="h-8 w-auto group-hover:scale-105 transition-transform" src="/lovable-uploads/bda42a85-fa69-47e4-b7d2-1900e3411ffb.png" />
+            <img alt="McCullar Properties Group" className="h-8 w-auto group-hover:scale-105 transition-transform drop-shadow-sm" src="/lovable-uploads/bda42a85-fa69-47e4-b7d2-1900e3411ffb.png" />
           </a>
         </div>
 
         <div className="hidden md:flex items-center gap-6">
-          <a href="#services" onClick={e => handleScrollToSection(e, 'services')} className="text-white hover:text-luxury-gold font-medium transition-colors uppercase text-sm tracking-wider hover-underline-grow">
-            Services
-          </a>
-          <a href="#properties" onClick={e => handleScrollToSection(e, 'properties')} className="text-white hover:text-luxury-gold font-medium transition-colors uppercase text-sm tracking-wider hover-underline-grow">
-            Properties
-          </a>
-          <a href="#about" onClick={e => handleScrollToSection(e, 'about')} className="text-white hover:text-luxury-gold font-medium transition-colors uppercase text-sm tracking-wider hover-underline-grow">
-            About
-          </a>
-          <a href="#blogs" onClick={e => handleScrollToSection(e, 'blogs')} className="text-white hover:text-luxury-gold font-medium transition-colors uppercase text-sm tracking-wider hover-underline-grow">
-            Blog
-          </a>
-          <a href="#contact" onClick={e => handleScrollToSection(e, 'contact')} className="text-white hover:text-luxury-gold font-medium transition-colors uppercase text-sm tracking-wider hover-underline-grow">
-            Contact
-          </a>
-          <Button className="bg-luxury-gold hover:bg-luxury-khaki text-luxury-black flex items-center gap-2 rounded-sm hover-scale group">
-            <Phone className="h-4 w-4 group-hover:rotate-12 transition-transform" />
-            <span>Call Josh</span>
-          </Button>
+          {!isAdminPage ? (
+            <>
+              <a href="#services" onClick={e => handleScrollToSection(e, 'services')} className="text-white hover:text-luxury-gold font-medium transition-colors uppercase text-sm tracking-wider hover-underline-grow drop-shadow-md">
+                Services
+              </a>
+              <a href="#properties" onClick={e => handleScrollToSection(e, 'properties')} className="text-white hover:text-luxury-gold font-medium transition-colors uppercase text-sm tracking-wider hover-underline-grow drop-shadow-md">
+                Properties
+              </a>
+              <a href="#about" onClick={e => handleScrollToSection(e, 'about')} className="text-white hover:text-luxury-gold font-medium transition-colors uppercase text-sm tracking-wider hover-underline-grow drop-shadow-md">
+                About
+              </a>
+              <a href="#blogs" onClick={e => handleScrollToSection(e, 'blogs')} className="text-white hover:text-luxury-gold font-medium transition-colors uppercase text-sm tracking-wider hover-underline-grow drop-shadow-md">
+                Blog
+              </a>
+              <a href="#contact" onClick={e => handleScrollToSection(e, 'contact')} className="text-white hover:text-luxury-gold font-medium transition-colors uppercase text-sm tracking-wider hover-underline-grow drop-shadow-md">
+                Contact
+              </a>
+              <Button className="bg-luxury-gold hover:bg-luxury-khaki text-luxury-black flex items-center gap-2 rounded-sm hover-scale group">
+                <Phone className="h-4 w-4 group-hover:rotate-12 transition-transform" />
+                <span>Call Josh</span>
+              </Button>
+            </>
+          ) : (
+            <div className="text-white/80 font-medium flex items-center gap-2">
+              <BookText className="h-4 w-4 text-luxury-gold" />
+              <span className="uppercase tracking-wider text-sm">Blog Management</span>
+            </div>
+          )}
           <Button 
             onClick={handleAuthClick}
             variant="outline" 
