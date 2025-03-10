@@ -23,15 +23,20 @@ const HeroSection = () => {
   }, []);
   
   return <section ref={sectionRef} className="relative min-h-screen flex items-center pt-20 pb-52 overflow-hidden">
-      {/* Background Image with Parallax Effect */}
+      {/* Video Background with Overlay */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-r from-luxury-black/95 to-luxury-charcoal/90 z-10" style={{
-        transform: `translateY(${scrollY * 0.1}px)`
-      }}></div>
-        <img src="/lovable-uploads/452f8926-d28f-4549-93ac-40a82a160575.png" alt="Abilene Downtown Skyline" className="w-full h-full object-cover object-center" style={{
-        transform: `translateY(${scrollY * 0.1}px) scale(${1 + scrollY * 0.0002})`,
-        transformOrigin: 'center center'
-      }} />
+        <div className="absolute inset-0 bg-gradient-to-r from-luxury-black/95 to-luxury-charcoal/90 z-10"></div>
+        <video 
+          className="w-full h-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+        >
+          <source src="/lovable-uploads/abilene-skyline.mp4" type="video/mp4" />
+          {/* Fallback to image if video doesn't load */}
+          <img src="/lovable-uploads/452f8926-d28f-4549-93ac-40a82a160575.png" alt="Abilene Downtown Skyline" className="w-full h-full object-cover object-center" />
+        </video>
       </div>
       
       <div className="container relative z-20 flex md:flex-row flex-col items-center">
