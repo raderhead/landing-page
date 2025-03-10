@@ -63,12 +63,15 @@ const ContentBlock: React.FC<ContentBlockProps> = ({
       if (selection && selection.rangeCount > 0) {
         const range = selection.getRangeAt(0);
         const br = document.createElement('br');
-        range.deleteContents();
-        range.insertNode(br);
+        const div = document.createElement('div');
+        div.appendChild(br);
         
-        // Move the cursor after the <br>
-        range.setStartAfter(br);
-        range.setEndAfter(br);
+        range.deleteContents();
+        range.insertNode(div);
+        
+        // Move cursor after the br
+        range.setStartAfter(div);
+        range.collapse(true);
         selection.removeAllRanges();
         selection.addRange(range);
         
@@ -82,6 +85,9 @@ const ContentBlock: React.FC<ContentBlockProps> = ({
             .replace(/<\/div>/g, '')
           );
         }
+        
+        // Prevent default behavior that causes cursor to jump
+        return false;
       }
     }
   };

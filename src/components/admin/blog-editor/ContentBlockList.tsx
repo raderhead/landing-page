@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
@@ -36,12 +35,14 @@ const ContentBlockList: React.FC<ContentBlockListProps> = ({
   formatTextForPreview,
   textareaRefs
 }) => {
-  // Format command handler
   const handleFormatCommand = (command: string) => {
     if (activeBlockId) {
+      const selection = window.getSelection();
+      if (!selection || selection.rangeCount === 0) return;
+      const range = selection.getRangeAt(0).cloneRange();
+      
       document.execCommand(command, false);
       
-      // Store the formatted HTML
       const block = contentBlocks.find(block => block.id === activeBlockId);
       if (block) {
         const editorElement = document.getElementById(`editor-${activeBlockId}`);
@@ -55,6 +56,15 @@ const ContentBlockList: React.FC<ContentBlockListProps> = ({
             .replace(/^\s*<br>/g, '');
             
           onContentBlockChange(activeBlockId, formattedHtml);
+          
+          try {
+            setTimeout(() => {
+              selection.removeAllRanges();
+              selection.addRange(range);
+            }, 10);
+          } catch (e) {
+            console.log("Could not restore exact selection");
+          }
         }
       }
     }
@@ -63,9 +73,9 @@ const ContentBlockList: React.FC<ContentBlockListProps> = ({
   const handleAlignParagraph = (alignment: string) => {
     if (!activeBlockId) return;
     
-    // Get the currently selected text or cursor position
     const selection = window.getSelection();
-    if (!selection) return;
+    if (!selection || selection.rangeCount === 0) return;
+    const range = selection.getRangeAt(0).cloneRange();
     
     const editorElement = document.getElementById(`editor-${activeBlockId}`);
     if (!editorElement) return;
@@ -87,7 +97,6 @@ const ContentBlockList: React.FC<ContentBlockListProps> = ({
         break;
     }
     
-    // Store the updated HTML
     const formattedHtml = editorElement.innerHTML
       .replace(/<b>(.*?)<\/b>/g, '<strong>$1</strong>')
       .replace(/<i>(.*?)<\/i>/g, '<em>$1</em>')
@@ -97,19 +106,26 @@ const ContentBlockList: React.FC<ContentBlockListProps> = ({
       .replace(/^\s*<br>/g, '');
       
     onContentBlockChange(activeBlockId, formattedHtml);
+    
+    try {
+      setTimeout(() => {
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }, 10);
+    } catch (e) {
+      console.log("Could not restore exact selection");
+    }
   };
 
   const handleTextColor = (color: string) => {
     if (!activeBlockId) return;
     
-    // Save the current selection
     const selection = window.getSelection();
     if (!selection || selection.rangeCount === 0) return;
-    const range = selection.getRangeAt(0);
+    const range = selection.getRangeAt(0).cloneRange();
     
     document.execCommand('foreColor', false, color);
     
-    // Store the formatted HTML
     const editorElement = document.getElementById(`editor-${activeBlockId}`);
     if (editorElement) {
       const formattedHtml = editorElement.innerHTML
@@ -122,46 +138,33 @@ const ContentBlockList: React.FC<ContentBlockListProps> = ({
         
       onContentBlockChange(activeBlockId, formattedHtml);
       
-      // Restore selection
-      setTimeout(() => {
-        selection.removeAllRanges();
-        selection.addRange(range);
-      }, 10);
+      try {
+        setTimeout(() => {
+          selection.removeAllRanges();
+          selection.addRange(range);
+        }, 10);
+      } catch (e) {
+        console.log("Could not restore exact selection");
+      }
     }
   };
 
   const handleFontSize = (fontSize: string) => {
     if (!activeBlockId) return;
     
-    // Get the selection
     const selection = window.getSelection();
     if (!selection || selection.rangeCount === 0) return;
-    
-    const range = selection.getRangeAt(0).cloneRange(); // Clone the range to restore later
+    const range = selection.getRangeAt(0).cloneRange();
     if (range.collapsed) return; // No text selected
     
-    // Store start and end points to restore selection
-    const startContainer = range.startContainer;
-    const startOffset = range.startOffset;
-    const endContainer = range.endContainer;
-    const endOffset = range.endOffset;
+    const selectedContent = range.extractContents();
+    const span = document.createElement('span');
+    span.className = fontSize;
+    span.appendChild(selectedContent);
+    range.insertNode(span);
     
-    // Instead of surroundContents which can cause errors with complex selections,
-    // use execCommand with fontSize and then apply classes with JavaScript
-    document.execCommand('fontSize', false, '7'); // Use a temporary size
-    
-    // Now find all font elements with size 7 and replace them with spans
     const editorElement = document.getElementById(`editor-${activeBlockId}`);
     if (editorElement) {
-      const fontElements = editorElement.querySelectorAll('font[size="7"]');
-      fontElements.forEach(element => {
-        const span = document.createElement('span');
-        span.className = fontSize;
-        span.innerHTML = element.innerHTML;
-        element.parentNode?.replaceChild(span, element);
-      });
-      
-      // Store the formatted HTML
       const formattedHtml = editorElement.innerHTML
         .replace(/<b>(.*?)<\/b>/g, '<strong>$1</strong>')
         .replace(/<i>(.*?)<\/i>/g, '<em>$1</em>')
@@ -169,28 +172,24 @@ const ContentBlockList: React.FC<ContentBlockListProps> = ({
         .replace(/<div>/g, '<br>')
         .replace(/<\/div>/g, '')
         .replace(/^\s*<br>/g, '');
-        
+      
       onContentBlockChange(activeBlockId, formattedHtml);
       
-      // Restore selection
-      setTimeout(() => {
-        try {
+      try {
+        setTimeout(() => {
           const newRange = document.createRange();
-          newRange.setStart(startContainer, startOffset);
-          newRange.setEnd(endContainer, endOffset);
-          
+          newRange.selectNodeContents(span);
           selection.removeAllRanges();
           selection.addRange(newRange);
-        } catch (error) {
-          console.log("Couldn't restore selection exactly, but the formatting was applied");
-        }
-      }, 10);
+        }, 10);
+      } catch (e) {
+        console.log("Could not restore selection", e);
+      }
     }
   };
 
   return (
     <div className="border border-input rounded-md p-4 space-y-4">
-      {/* Global format toolbar at the top */}
       <div className="flex flex-wrap gap-2 mb-6 p-2 bg-background border rounded-md">
         <div className="flex border rounded-md">
           <Button
@@ -299,7 +298,6 @@ const ContentBlockList: React.FC<ContentBlockListProps> = ({
             ))}
           </select>
           
-          {/* Color swatches preview */}
           <div className="absolute top-full left-0 mt-1 p-2 bg-white border rounded-md shadow-md z-10 grid grid-cols-3 gap-1 w-48 hidden group-hover:block">
             {TEXT_COLORS.map(color => (
               <button
@@ -320,7 +318,6 @@ const ContentBlockList: React.FC<ContentBlockListProps> = ({
         </div>
       </div>
 
-      {/* Color swatches display */}
       <div className="flex flex-wrap gap-2 mb-4 p-2 border rounded-md">
         <div className="text-xs font-medium text-muted-foreground mb-1 w-full">Available Colors:</div>
         <div className="flex flex-wrap gap-1">
