@@ -9,6 +9,7 @@ export type BlogContentBlock = {
     align?: 'left' | 'center' | 'right' | 'justify';
     fontWeight?: string;
     fontStyle?: string;
+    textDecoration?: string;
   };
 };
 

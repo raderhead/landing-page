@@ -4,9 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select } from "@/components/ui/select";
 import { toast } from "@/components/ui/use-toast";
-import { Image, Save, Plus, Trash2, AlignLeft, AlignCenter, AlignRight, AlignJustify, Bold, Italic, Type, Quote, List, FileImage } from "lucide-react";
+import { Image, Save, Plus, Trash2, AlignLeft, AlignCenter, AlignRight, AlignJustify, Bold, Italic, Type, Quote, List, FileImage, Underline } from "lucide-react";
 import { v4 as uuidv4 } from 'uuid';
 import { BlogPost, BlogContentBlock, TEXT_COLORS, FONT_SIZES, TEXT_ALIGNMENTS } from '@/types/blog';
 import { cn } from '@/lib/utils';
@@ -129,11 +128,43 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
     );
   };
 
+  const toggleBlockStyle = (id: string, styleProp: string, value: string) => {
+    setContentBlocks(blocks => 
+      blocks.map(block => {
+        if (block.id === id) {
+          const currentValue = block.style?.[styleProp];
+          return { 
+            ...block, 
+            style: { 
+              ...block.style,
+              [styleProp]: currentValue === value ? undefined : value 
+            } 
+          };
+        }
+        return block;
+      })
+    );
+  };
+
   const handleBlockTypeChange = (id: string, newType: BlogContentBlock['type']) => {
     setContentBlocks(blocks => 
-      blocks.map(block => 
-        block.id === id ? { ...block, type: newType } : block
-      )
+      blocks.map(block => {
+        if (block.id === id) {
+          // Reset some styles when changing to heading for better appearance
+          let updatedStyle = { ...block.style };
+          if (newType === 'heading') {
+            updatedStyle.fontSize = 'text-2xl';
+            updatedStyle.fontWeight = 'bold';
+          }
+          
+          return { 
+            ...block, 
+            type: newType,
+            style: updatedStyle
+          };
+        }
+        return block;
+      })
     );
   };
 
@@ -248,6 +279,22 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
         variant: "destructive"
       });
     }
+  };
+
+  // Function to determine if a style is active
+  const isStyleActive = (block: BlogContentBlock, styleProp: string, value: string) => {
+    return block.style?.[styleProp] === value;
+  };
+
+  // Function to preserve line breaks in preview
+  const formatContentWithLineBreaks = (content: string) => {
+    if (!content) return "";
+    return content.split('\n').map((line, i) => (
+      <React.Fragment key={i}>
+        {line}
+        {i < content.split('\n').length - 1 && <br />}
+      </React.Fragment>
+    ));
   };
 
   return (
@@ -440,12 +487,8 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
                       type="button"
                       variant="ghost"
                       size="sm"
-                      onClick={() => handleBlockStyleChange(
-                        block.id, 
-                        'fontWeight', 
-                        block.style?.fontWeight === 'bold' ? '' : 'bold'
-                      )}
-                      className={block.style?.fontWeight === 'bold' ? "bg-luxury-gold/20" : ""}
+                      onClick={() => toggleBlockStyle(block.id, 'fontWeight', 'bold')}
+                      className={isStyleActive(block, 'fontWeight', 'bold') ? "bg-luxury-gold/20" : ""}
                     >
                       <Bold className="h-3 w-3" />
                     </Button>
@@ -453,14 +496,19 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
                       type="button"
                       variant="ghost"
                       size="sm"
-                      onClick={() => handleBlockStyleChange(
-                        block.id, 
-                        'fontStyle', 
-                        block.style?.fontStyle === 'italic' ? '' : 'italic'
-                      )}
-                      className={block.style?.fontStyle === 'italic' ? "bg-luxury-gold/20" : ""}
+                      onClick={() => toggleBlockStyle(block.id, 'fontStyle', 'italic')}
+                      className={isStyleActive(block, 'fontStyle', 'italic') ? "bg-luxury-gold/20" : ""}
                     >
                       <Italic className="h-3 w-3" />
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => toggleBlockStyle(block.id, 'textDecoration', 'underline')}
+                      className={isStyleActive(block, 'textDecoration', 'underline') ? "bg-luxury-gold/20" : ""}
+                    >
+                      <Underline className="h-3 w-3" />
                     </Button>
                   </div>
                   
@@ -497,6 +545,7 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
                         block.style?.align ? `text-${block.style.align}` : 'text-left',
                         block.style?.fontWeight === 'bold' ? 'font-bold' : '',
                         block.style?.fontStyle === 'italic' ? 'italic' : '',
+                        block.style?.textDecoration === 'underline' ? 'underline' : '',
                       )}
                       style={{ color: block.style?.color || '#121212' }}
                     >
@@ -509,7 +558,7 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
                           ))}
                         </ul>
                       ) : (
-                        block.content
+                        formatContentWithLineBreaks(block.content)
                       )}
                     </div>
                   </div>

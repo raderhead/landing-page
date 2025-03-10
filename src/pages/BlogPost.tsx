@@ -58,6 +58,17 @@ const BlogPost = () => {
     }
   };
 
+  // Function to render content with preserved line breaks
+  const renderContentWithLineBreaks = (content: string) => {
+    if (!content) return null;
+    return content.split('\n').map((line, i) => (
+      <span key={i}>
+        {line}
+        {i < content.split('\n').length - 1 && <br />}
+      </span>
+    ));
+  };
+
   const renderFormattedContent = () => {
     if (!post) return null;
     
@@ -71,12 +82,14 @@ const BlogPost = () => {
             const fontSize = block.style?.fontSize || '';
             const fontWeight = block.style?.fontWeight ? `font-${block.style.fontWeight}` : '';
             const fontStyle = block.style?.fontStyle === 'italic' ? 'italic' : '';
+            const textDecoration = block.style?.textDecoration === 'underline' ? 'underline' : '';
             
             const className = cn(
               textAlign,
               fontSize,
               fontWeight,
               fontStyle,
+              textDecoration,
               "max-w-none leading-relaxed"
             );
             
@@ -88,7 +101,7 @@ const BlogPost = () => {
                     className={cn("font-bold text-2xl my-4", className)}
                     style={{ color: textColor }}
                   >
-                    {block.content}
+                    {renderContentWithLineBreaks(block.content)}
                   </h2>
                 );
               case 'paragraph':
@@ -98,7 +111,7 @@ const BlogPost = () => {
                     className={className}
                     style={{ color: textColor }}
                   >
-                    {block.content}
+                    {renderContentWithLineBreaks(block.content)}
                   </p>
                 );
               case 'quote':
@@ -108,7 +121,7 @@ const BlogPost = () => {
                     className={cn("border-l-4 border-luxury-gold pl-4 italic py-2", className)}
                     style={{ color: textColor }}
                   >
-                    {block.content}
+                    {renderContentWithLineBreaks(block.content)}
                   </blockquote>
                 );
               case 'list':
@@ -140,7 +153,7 @@ const BlogPost = () => {
                     className={className}
                     style={{ color: textColor }}
                   >
-                    {block.content}
+                    {renderContentWithLineBreaks(block.content)}
                   </p>
                 );
             }
