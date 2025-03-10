@@ -60,6 +60,45 @@ const ContentBlockList: React.FC<ContentBlockListProps> = ({
     }
   };
 
+  const handleAlignParagraph = (alignment: string) => {
+    if (!activeBlockId) return;
+    
+    // Get the currently selected text or cursor position
+    const selection = window.getSelection();
+    if (!selection) return;
+    
+    const editorElement = document.getElementById(`editor-${activeBlockId}`);
+    if (!editorElement) return;
+    
+    document.execCommand('formatBlock', false, '<p>');
+    
+    switch(alignment) {
+      case 'left':
+        document.execCommand('justifyLeft', false);
+        break;
+      case 'center':
+        document.execCommand('justifyCenter', false);
+        break;
+      case 'right':
+        document.execCommand('justifyRight', false);
+        break;
+      case 'justify':
+        document.execCommand('justifyFull', false);
+        break;
+    }
+    
+    // Store the updated HTML
+    const formattedHtml = editorElement.innerHTML
+      .replace(/<b>(.*?)<\/b>/g, '<strong>$1</strong>')
+      .replace(/<i>(.*?)<\/i>/g, '<em>$1</em>')
+      .replace(/<div><br><\/div>/g, '<br>')
+      .replace(/<div>/g, '<br>')
+      .replace(/<\/div>/g, '')
+      .replace(/^\s*<br>/g, '');
+      
+    onContentBlockChange(activeBlockId, formattedHtml);
+  };
+
   return (
     <div className="border border-input rounded-md p-4 space-y-4">
       {/* Global format toolbar at the top */}
@@ -69,8 +108,7 @@ const ContentBlockList: React.FC<ContentBlockListProps> = ({
             type="button"
             variant="ghost"
             size="sm"
-            onClick={() => activeBlockId && onBlockStyleChange(activeBlockId, 'align', 'left')}
-            className={activeBlockId && contentBlocks.find(b => b.id === activeBlockId)?.style?.align === 'left' ? "bg-luxury-gold/20" : ""}
+            onClick={() => handleAlignParagraph('left')}
             disabled={!activeBlockId}
           >
             <AlignLeft className="h-4 w-4" />
@@ -79,8 +117,7 @@ const ContentBlockList: React.FC<ContentBlockListProps> = ({
             type="button"
             variant="ghost"
             size="sm"
-            onClick={() => activeBlockId && onBlockStyleChange(activeBlockId, 'align', 'center')}
-            className={activeBlockId && contentBlocks.find(b => b.id === activeBlockId)?.style?.align === 'center' ? "bg-luxury-gold/20" : ""}
+            onClick={() => handleAlignParagraph('center')}
             disabled={!activeBlockId}
           >
             <AlignCenter className="h-4 w-4" />
@@ -89,8 +126,7 @@ const ContentBlockList: React.FC<ContentBlockListProps> = ({
             type="button"
             variant="ghost"
             size="sm"
-            onClick={() => activeBlockId && onBlockStyleChange(activeBlockId, 'align', 'right')}
-            className={activeBlockId && contentBlocks.find(b => b.id === activeBlockId)?.style?.align === 'right' ? "bg-luxury-gold/20" : ""}
+            onClick={() => handleAlignParagraph('right')}
             disabled={!activeBlockId}
           >
             <AlignRight className="h-4 w-4" />
@@ -99,8 +135,7 @@ const ContentBlockList: React.FC<ContentBlockListProps> = ({
             type="button"
             variant="ghost"
             size="sm"
-            onClick={() => activeBlockId && onBlockStyleChange(activeBlockId, 'align', 'justify')}
-            className={activeBlockId && contentBlocks.find(b => b.id === activeBlockId)?.style?.align === 'justify' ? "bg-luxury-gold/20" : ""}
+            onClick={() => handleAlignParagraph('justify')}
             disabled={!activeBlockId}
           >
             <AlignJustify className="h-4 w-4" />
