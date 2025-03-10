@@ -35,21 +35,21 @@ const ServicesSection = () => {
   const [scrollY, setScrollY] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
   
-  // Configure embla carousel with autoplay plugin - set loop to true and configured for continuous scrolling
+  // Configure embla carousel with autoplay plugin for continuous scrolling without stopping
   const autoplayOptions = {
-    delay: 2000,          // Shorter delay between transitions
+    delay: 0,              // No delay between slides
     stopOnInteraction: false, // Don't stop on user interaction
-    stopOnMouseEnter: false,  // Don't stop on mouse enter
+    stopOnMouseEnter: false,  // Don't stop on mouse hover
     playOnInit: true       // Start playing immediately
   };
   
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { 
-      loop: true,          // Enable loop
+      loop: true,
       align: "start",
       slidesToScroll: 1,
-      speed: 8,           // Slower transition for smoother continuous flow
-      dragFree: true      // Enables momentum scrolling
+      duration: 50,        // Slower transition speed for smoother continuous flow
+      dragFree: true       // Enables momentum scrolling
     },
     [Autoplay(autoplayOptions)]
   );
