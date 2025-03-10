@@ -37,6 +37,10 @@ const ContactSection = () => {
         throw new Error("Please fill in all required fields");
       }
 
+      // Get the current session for authorization
+      const { data: sessionData } = await supabase.auth.getSession();
+      const accessToken = sessionData.session?.access_token || "";
+
       // Directly fetch the edge function to have more control over the request
       const functionUrl = "https://xfmguaamogzirnnqktwz.supabase.co/functions/v1/send-contact-email";
       
@@ -46,8 +50,9 @@ const ContactSection = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${supabase.auth.getSession().then(res => res.data.session?.access_token || "")}`,
-          "apikey": supabase.supabaseKey
+          "Authorization": `Bearer ${accessToken}`,
+          // Use the project URL from the supabase client as the anon key is already initialized there
+          "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhmbWd1YWFtb2d6aXJubnFrdHd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NjMxMzMsImV4cCI6MjA1NzEzOTEzM30.OjoZDtrxo7z2Xa2fQ4_FSKISQehuSNx3UbHKjfFzNxg"
         },
         body: JSON.stringify(formData)
       });
