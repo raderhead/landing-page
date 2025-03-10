@@ -125,6 +125,10 @@ const Auth = () => {
     }
   };
 
+  const navigateToChat = () => {
+    navigate('/chat');
+  };
+
   return (
     <div className="min-h-screen">
       <Navbar />
@@ -206,6 +210,17 @@ const Auth = () => {
               {isLogin ? "Need an account? Sign up" : "Already have an account? Sign in"}
             </button>
           </div>
+
+          {isVerified && (
+            <div className="mt-6 text-center">
+              <Button
+                onClick={navigateToChat}
+                className="w-full bg-luxury-navy hover:bg-luxury-navy/80 text-white"
+              >
+                Go to Chat Bot
+              </Button>
+            </div>
+          )}
         </div>
       </main>
 
@@ -247,7 +262,7 @@ const Auth = () => {
               <line x1="18" y1="6" x2="6" y2="18"></line>
               <line x1="6" y1="6" x2="18" y2="18"></line>
             </svg>
-            <span className="sr-only">Close and return to homepage</span>
+            <span className="sr-only">Close</span>
           </button>
         </DialogContent>
       </Dialog>
