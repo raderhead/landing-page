@@ -19,7 +19,7 @@ const Footer = () => {
               Licensed commercial real estate agent serving Abilene, TX and surrounding areas with expertise in all types of commercial properties.
             </p>
             <div className="flex gap-4">
-              <a href="#" className="text-luxury-khaki hover:text-luxury-gold transition-colors">
+              <a href="https://www.facebook.com/brotivater" className="text-luxury-khaki hover:text-luxury-gold transition-colors">
                 <Facebook className="h-5 w-5" />
               </a>
               <a href="#" className="text-luxury-khaki hover:text-luxury-gold transition-colors">
