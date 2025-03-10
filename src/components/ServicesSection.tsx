@@ -35,7 +35,7 @@ const ServicesSection = () => {
   const [scrollY, setScrollY] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
   
-  // Configure embla carousel with autoplay plugin for continuous scrolling without stopping
+  // Configure embla carousel with autoplay plugin for very slow continuous scrolling
   const autoplayOptions = {
     delay: 0,              // No delay between slides
     stopOnInteraction: false, // Don't stop on user interaction
@@ -48,7 +48,7 @@ const ServicesSection = () => {
       loop: true,
       align: "start",
       slidesToScroll: 1,
-      duration: 50,        // Slower transition speed for smoother continuous flow
+      duration: 300,        // Much slower transition speed for very smooth scrolling
       dragFree: true       // Enables momentum scrolling
     },
     [Autoplay(autoplayOptions)]
