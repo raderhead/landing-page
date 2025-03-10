@@ -1,20 +1,37 @@
+import { useState } from 'react';
 import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
+import { useNavigate } from 'react-router-dom';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const [clickCount, setClickCount] = useState(0);
+  const navigate = useNavigate();
+  
+  const handleLogoClick = () => {
+    const newCount = clickCount + 1;
+    setClickCount(newCount);
+    
+    if (newCount === 3) {
+      setClickCount(0); // Reset count
+      navigate('/auth'); // Navigate to auth page
+    }
+  };
   
   return (
     <footer className="bg-luxury-black text-white pt-12 pb-6">
       <div className="container">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           <div className="flex flex-col items-center md:items-start">
-            <div className="mb-4">
+            <button 
+              onClick={handleLogoClick}
+              className="mb-4 cursor-pointer"
+            >
               <img 
                 src="/lovable-uploads/8e0f7a87-fcde-45bb-840a-20ba1452adde.png" 
                 alt="Josh Rader" 
                 className="h-20 w-auto drop-shadow-md"
               />
-            </div>
+            </button>
             <p className="text-luxury-khaki mb-6">
               Licensed commercial real estate agent serving Abilene, TX and surrounding areas with expertise in all types of commercial properties.
             </p>
