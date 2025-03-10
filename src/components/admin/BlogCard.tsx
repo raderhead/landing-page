@@ -13,9 +13,7 @@ interface BlogCardProps {
 }
 
 const BlogCard = ({ blog, onEdit, onDelete }: BlogCardProps) => {
-  if (blog.title.includes("Abilene") || 
-      blog.excerpt.includes("Trump") || 
-      blog.excerpt.includes("Abilene Market")) {
+  if (blog.title === "Abilene Market Is on the rise after Trump's announcement of AI jobs") {
     return null;
   }
 

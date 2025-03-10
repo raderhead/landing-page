@@ -26,7 +26,10 @@ export const supabase = createClient<Database>(
   }
 );
 
-// Helper function to get blogs with filtering applied
+// The ID of the problematic blog post to filter out
+const PROBLEMATIC_BLOG_ID = "problematic-blog-id-to-filter"; // Replace with actual ID if known
+
+// Helper function to get blogs with specific filtering applied
 export const getFilteredBlogs = async () => {
   const { data, error } = await supabase
     .from('blog_posts')
@@ -35,11 +38,10 @@ export const getFilteredBlogs = async () => {
   
   if (error) throw error;
   
-  // Always filter out problematic posts
+  // Filter out only the problematic post (if ID is known) or posts with the exact problematic title
   return data ? data.filter(blog => 
-    !blog.title.includes("Abilene") && 
-    !blog.excerpt.includes("Trump") && 
-    !blog.excerpt.includes("Abilene Market")
+    blog.id !== PROBLEMATIC_BLOG_ID && 
+    blog.title !== "Abilene Market Is on the rise after Trump's announcement of AI jobs"
   ) : [];
 };
 

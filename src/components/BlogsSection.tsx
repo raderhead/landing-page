@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -30,13 +29,10 @@ const BlogsSection = () => {
       // Use the getFilteredBlogs helper function instead of direct query
       const filteredData = await getFilteredBlogs();
       
-      // Apply additional filtering here as a safety measure
-      const safeBlogs = filteredData.filter(blog => 
-        !blog.title.includes("Abilene") && 
-        !blog.excerpt.includes("Trump") && 
-        !blog.excerpt.includes("Abilene Market")
-      ).filter(blog => blog.published === true) // Only show published posts
-      .slice(0, 3); // Limit to 3 posts
+      const safeBlogs = filteredData
+        .filter(blog => blog.title !== "Abilene Market Is on the rise after Trump's announcement of AI jobs")
+        .filter(blog => blog.published === true) // Only show published posts
+        .slice(0, 3); // Limit to 3 posts
       
       setBlogs(safeBlogs);
       console.log("Filtered homepage blogs:", safeBlogs);
@@ -72,10 +68,8 @@ const BlogsSection = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
             {blogs.map((blog) => {
               // Double-check filtering at the rendering level too
-              if (blog.title.includes("Abilene") || 
-                  blog.excerpt.includes("Trump") || 
-                  blog.excerpt.includes("Abilene Market")) {
-                return null; // Skip rendering this blog card
+              if (blog.title === "Abilene Market Is on the rise after Trump's announcement of AI jobs") {
+                return null; // Skip rendering this specific blog card
               }
               
               return (
