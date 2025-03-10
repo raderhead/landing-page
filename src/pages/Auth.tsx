@@ -1,11 +1,10 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
-import { Mail, Lock, User, Eye, EyeOff, Key } from "lucide-react";
+import { Mail, Lock, User, Eye, EyeOff, Key, Home } from "lucide-react";
 import { 
   Dialog, 
   DialogContent, 
@@ -207,10 +206,21 @@ const Auth = () => {
             </button>
           </div>
         </div>
+
+        <div className="max-w-md mx-auto mt-6 text-center">
+          <Button 
+            onClick={() => navigate('/')} 
+            variant="outline" 
+            className="flex items-center gap-2"
+          >
+            <Home className="h-5 w-5" />
+            Return to Homepage
+          </Button>
+        </div>
       </main>
 
-      <Dialog open={inviteDialogOpen} onOpenChange={setInviteDialogOpen}>
-        <DialogContent className="sm:max-w-md">
+      <Dialog open={inviteDialogOpen} onOpenChange={setInviteDialogOpen} modal={true}>
+        <DialogContent className="sm:max-w-md" onPointerDownOutside={(e) => e.preventDefault()} onEscapeKeyDown={(e) => e.preventDefault()}>
           <DialogHeader>
             <DialogTitle className="text-center text-2xl">Enter Invite Code</DialogTitle>
             <DialogDescription className="text-center">
