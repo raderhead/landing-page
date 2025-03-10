@@ -9,6 +9,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
 import { BlogPost as BlogPostType, BlogContentBlock } from '@/types/blog';
 import { cn } from '@/lib/utils';
+
 const BlogPost = () => {
   const {
     id
@@ -18,9 +19,11 @@ const BlogPost = () => {
   const [post, setPost] = useState<BlogPostType | null>(null);
   const [relatedPosts, setRelatedPosts] = useState<BlogPostType[]>([]);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     fetchBlogPost();
   }, [id]);
+
   const fetchBlogPost = async () => {
     try {
       setLoading(true);
@@ -56,6 +59,7 @@ const BlogPost = () => {
       setLoading(false);
     }
   };
+
   const generateShareUrls = () => {
     if (!post) return {
       twitter: '',
@@ -71,6 +75,7 @@ const BlogPost = () => {
       linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${url}`
     };
   };
+
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href).then(() => {
       toast({
@@ -85,6 +90,7 @@ const BlogPost = () => {
       });
     });
   };
+
   const renderFormattedContent = () => {
     if (!post) return null;
     if (post.formattedContent && post.formattedContent.length > 0) {
@@ -142,6 +148,7 @@ const BlogPost = () => {
       __html: post.content
     }} />;
   };
+
   if (loading) {
     return <div className="min-h-screen">
         <Navbar />
@@ -153,6 +160,7 @@ const BlogPost = () => {
         <Footer />
       </div>;
   }
+
   if (!post) {
     return <div className="min-h-screen">
         <Navbar />
@@ -168,7 +176,9 @@ const BlogPost = () => {
         <Footer />
       </div>;
   }
+
   const shareUrls = generateShareUrls();
+
   return <div className="min-h-screen">
       <Navbar />
       <main>
@@ -177,7 +187,11 @@ const BlogPost = () => {
           <img src={post?.image_url || "https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-1.2.1&auto=format&fit=crop&q=80"} alt={post?.title} className="w-full h-full object-cover" />
           <div className="absolute bottom-0 left-0 right-0 z-20 container pb-12">
             <div className="max-w-4xl">
-              <Button variant="outline" asChild className="mb-6 border-white/20 text-white hover:bg-white/10 transition-colors">
+              <Button 
+                variant="outline" 
+                asChild 
+                className="mb-6 bg-luxury-gold/90 hover:bg-luxury-khaki text-luxury-black border-luxury-gold/70 hover:border-luxury-black/20 transition-colors hover:scale-105"
+              >
                 <Link to="/blog" className="flex items-center">
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   Back to Blog
@@ -248,7 +262,7 @@ const BlogPost = () => {
                 <p className="text-luxury-slate text-sm mb-4">
                   Josh is a licensed commercial real estate agent with over 10 years of experience in Abilene's market.
                 </p>
-                <Button className="w-full bg-luxury-gold hover:bg-luxury-khaki text-luxury-black transition-all duration-300">
+                <Button className="w-full bg-luxury-gold hover:bg-luxury-khaki text-luxury-black transition-all duration-300 hover:scale-105">
                   Contact Josh
                 </Button>
               </div>
@@ -290,4 +304,6 @@ const BlogPost = () => {
       <Footer />
     </div>;
 };
+
 export default BlogPost;
+
