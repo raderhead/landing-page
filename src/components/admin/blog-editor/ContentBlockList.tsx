@@ -99,6 +99,57 @@ const ContentBlockList: React.FC<ContentBlockListProps> = ({
     onContentBlockChange(activeBlockId, formattedHtml);
   };
 
+  const handleTextColor = (color: string) => {
+    if (!activeBlockId) return;
+    document.execCommand('foreColor', false, color);
+    
+    // Store the formatted HTML
+    const editorElement = document.getElementById(`editor-${activeBlockId}`);
+    if (editorElement) {
+      const formattedHtml = editorElement.innerHTML
+        .replace(/<b>(.*?)<\/b>/g, '<strong>$1</strong>')
+        .replace(/<i>(.*?)<\/i>/g, '<em>$1</em>')
+        .replace(/<div><br><\/div>/g, '<br>')
+        .replace(/<div>/g, '<br>')
+        .replace(/<\/div>/g, '')
+        .replace(/^\s*<br>/g, '');
+        
+      onContentBlockChange(activeBlockId, formattedHtml);
+    }
+  };
+
+  const handleFontSize = (fontSize: string) => {
+    if (!activeBlockId) return;
+    
+    // Get the selection
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return;
+    
+    const range = selection.getRangeAt(0);
+    if (range.collapsed) return; // No text selected
+    
+    // Create a span with the font size class
+    const span = document.createElement('span');
+    span.className = fontSize;
+    
+    // Apply the span to the selected text
+    range.surroundContents(span);
+    
+    // Store the updated HTML
+    const editorElement = document.getElementById(`editor-${activeBlockId}`);
+    if (editorElement) {
+      const formattedHtml = editorElement.innerHTML
+        .replace(/<b>(.*?)<\/b>/g, '<strong>$1</strong>')
+        .replace(/<i>(.*?)<\/i>/g, '<em>$1</em>')
+        .replace(/<div><br><\/div>/g, '<br>')
+        .replace(/<div>/g, '<br>')
+        .replace(/<\/div>/g, '')
+        .replace(/^\s*<br>/g, '');
+        
+      onContentBlockChange(activeBlockId, formattedHtml);
+    }
+  };
+
   return (
     <div className="border border-input rounded-md p-4 space-y-4">
       {/* Global format toolbar at the top */}
@@ -176,22 +227,34 @@ const ContentBlockList: React.FC<ContentBlockListProps> = ({
         </div>
         
         <select
-          value={activeBlockId ? contentBlocks.find(b => b.id === activeBlockId)?.style?.fontSize || 'text-base' : 'text-base'}
-          onChange={(e) => activeBlockId && onBlockStyleChange(activeBlockId, 'fontSize', e.target.value)}
+          value=""
+          onChange={(e) => {
+            if (e.target.value) {
+              handleFontSize(e.target.value);
+              e.target.value = ""; // Reset after selection
+            }
+          }}
           className="h-9 rounded-md border border-input bg-background px-2 text-sm"
           disabled={!activeBlockId}
         >
+          <option value="">Font Size</option>
           {FONT_SIZES.map(size => (
             <option key={size.value} value={size.value}>{size.name}</option>
           ))}
         </select>
         
         <select
-          value={activeBlockId ? contentBlocks.find(b => b.id === activeBlockId)?.style?.color || '#121212' : '#121212'}
-          onChange={(e) => activeBlockId && onBlockStyleChange(activeBlockId, 'color', e.target.value)}
+          value=""
+          onChange={(e) => {
+            if (e.target.value) {
+              handleTextColor(e.target.value);
+              e.target.value = ""; // Reset after selection
+            }
+          }}
           className="h-9 rounded-md border border-input bg-background px-2 text-sm"
           disabled={!activeBlockId}
         >
+          <option value="">Text Color</option>
           {TEXT_COLORS.map(color => (
             <option key={color.value} value={color.value}>{color.name}</option>
           ))}

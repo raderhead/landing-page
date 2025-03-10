@@ -107,11 +107,7 @@ const ContentBlock: React.FC<ContentBlockProps> = ({
             <div
               id={`editor-${block.id}`}
               ref={editorRef}
-              className={cn(
-                "min-h-[150px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:border-luxury-gold overflow-auto",
-                block.style?.fontSize || 'text-base',
-              )}
-              style={{ color: block.style?.color || '#121212' }}
+              className="min-h-[150px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:border-luxury-gold overflow-auto"
               contentEditable
               suppressContentEditableWarning
               onInput={() => {
