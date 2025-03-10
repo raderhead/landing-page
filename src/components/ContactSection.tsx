@@ -1,138 +1,124 @@
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
+
 const ContactSection = () => {
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
     message: ""
   });
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const {
-      name,
-      value
-    } = e.target;
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
   };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     // In a real application, you would send this data to your backend
     console.log("Form submitted:", formData);
-    toast({
-      title: "Message Sent!",
-      description: "Thank you for reaching out. Josh will contact you shortly."
-    });
+    
+    // Simulate network request
+    setTimeout(() => {
+      toast({
+        title: "Message Sent!",
+        description: "Thank you for reaching out. Josh will contact you shortly."
+      });
 
-    // Reset form
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      message: ""
-    });
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        message: ""
+      });
+      setIsSubmitting(false);
+    }, 1000);
   };
-  return <section id="contact" className="section bg-luxury-dark py-[50px]">
-      <div className="container">
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <h2 className="section-title text-white">Contact Josh</h2>
-          <p className="section-subtitle text-luxury-khaki">
-            Ready to find your ideal commercial property? Get in touch with Josh today
-          </p>
-        </div>
+
+  return (
+    <section id="contact" className="section bg-luxury-black py-[50px] px-4 md:px-0">
+      <div className="container max-w-3xl mx-auto">
+        <h2 className="text-4xl font-bold mb-12 text-white">Send a Message</h2>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <div className="bg-luxury-black p-8 rounded-md mb-8 border border-luxury-khaki/10">
-              <h3 className="text-2xl font-bold mb-6 text-white">Contact Information</h3>
-              
-              <div className="space-y-6">
-                <div className="flex items-start">
-                  <div className="bg-luxury-gold p-3 rounded-sm mr-4">
-                    <Phone className="h-5 w-5 text-luxury-black" />
-                  </div>
-                  <div>
-                    <p className="font-medium text-white">Phone</p>
-                    <p className="text-luxury-khaki">(325) 555-1234</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start">
-                  <div className="bg-luxury-gold p-3 rounded-sm mr-4">
-                    <Mail className="h-5 w-5 text-luxury-black" />
-                  </div>
-                  <div>
-                    <p className="font-medium text-white">Email</p>
-                    <p className="text-luxury-khaki">josh.rader@example.com</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start">
-                  <div className="bg-luxury-gold p-3 rounded-sm mr-4">
-                    <MapPin className="h-5 w-5 text-luxury-black" />
-                  </div>
-                  <div>
-                    <p className="font-medium text-white">Office Address</p>
-                    <p className="text-luxury-khaki">123 Commercial Ave, Suite 200<br />Abilene, TX 79601</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start">
-                  <div className="bg-luxury-gold p-3 rounded-sm mr-4">
-                    <Clock className="h-5 w-5 text-luxury-black" />
-                  </div>
-                  <div>
-                    <p className="font-medium text-white">Business Hours</p>
-                    <p className="text-luxury-khaki">Monday - Friday: 9:00 AM - 5:00 PM<br />Saturday: By appointment</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <label htmlFor="name" className="block mb-2 text-xl font-medium text-white">Your Name</label>
+            <Input
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="John Doe"
+              required
+              className="bg-luxury-charcoal border-luxury-charcoal text-white h-14 text-lg placeholder:text-gray-400"
+            />
           </div>
           
           <div>
-            <form onSubmit={handleSubmit} className="bg-luxury-black p-8 rounded-md border border-luxury-khaki/10 shadow-sm">
-              <h3 className="text-2xl font-bold mb-6 text-white">Send a Message</h3>
-              
-              <div className="space-y-4">
-                <div>
-                  <label htmlFor="name" className="block mb-2 text-sm font-medium text-white">Your Name</label>
-                  <Input id="name" name="name" value={formData.name} onChange={handleChange} placeholder="John Doe" required className="bg-luxury-charcoal border-luxury-khaki/20 text-white focus:border-luxury-gold focus:ring-luxury-gold/50" />
-                </div>
-                
-                <div>
-                  <label htmlFor="email" className="block mb-2 text-sm font-medium text-white">Email Address</label>
-                  <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} placeholder="john@example.com" required className="bg-luxury-charcoal border-luxury-khaki/20 text-white focus:border-luxury-gold focus:ring-luxury-gold/50" />
-                </div>
-                
-                <div>
-                  <label htmlFor="phone" className="block mb-2 text-sm font-medium text-white">Phone Number</label>
-                  <Input id="phone" name="phone" value={formData.phone} onChange={handleChange} placeholder="(555) 123-4567" className="bg-luxury-charcoal border-luxury-khaki/20 text-white focus:border-luxury-gold focus:ring-luxury-gold/50" />
-                </div>
-                
-                <div>
-                  <label htmlFor="message" className="block mb-2 text-sm font-medium text-white">Your Message</label>
-                  <Textarea id="message" name="message" value={formData.message} onChange={handleChange} placeholder="I'm interested in commercial property in downtown Abilene..." rows={4} required className="bg-luxury-charcoal border-luxury-khaki/20 text-white focus:border-luxury-gold focus:ring-luxury-gold/50" />
-                </div>
-                
-                <Button type="submit" className="w-full bg-luxury-gold hover:bg-luxury-khaki text-luxury-black rounded-sm">
-                  Send Message
-                </Button>
-              </div>
-            </form>
+            <label htmlFor="email" className="block mb-2 text-xl font-medium text-white">Email Address</label>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="john@example.com"
+              required
+              className="bg-luxury-charcoal border-luxury-charcoal text-white h-14 text-lg placeholder:text-gray-400"
+            />
           </div>
-        </div>
+          
+          <div>
+            <label htmlFor="phone" className="block mb-2 text-xl font-medium text-white">Phone Number</label>
+            <Input
+              id="phone"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              placeholder="(555) 123-4567"
+              className="bg-luxury-charcoal border-luxury-charcoal text-white h-14 text-lg placeholder:text-gray-400"
+            />
+          </div>
+          
+          <div>
+            <label htmlFor="message" className="block mb-2 text-xl font-medium text-white">Your Message</label>
+            <Textarea
+              id="message"
+              name="message"
+              value={formData.message}
+              onChange={handleChange}
+              placeholder="I'm interested in commercial property in downtown Abilene..."
+              rows={6}
+              required
+              className="bg-luxury-charcoal border-luxury-charcoal text-white text-lg resize-none min-h-[160px] placeholder:text-gray-400"
+            />
+          </div>
+          
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full bg-luxury-gold hover:bg-luxury-gold/90 text-luxury-black rounded-sm h-14 text-lg font-medium"
+          >
+            {isSubmitting ? "Sending..." : "Send Message"}
+          </Button>
+        </form>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default ContactSection;

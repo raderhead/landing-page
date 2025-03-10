@@ -120,4 +120,17 @@
   .admin-input {
     @apply border-0 shadow-none focus-visible:ring-1 focus-visible:ring-primary/30;
   }
+  
+  /* Form input styles for darker themed UI */
+  .dark-input {
+    @apply bg-luxury-charcoal border-0 text-white focus:ring-1 focus:ring-luxury-gold/50;
+  }
+  
+  .dark-textarea {
+    @apply bg-luxury-charcoal border-0 text-white focus:ring-1 focus:ring-luxury-gold/50 resize-none;
+  }
+  
+  .gold-button {
+    @apply bg-luxury-gold hover:bg-luxury-gold/90 text-luxury-black font-medium transition-all duration-300;
+  }
 }
