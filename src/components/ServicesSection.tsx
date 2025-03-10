@@ -48,7 +48,7 @@ const ServicesSection = () => {
       loop: true,
       align: "start",
       slidesToScroll: 1,
-      duration: 8000,      // Extremely slow transition speed for ultra smooth scrolling
+      duration: 10000,      // Updated to 10,000ms for extremely slow transition speed
       dragFree: true       // Enables momentum scrolling
     },
     [Autoplay(autoplayOptions)]
