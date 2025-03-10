@@ -1,5 +1,10 @@
+
 import { Building, Store, Warehouse, Building2, BarChart4, Handshake } from "lucide-react";
 import { useRef, useEffect, useState } from 'react';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
+
 const services = [{
   icon: <Store className="h-12 w-12 text-luxury-gold" />,
   title: "Retail Leasing",
@@ -25,9 +30,21 @@ const services = [{
   title: "Buyer/Seller Representation",
   description: "Experienced guidance for buying and selling commercial real estate properties in Abilene with expert negotiation services."
 }];
+
 const ServicesSection = () => {
   const [scrollY, setScrollY] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
+  
+  // Configure embla carousel with autoplay plugin
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    { 
+      loop: true,
+      align: "start",
+      slidesToScroll: 1
+    },
+    [Autoplay({ delay: 5000, stopOnInteraction: false })]
+  );
+  
   useEffect(() => {
     const handleScroll = () => {
       if (sectionRef.current) {
@@ -40,15 +57,16 @@ const ServicesSection = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+  
   return <section id="services" ref={sectionRef} className="section bg-luxury-dark relative overflow-hidden py-[45px]">
       {/* Subtle Parallax Background Elements */}
       <div className="absolute top-40 left-0 w-64 h-64 rounded-full bg-luxury-gold/5 -translate-x-1/2 parallax-layer" style={{
-      transform: `translateX(${scrollY * 0.05}px) translateY(${scrollY * 0.02}px)`
-    }}>
+        transform: `translateX(${scrollY * 0.05}px) translateY(${scrollY * 0.02}px)`
+      }}>
       </div>
       <div className="absolute bottom-20 right-0 w-80 h-80 rounded-full bg-luxury-gold/5 translate-x-1/2 parallax-layer" style={{
-      transform: `translateX(${-scrollY * 0.04}px) translateY(${-scrollY * 0.01}px)`
-    }}>
+        transform: `translateX(${-scrollY * 0.04}px) translateY(${-scrollY * 0.01}px)`
+      }}>
       </div>
       
       <div className="container relative z-10">
@@ -59,17 +77,74 @@ const ServicesSection = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service, index) => <div key={index} className="bg-luxury-charcoal p-8 rounded-md shadow-md hover:shadow-lg transition-all duration-500 border border-luxury-khaki/10 hover:border-luxury-gold/30 hover:bg-luxury-charcoal/80 hover:-translate-y-2" style={{
-          transitionDelay: `${index * 50}ms`,
-          transform: `translateY(${Math.min(15, Math.max(-15, (scrollY - 800) * 0.02 * (index % 3 - 1)))}px)`
-        }}>
-              <div className="mb-4 transform transition-transform duration-500 hover:scale-110 hover:text-luxury-gold">{service.icon}</div>
-              <h3 className="text-xl font-bold mb-3 text-white hover:text-luxury-gold transition-colors">{service.title}</h3>
-              <p className="text-luxury-khaki/80">{service.description}</p>
-            </div>)}
+        {/* Infinite Carousel */}
+        <div className="mx-auto max-w-6xl relative px-4">
+          <div className="relative" ref={emblaRef}>
+            <div className="flex">
+              {services.map((service, index) => (
+                <div 
+                  key={index} 
+                  className="flex-[0_0_100%] min-w-0 sm:flex-[0_0_50%] md:flex-[0_0_33.333%] px-4"
+                >
+                  <div 
+                    className="bg-luxury-charcoal p-8 rounded-md shadow-md hover:shadow-lg transition-all duration-500 
+                    border border-luxury-khaki/10 hover:border-luxury-gold/30 hover:bg-luxury-charcoal/80 hover:-translate-y-2 h-full"
+                  >
+                    <div className="mb-4 transform transition-transform duration-500 hover:scale-110 hover:text-luxury-gold">
+                      {service.icon}
+                    </div>
+                    <h3 className="text-xl font-bold mb-3 text-white hover:text-luxury-gold transition-colors">
+                      {service.title}
+                    </h3>
+                    <p className="text-luxury-khaki/80">
+                      {service.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          {/* Custom Navigation Buttons */}
+          <button 
+            onClick={() => emblaApi?.scrollPrev()} 
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-luxury-dark/80 hover:bg-luxury-gold/20 text-luxury-gold p-2 rounded-full
+            transition-all duration-300 -ml-4 opacity-70 hover:opacity-100 focus:outline-none hidden md:flex"
+            aria-label="Previous slide"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </button>
+          
+          <button 
+            onClick={() => emblaApi?.scrollNext()} 
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-luxury-dark/80 hover:bg-luxury-gold/20 text-luxury-gold p-2 rounded-full
+            transition-all duration-300 -mr-4 opacity-70 hover:opacity-100 focus:outline-none hidden md:flex"
+            aria-label="Next slide"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </button>
+        </div>
+        
+        {/* Dots pagination indicator */}
+        <div className="flex justify-center mt-8 gap-2">
+          {services.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => emblaApi?.scrollTo(index)}
+              className={`w-2 h-2 rounded-full transition-all duration-300 focus:outline-none
+                ${emblaApi?.selectedScrollSnap() === index 
+                  ? 'bg-luxury-gold w-6' 
+                  : 'bg-luxury-khaki/30 hover:bg-luxury-khaki/50'}`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
         </div>
       </div>
     </section>;
 };
+
 export default ServicesSection;
