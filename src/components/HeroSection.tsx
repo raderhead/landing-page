@@ -28,7 +28,7 @@ const HeroSection = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-luxury-black/95 to-luxury-charcoal/90 z-10" style={{
         transform: `translateY(${scrollY * 0.1}px)`
       }}></div>
-        <img src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?ixlib=rb-1.2.1&auto=format&fit=crop&q=80" alt="Luxury Commercial Building in Abilene" className="w-full h-full object-cover" style={{
+        <img src="/lovable-uploads/452f8926-d28f-4549-93ac-40a82a160575.png" alt="Abilene Downtown Skyline" className="w-full h-full object-cover" style={{
         transform: `translateY(${scrollY * 0.2}px) scale(${1 + scrollY * 0.0005})`
       }} />
       </div>
