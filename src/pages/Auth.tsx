@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import ChatButton from "@/components/ChatButton";
 
 const INVITE_CODE = "Brotivator!";
 const INVITE_CODE_STORAGE_KEY = "invite_code_verified";
@@ -30,7 +31,6 @@ const Auth = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if user has already verified the invite code
     const verified = localStorage.getItem(INVITE_CODE_STORAGE_KEY) === 'true';
     setIsVerified(verified);
     
@@ -38,11 +38,9 @@ const Auth = () => {
       setInviteDialogOpen(true);
     }
     
-    // Check if user is already logged in
     const checkSession = async () => {
       const { data } = await supabase.auth.getSession();
       if (data.session) {
-        // User is logged in, make sure they've verified the invite code
         if (verified) {
           navigate('/admin');
         }
@@ -115,11 +113,6 @@ const Auth = () => {
         title: "Success!",
         description: "Invite code verified successfully.",
       });
-      
-      toast({
-        title: "Chat Assistant Available",
-        description: "You can now access our real estate chat assistant!",
-      });
     } else {
       toast({
         title: "Error",
@@ -129,25 +122,10 @@ const Auth = () => {
     }
   };
 
-  const navigateToChat = () => {
-    navigate('/chat');
-  };
-
   return (
     <div className="min-h-screen">
       <Navbar />
       <main className="container py-16">
-        {isVerified && (
-          <div className="max-w-md mx-auto mb-8">
-            <Button
-              onClick={navigateToChat}
-              className="w-full bg-luxury-gold hover:bg-luxury-khaki text-luxury-dark py-6 text-lg"
-            >
-              Access Real Estate Chat Assistant
-            </Button>
-          </div>
-        )}
-        
         <div className={`max-w-md mx-auto luxury-card p-8 ${!isVerified ? 'blur-sm pointer-events-none' : ''}`}>
           <h1 className="text-2xl font-bold text-center mb-8">
             {isLogin ? "Sign In" : "Create Account"}
@@ -256,9 +234,6 @@ const Auth = () => {
             >
               Verify Code
             </Button>
-            <div className="text-center text-sm mt-4">
-              <p>After verification, you'll be able to access the Real Estate Chat Assistant.</p>
-            </div>
           </div>
           <button 
             className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground cursor-default"
@@ -275,6 +250,7 @@ const Auth = () => {
       </Dialog>
 
       <Footer />
+      <ChatButton />
     </div>
   );
 };

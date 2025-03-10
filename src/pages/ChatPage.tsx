@@ -1,36 +1,9 @@
 
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ChatBot from "@/components/ChatBot";
-import { toast } from "@/components/ui/use-toast";
 
 const ChatPage = () => {
-  const [isVerified, setIsVerified] = useState(false);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    // Check if user has verified the invite code
-    const verified = localStorage.getItem("invite_code_verified") === "true";
-    setIsVerified(verified);
-    
-    if (!verified) {
-      toast({
-        title: "Access Restricted",
-        description: "You need to verify your invite code to access this page.",
-        variant: "destructive"
-      });
-      navigate("/auth");
-    }
-    
-    // No longer checking if user is logged in
-  }, [navigate]);
-
-  if (!isVerified) {
-    return null;
-  }
-
   return (
     <div className="min-h-screen">
       <Navbar />

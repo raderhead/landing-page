@@ -13,12 +13,17 @@ import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import ChatPage from "./pages/ChatPage";
 import NotFound from "./pages/NotFound";
+import ChatButton from "./components/ChatButton";
 
 const queryClient = new QueryClient();
 
 // ScrollToTop component to handle hash navigation
 const ScrollToTop = () => {
   const { pathname, hash } = useLocation();
+  const navigate = useNavigate();
+
+  // Don't show chat button on chat page
+  const showChatButton = pathname !== '/chat' && pathname !== '/admin';
 
   useEffect(() => {
     // If no hash, scroll to top
@@ -40,7 +45,7 @@ const ScrollToTop = () => {
     }, 100);
   }, [pathname, hash]);
 
-  return null;
+  return showChatButton ? <ChatButton /> : null;
 };
 
 const AppRoutes = () => {
