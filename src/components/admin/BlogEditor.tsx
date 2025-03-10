@@ -26,6 +26,10 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
         throw new Error("Please fill all required fields");
       }
       
+      if (!userId) {
+        throw new Error("You must be logged in to save blog posts");
+      }
+      
       const processedBlocks = currentBlog.formattedContent.map(block => {
         let processedContent = block.content;
         return {
@@ -57,12 +61,13 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
         title: currentBlog.title,
         excerpt: currentBlog.excerpt,
         content: htmlContent,
-        blocksCount: processedBlocks.length
+        blocksCount: processedBlocks.length,
+        author_id: userId
       });
       
       if (currentBlog.id) {
         // For existing blogs, use upsert instead of update to ensure complete replacement
-        const { error } = await supabase
+        const { data, error } = await supabase
           .from('blog_posts')
           .upsert({
             id: currentBlog.id,
@@ -76,14 +81,19 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
             author_id: userId
           });
           
-        if (error) throw error;
+        if (error) {
+          console.error("Error during upsert:", error);
+          throw error;
+        }
+        
+        console.log("Upsert response:", data);
         
         toast({
           title: "Success",
           description: "Blog post updated successfully",
         });
       } else {
-        const { error } = await supabase
+        const { data, error } = await supabase
           .from('blog_posts')
           .insert({
             title: currentBlog.title,
@@ -95,7 +105,12 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
             author_id: userId
           });
           
-        if (error) throw error;
+        if (error) {
+          console.error("Error during insert:", error);
+          throw error;
+        }
+        
+        console.log("Insert response:", data);
         
         toast({
           title: "Success",
@@ -105,6 +120,7 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
       
       onSave();
     } catch (error: any) {
+      console.error("Save error:", error);
       toast({
         title: "Error saving blog",
         description: error.message,
