@@ -16,6 +16,7 @@ export type Database = {
           content: string
           created_at: string
           excerpt: string
+          formattedContent: Json | null
           id: string
           image_url: string | null
           published: boolean | null
@@ -28,6 +29,7 @@ export type Database = {
           content: string
           created_at?: string
           excerpt: string
+          formattedContent?: Json | null
           id?: string
           image_url?: string | null
           published?: boolean | null
@@ -40,6 +42,7 @@ export type Database = {
           content?: string
           created_at?: string
           excerpt?: string
+          formattedContent?: Json | null
           id?: string
           image_url?: string | null
           published?: boolean | null
