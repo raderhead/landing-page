@@ -88,20 +88,20 @@ const BlogList = ({ blogs, onEdit, onDelete }: BlogListProps) => {
   return (
     <div className="space-y-4">
       {blogs.length > 0 && (
-        <div className="flex items-center justify-between mb-5 pb-3 border-b border-luxury-khaki/20">
-          <h2 className="text-lg font-serif font-medium text-luxury-slate">Posts</h2>
+        <div className="flex items-center justify-between mb-4 pb-2 border-b">
+          <h2 className="text-lg font-medium">Your posts</h2>
           
           <div className="flex items-center gap-2">
             <Button 
               variant="ghost" 
               size="sm"
               onClick={toggleSelectAll}
-              className="text-xs h-8 hover:bg-luxury-khaki/10 hover:text-luxury-black"
+              className="text-xs h-8"
             >
               {selectedBlogs.length === blogs.length ? (
-                <CheckSquare className="h-4 w-4 mr-1.5 text-luxury-gold" />
+                <CheckSquare className="h-4 w-4 mr-1.5 text-primary" />
               ) : (
-                <Square className="h-4 w-4 mr-1.5 text-luxury-slate" />
+                <Square className="h-4 w-4 mr-1.5" />
               )}
               {selectedBlogs.length === blogs.length ? "Deselect all" : "Select all"}
             </Button>
@@ -123,18 +123,18 @@ const BlogList = ({ blogs, onEdit, onDelete }: BlogListProps) => {
       )}
       
       {blogs.length === 0 ? (
-        <div className="text-center py-16 bg-muted/20 rounded-lg border border-luxury-khaki/10">
-          <AlertCircle className="h-10 w-10 mx-auto mb-4 text-luxury-khaki/70" />
-          <p className="text-foreground font-medium font-serif text-xl mb-1">No blog posts yet</p>
-          <p className="text-muted-foreground text-sm mt-1 max-w-md mx-auto">Click "New Post" above to create your first blog post</p>
+        <div className="text-center py-12 bg-muted/30 rounded-lg border border-muted">
+          <AlertCircle className="h-8 w-8 mx-auto mb-3 text-muted-foreground/70" />
+          <p className="text-foreground font-medium">No blog posts yet</p>
+          <p className="text-muted-foreground text-sm mt-1">Click "New Post" to create content</p>
         </div>
       ) : (
-        <div className="grid gap-4">
+        <div className="grid gap-3">
           {blogs.map(blog => (
             <div 
               key={blog.id} 
-              className={`relative bg-white border rounded-lg overflow-hidden transition-all shadow-sm hover:shadow-md ${
-                selectedBlogs.includes(blog.id) ? 'ring-1 ring-luxury-gold border-luxury-gold/30' : 'border-luxury-khaki/20'
+              className={`relative bg-white border rounded-lg overflow-hidden transition-all ${
+                selectedBlogs.includes(blog.id) ? 'ring-1 ring-primary' : ''
               }`}
             >
               <div className="absolute top-3 left-3 z-10">
@@ -144,9 +144,9 @@ const BlogList = ({ blogs, onEdit, onDelete }: BlogListProps) => {
                   aria-label={selectedBlogs.includes(blog.id) ? "Deselect post" : "Select post"}
                 >
                   {selectedBlogs.includes(blog.id) ? (
-                    <CheckSquare className="h-5 w-5 text-luxury-gold" />
+                    <CheckSquare className="h-5 w-5 text-primary" />
                   ) : (
-                    <Square className="h-5 w-5 text-muted-foreground/60 hover:text-luxury-gold transition-colors" />
+                    <Square className="h-5 w-5 text-muted-foreground/60 hover:text-primary transition-colors" />
                   )}
                 </button>
               </div>
@@ -168,11 +168,11 @@ const BlogList = ({ blogs, onEdit, onDelete }: BlogListProps) => {
                       <Badge variant="secondary" className="mb-2 font-normal text-xs">
                         {blog.category}
                       </Badge>
-                      <h3 className="text-base font-serif font-medium mb-1.5 line-clamp-1">
+                      <h3 className="text-base font-medium mb-1 line-clamp-1">
                         {blog.title}
                       </h3>
-                      <p className="text-muted-foreground text-sm mb-2.5 line-clamp-2 font-sans" dangerouslySetInnerHTML={{ __html: blog.excerpt }}></p>
-                      <div className="flex items-center text-xs text-luxury-slate/70">
+                      <p className="text-muted-foreground text-sm mb-2 line-clamp-2" dangerouslySetInnerHTML={{ __html: blog.excerpt }}></p>
+                      <div className="flex items-center text-xs text-muted-foreground">
                         <Calendar className="h-3 w-3 mr-1 flex-shrink-0" />
                         <span>
                           {new Date(blog.created_at).toLocaleDateString('en-US', {
@@ -189,7 +189,7 @@ const BlogList = ({ blogs, onEdit, onDelete }: BlogListProps) => {
                         variant="outline"
                         size="sm"
                         onClick={() => onEdit(blog)}
-                        className="h-8 px-2 border-luxury-khaki/30 hover:bg-luxury-khaki/10 hover:text-luxury-black"
+                        className="h-8 px-2"
                       >
                         <Pen className="h-3.5 w-3.5" />
                         <span className="sr-only md:not-sr-only md:ml-1.5 text-xs">Edit</span>
@@ -198,7 +198,7 @@ const BlogList = ({ blogs, onEdit, onDelete }: BlogListProps) => {
                         variant="outline"
                         size="sm"
                         asChild
-                        className="h-8 px-2 border-luxury-khaki/30 hover:bg-luxury-khaki/10 hover:text-luxury-black"
+                        className="h-8 px-2"
                       >
                         <Link to={`/blog/${blog.id}`} target="_blank">
                           <Eye className="h-3.5 w-3.5" />
@@ -209,7 +209,7 @@ const BlogList = ({ blogs, onEdit, onDelete }: BlogListProps) => {
                         variant="outline"
                         size="sm"
                         onClick={() => onDelete(blog.id)}
-                        className="h-8 px-2 text-destructive hover:bg-destructive/10 border-luxury-khaki/30"
+                        className="h-8 px-2 text-destructive hover:bg-destructive/10"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
                         <span className="sr-only md:not-sr-only md:ml-1.5 text-xs">Delete</span>
