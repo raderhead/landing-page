@@ -139,20 +139,7 @@ const ServicesSection = () => {
           </button>
         </div>
         
-        {/* Dots pagination indicator */}
-        <div className="flex justify-center mt-8 gap-2">
-          {services.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => emblaApi?.scrollTo(index)}
-              className={`w-2 h-2 rounded-full transition-all duration-300 focus:outline-none
-                ${emblaApi?.selectedScrollSnap() === index 
-                  ? 'bg-luxury-gold w-6' 
-                  : 'bg-luxury-khaki/30 hover:bg-luxury-khaki/50'}`}
-              aria-label={`Go to slide ${index + 1}`}
-            />
-          ))}
-        </div>
+        {/* Removed the dots pagination indicator that was here */}
       </div>
     </section>;
 };
