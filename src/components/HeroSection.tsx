@@ -22,7 +22,7 @@ const HeroSection = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   
-  return <section ref={sectionRef} className="relative min-h-screen flex items-center pt-20 pb-52 overflow-hidden">
+  return <section ref={sectionRef} className="relative flex items-center overflow-hidden min-h-[calc(100vh-4rem)] md:min-h-screen pt-16 pb-32 md:pb-52">
       {/* Background Image with Parallax Effect */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-r from-luxury-black/95 to-luxury-charcoal/90 z-10" style={{
@@ -36,12 +36,12 @@ const HeroSection = () => {
       
       <div className="container relative z-20 flex md:flex-row flex-col items-center">
         <div className="max-w-2xl">
-          <div className="flex items-center gap-2 text-luxury-khaki mb-4 opacity-0 animate-fade-in">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-luxury-khaki mb-4 opacity-0 animate-fade-in">
             <div className="inline-flex items-center">
               <MapPin className="h-4 w-4 mr-1 text-luxury-gold" />
               <span className="text-sm font-medium tracking-wide">Abilene, Texas</span>
             </div>
-            <span className="text-luxury-khaki/50">|</span>
+            <span className="hidden sm:inline text-luxury-khaki/50">|</span>
             <span className="text-sm font-medium tracking-wide text-luxury-khaki">Trusted by 50+ Investors & Businesses</span>
           </div>
           
@@ -50,7 +50,7 @@ const HeroSection = () => {
             <span className="font-serif text-4xl md:text-5xl lg:text-6xl text-luxury-gold hover-glow inline-block">Commercial Investment</span>
           </h1>
           
-          <p className="text-xl text-white/80 mb-8 max-w-2xl opacity-0 animate-fade-in-delay-2 leading-relaxed">
+          <p className="text-lg md:text-xl text-white/80 mb-8 max-w-2xl opacity-0 animate-fade-in-delay-2 leading-relaxed">
             Josh Rader is a licensed commercial real estate agent specializing in helping businesses and investors find premium locations in Abilene.
           </p>
           
@@ -58,7 +58,7 @@ const HeroSection = () => {
             <Button
               size="lg"
               variant="default"
-              className="bg-luxury-gold/90 backdrop-blur-sm text-luxury-dark rounded-sm px-8 
+              className="bg-luxury-gold/90 backdrop-blur-sm text-luxury-dark rounded-sm px-6 sm:px-8 
                 hover:bg-luxury-gold hover:text-luxury-dark hover:scale-105 
                 transition-all duration-300 group shadow-[0_0_10px_rgba(212,184,123,0.2)]
                 hover:shadow-[0_0_15px_rgba(212,184,123,0.5)]"
@@ -72,7 +72,7 @@ const HeroSection = () => {
             <Button 
               size="lg" 
               variant="outline" 
-              className="border border-white/10 backdrop-blur-lg rounded-sm px-8 
+              className="border border-white/10 backdrop-blur-lg rounded-sm px-6 sm:px-8 
                 bg-white/5 text-white hover:bg-white/10 hover:text-luxury-gold 
                 hover:scale-105 transition-all duration-300 group
                 hover:shadow-[0_0_15px_rgba(212,184,123,0.3)]"
@@ -85,20 +85,19 @@ const HeroSection = () => {
       </div>
       
       {/* Stats banner - Moved from absolute positioning to normal flow at the bottom of the section */}
-      <div className="bg-luxury-dark/80 backdrop-blur-lg py-8 z-20 border-t border-luxury-khaki/20 w-full absolute bottom-0 left-0 right-0">
-        <div className="container grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="text-center hover-lift p-4">
-            <p className="text-3xl font-bold text-luxury-gold font-serif">10+ Years</p>
-            <p className="text-luxury-khaki">Experience in
-Commercial Real Estate</p>
+      <div className="bg-luxury-dark/80 backdrop-blur-lg py-6 sm:py-8 z-20 border-t border-luxury-khaki/20 w-full absolute bottom-0 left-0 right-0">
+        <div className="container grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8">
+          <div className="text-center hover-lift p-2 sm:p-4">
+            <p className="text-2xl sm:text-3xl font-bold text-luxury-gold font-serif">10+ Years</p>
+            <p className="text-sm sm:text-base text-luxury-khaki">Experience in Commercial Real Estate</p>
           </div>
-          <div className="text-center hover-lift p-4">
-            <p className="text-3xl font-bold text-luxury-gold font-serif">$50M+</p>
-            <p className="text-luxury-khaki">In Closed Transactions</p>
+          <div className="text-center hover-lift p-2 sm:p-4">
+            <p className="text-2xl sm:text-3xl font-bold text-luxury-gold font-serif">$50M+</p>
+            <p className="text-sm sm:text-base text-luxury-khaki">In Closed Transactions</p>
           </div>
-          <div className="text-center hover-lift p-4">
-            <p className="text-3xl font-bold text-luxury-gold font-serif">100+</p>
-            <p className="text-luxury-khaki">Satisfied Clients</p>
+          <div className="text-center hover-lift p-2 sm:p-4">
+            <p className="text-2xl sm:text-3xl font-bold text-luxury-gold font-serif">100+</p>
+            <p className="text-sm sm:text-base text-luxury-khaki">Satisfied Clients</p>
           </div>
         </div>
       </div>
