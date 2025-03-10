@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -165,7 +164,7 @@ const BlogList = ({ blogs, onEdit, onDelete }: BlogListProps) => {
                 <div className="flex-1 p-4 pt-5">
                   <div className="flex flex-col md:flex-row md:items-start justify-between gap-3">
                     <div className="flex-1">
-                      <div className="text-center md:text-left mb-2">
+                      <div className="text-center mb-2">
                         <Badge variant="secondary" className="font-normal text-xs">
                           {blog.category}
                         </Badge>
