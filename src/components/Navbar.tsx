@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Menu, X, Phone, BookText, LogIn, User } from "lucide-react";
@@ -62,8 +61,8 @@ const Navbar = () => {
 
   const isAdminPage = location.pathname.includes('/admin');
   const navbarClass = isAdminPage 
-    ? `fixed top-0 left-0 right-0 z-50 transition-all duration-300 admin-header py-2`
-    : `fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-luxury-black shadow-md py-1' : 'bg-transparent py-2'}`;
+    ? `fixed top-0 left-0 right-0 z-50 transition-all duration-300 admin-header py-0`
+    : `fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-luxury-black shadow-md py-0' : 'bg-transparent py-0'}`;
 
   return <header className={navbarClass}>
       <nav className="container flex items-center justify-between">
