@@ -52,3 +52,18 @@ export const TEXT_ALIGNMENTS = [
   { name: "Right", value: "text-right" },
   { name: "Justify", value: "text-justify" },
 ];
+
+// Adding utility functions for blog management
+export const formatBlogDate = (dateString: string): string => {
+  return new Date(dateString).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+};
+
+export const estimateReadingTime = (content: string): number => {
+  // Average reading speed: 200 words per minute
+  const wordCount = content.split(/\s+/).length;
+  return Math.max(1, Math.ceil(wordCount / 200));
+};
