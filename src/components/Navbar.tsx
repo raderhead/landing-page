@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { Menu, X, Phone, BookText, LogIn, User } from "lucide-react";
+import { Menu, X, Phone, BookText, User } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -53,11 +53,7 @@ const Navbar = () => {
   };
 
   const handleAuthClick = () => {
-    if (user) {
-      navigate('/admin');
-    } else {
-      navigate('/auth');
-    }
+    navigate('/admin');
   };
 
   const isAdminPage = location.pathname.includes('/admin');
@@ -110,23 +106,16 @@ const Navbar = () => {
               <span className="uppercase tracking-wider text-sm">Blog Management</span>
             </div>
           )}
-          <Button 
-            onClick={handleAuthClick}
-            variant="outline" 
-            className="text-luxury-gold hover:text-luxury-black hover:bg-luxury-gold border-luxury-gold flex items-center gap-2 rounded-sm hover-scale group text-xs py-1 h-8"
-          >
-            {user ? (
-              <>
-                <User className="h-3 w-3" />
-                <span>Admin</span>
-              </>
-            ) : (
-              <>
-                <LogIn className="h-3 w-3" />
-                <span>Login</span>
-              </>
-            )}
-          </Button>
+          {user && (
+            <Button 
+              onClick={handleAuthClick}
+              variant="outline" 
+              className="text-luxury-gold hover:text-luxury-black hover:bg-luxury-gold border-luxury-gold flex items-center gap-2 rounded-sm hover-scale group text-xs py-1 h-8"
+            >
+              <User className="h-3 w-3" />
+              <span>Admin</span>
+            </Button>
+          )}
         </div>
 
         <button className="md:hidden text-white hover:text-luxury-gold transition-colors hover-scale" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
@@ -159,23 +148,16 @@ const Navbar = () => {
               <Phone className="h-3 w-3 group-hover:rotate-12 transition-transform" />
               <span>Call Josh</span>
             </Button>
-            <Button 
-              onClick={handleAuthClick}
-              variant="outline" 
-              className="text-luxury-gold hover:text-luxury-black hover:bg-luxury-gold border-luxury-gold flex items-center justify-center gap-2 mt-2 rounded-sm hover-scale group text-xs py-1 h-8"
-            >
-              {user ? (
-                <>
-                  <User className="h-3 w-3" />
-                  <span>Admin</span>
-                </>
-              ) : (
-                <>
-                  <LogIn className="h-3 w-3" />
-                  <span>Login</span>
-                </>
-              )}
-            </Button>
+            {user && (
+              <Button 
+                onClick={handleAuthClick}
+                variant="outline" 
+                className="text-luxury-gold hover:text-luxury-black hover:bg-luxury-gold border-luxury-gold flex items-center justify-center gap-2 mt-2 rounded-sm hover-scale group text-xs py-1 h-8"
+              >
+                <User className="h-3 w-3" />
+                <span>Admin</span>
+              </Button>
+            )}
           </div>
         </div>}
     </header>;
