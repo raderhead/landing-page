@@ -165,7 +165,7 @@ const BlogList = ({ blogs, onEdit, onDelete }: BlogListProps) => {
                 <div className="flex-1 p-4 pt-5">
                   <div className="flex flex-col md:flex-row md:items-start justify-between gap-3">
                     <div className="flex-1">
-                      <Badge variant="secondary" className="mb-2 font-normal text-xs ml-8 md:ml-0">
+                      <Badge variant="secondary" className="mb-2 font-normal text-xs pl-8 md:pl-0">
                         {blog.category}
                       </Badge>
                       <h3 className="text-base font-serif font-medium mb-1.5 line-clamp-1">
