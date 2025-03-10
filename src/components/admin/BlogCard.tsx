@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -14,6 +13,12 @@ interface BlogCardProps {
 }
 
 const BlogCard = ({ blog, onEdit, onDelete }: BlogCardProps) => {
+  if (blog.title.includes("Abilene") || 
+      blog.excerpt.includes("Trump") || 
+      blog.excerpt.includes("Abilene Market")) {
+    return null;
+  }
+
   const [currentUser, setCurrentUser] = React.useState<string | null>(null);
   const [isOwner, setIsOwner] = React.useState(false);
 

@@ -63,7 +63,9 @@ const Admin = () => {
       if (error) throw error;
       
       const filteredData = data ? data.filter(blog => 
-        blog.title !== "Abilene Market Is on the rise after Trump's announcement of AI jobs"
+        !blog.title.includes("Abilene") && 
+        !blog.excerpt.includes("Trump") && 
+        !blog.excerpt.includes("Abilene Market")
       ) : [];
       
       const formattedBlogs: BlogPost[] = filteredData.map(blog => ({
@@ -72,6 +74,7 @@ const Admin = () => {
       }));
       
       setBlogs(formattedBlogs);
+      console.log("Filtered blogs:", formattedBlogs);
     } catch (error: any) {
       toast({
         title: "Error fetching blogs",

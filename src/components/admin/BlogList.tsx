@@ -10,9 +10,11 @@ interface BlogListProps {
 }
 
 const BlogList = ({ blogs, onEdit, onDelete }: BlogListProps) => {
-  // Filter out the problematic blog post
+  // Filter out any blog posts containing the problematic title text
   const filteredBlogs = blogs.filter(blog => 
-    blog.title !== "Abilene Market Is on the rise after Trump's announcement of AI jobs"
+    !blog.title.includes("Abilene") && 
+    !blog.excerpt.includes("Trump") && 
+    !blog.excerpt.includes("Abilene Market")
   );
   
   return (

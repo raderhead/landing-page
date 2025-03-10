@@ -26,6 +26,23 @@ export const supabase = createClient<Database>(
   }
 );
 
+// Helper function to get blogs with filtering applied
+export const getFilteredBlogs = async () => {
+  const { data, error } = await supabase
+    .from('blog_posts')
+    .select('*')
+    .order('created_at', { ascending: false });
+  
+  if (error) throw error;
+  
+  // Always filter out problematic posts
+  return data ? data.filter(blog => 
+    !blog.title.includes("Abilene") && 
+    !blog.excerpt.includes("Trump") && 
+    !blog.excerpt.includes("Abilene Market")
+  ) : [];
+};
+
 // Helper function to get the current user session
 export const getCurrentSession = async () => {
   // Force refresh the session to ensure we have the latest state
