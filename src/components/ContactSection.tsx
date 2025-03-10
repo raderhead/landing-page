@@ -37,20 +37,31 @@ const ContactSection = () => {
         throw new Error("Please fill in all required fields");
       }
 
-      // Send data to Supabase Edge Function with a longer timeout
-      const { data, error } = await supabase.functions.invoke('send-contact-email', {
-        body: formData,
+      // Directly fetch the edge function to have more control over the request
+      const functionUrl = "https://xfmguaamogzirnnqktwz.supabase.co/functions/v1/send-contact-email";
+      
+      console.log("Sending request to:", functionUrl);
+      
+      const response = await fetch(functionUrl, {
+        method: "POST",
         headers: {
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${supabase.auth.getSession().then(res => res.data.session?.access_token || "")}`,
+          "apikey": supabase.supabaseKey
+        },
+        body: JSON.stringify(formData)
       });
-
-      if (error) {
-        console.error("Supabase function error:", error);
-        throw error;
+      
+      console.log("Response status:", response.status);
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        console.error("Error response:", errorData);
+        throw new Error(errorData?.error || `Request failed with status ${response.status}`);
       }
-
-      console.log("Email sent successfully:", data);
+      
+      const data = await response.json();
+      console.log("Success response:", data);
       
       toast({
         title: "Message Sent!",
@@ -68,7 +79,7 @@ const ContactSection = () => {
       console.error("Error sending message:", error);
       toast({
         title: "Error Sending Message",
-        description: "There was a problem sending your message. Please try again later.",
+        description: error instanceof Error ? error.message : "There was a problem sending your message. Please try again later.",
         variant: "destructive"
       });
     } finally {

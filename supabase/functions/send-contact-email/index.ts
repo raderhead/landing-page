@@ -2,7 +2,10 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
 
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+// Initialize Resend with API key from environment variables
+const resendApiKey = Deno.env.get("RESEND_API_KEY");
+console.log("RESEND_API_KEY exists:", !!resendApiKey);
+const resend = new Resend(resendApiKey);
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -23,6 +26,7 @@ const handler = async (req: Request): Promise<Response> => {
   
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
+    console.log("Handling OPTIONS request");
     return new Response(null, { 
       status: 204, 
       headers: corsHeaders 
@@ -31,11 +35,13 @@ const handler = async (req: Request): Promise<Response> => {
 
   try {
     const body = await req.text();
-    console.log("Request body:", body);
+    console.log("Request body length:", body.length);
+    console.log("Request body preview:", body.substring(0, 100));
     
     let formData: ContactFormData;
     try {
       formData = JSON.parse(body);
+      console.log("Successfully parsed JSON");
     } catch (parseError) {
       console.error("Error parsing JSON:", parseError);
       return new Response(
@@ -72,25 +78,37 @@ const handler = async (req: Request): Promise<Response> => {
     `;
 
     console.log("Attempting to send email with Resend...");
-    const emailResponse = await resend.emails.send({
-      from: "Josh Rader Commercial <onboarding@resend.dev>",
-      to: ["josh.rader@example.com"], // Primary recipient
-      subject: `New Contact Form Submission from ${name}`,
-      html: htmlContent,
-      reply_to: email
-    });
-
-    console.log("Email sent successfully:", emailResponse);
-
-    return new Response(JSON.stringify(emailResponse), {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
-        ...corsHeaders,
-      },
-    });
+    
+    try {
+      const emailResponse = await resend.emails.send({
+        from: "Josh Rader Commercial <onboarding@resend.dev>",
+        to: ["josh.rader@example.com"], // Primary recipient
+        subject: `New Contact Form Submission from ${name}`,
+        html: htmlContent,
+        reply_to: email
+      });
+      
+      console.log("Email response:", JSON.stringify(emailResponse));
+      
+      return new Response(JSON.stringify({ success: true, data: emailResponse }), {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+          ...corsHeaders,
+        },
+      });
+    } catch (emailError: any) {
+      console.error("Error sending email with Resend:", emailError);
+      return new Response(
+        JSON.stringify({ error: `Error sending email: ${emailError.message}` }),
+        {
+          status: 500,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
   } catch (error: any) {
-    console.error("Error in send-contact-email function:", error);
+    console.error("General error in send-contact-email function:", error);
     return new Response(
       JSON.stringify({ error: error.message || "Unknown error occurred" }),
       {
