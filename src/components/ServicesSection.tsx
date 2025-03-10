@@ -1,3 +1,4 @@
+
 import { Building, Store, Warehouse, Building2, BarChart4, Handshake } from "lucide-react";
 import { useRef, useEffect, useState } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
@@ -47,7 +48,7 @@ const ServicesSection = () => {
       loop: true,
       align: "start",
       slidesToScroll: 1,
-      duration: 2000,      // Extremely slow transition speed for very smooth scrolling
+      duration: 3200,      // Ultra slow transition speed for extremely smooth scrolling
       dragFree: true       // Enables momentum scrolling
     },
     [Autoplay(autoplayOptions)]
