@@ -53,6 +53,39 @@ const ContentBlock: React.FC<ContentBlockProps> = ({
     }
   }, [block.content, showCodeView]);
 
+  // Handle enter key press to prevent cursor jumping
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      
+      // Insert a <br> at the current cursor position
+      const selection = window.getSelection();
+      if (selection && selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        const br = document.createElement('br');
+        range.deleteContents();
+        range.insertNode(br);
+        
+        // Move the cursor after the <br>
+        range.setStartAfter(br);
+        range.setEndAfter(br);
+        selection.removeAllRanges();
+        selection.addRange(range);
+        
+        // Update the content
+        if (editorRef.current) {
+          onContentChange(block.id, editorRef.current.innerHTML
+            .replace(/<b>(.*?)<\/b>/g, '<strong>$1</strong>')
+            .replace(/<i>(.*?)<\/i>/g, '<em>$1</em>')
+            .replace(/<div><br><\/div>/g, '<br>')
+            .replace(/<div>/g, '<br>')
+            .replace(/<\/div>/g, '')
+          );
+        }
+      }
+    }
+  };
+
   return (
     <div 
       className={cn(
@@ -110,6 +143,7 @@ const ContentBlock: React.FC<ContentBlockProps> = ({
               className="min-h-[150px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:border-luxury-gold overflow-auto"
               contentEditable
               suppressContentEditableWarning
+              onKeyDown={handleKeyDown}
               onInput={() => {
                 if (editorRef.current) {
                   onContentChange(block.id, editorRef.current.innerHTML

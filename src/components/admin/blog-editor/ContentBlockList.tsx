@@ -101,6 +101,12 @@ const ContentBlockList: React.FC<ContentBlockListProps> = ({
 
   const handleTextColor = (color: string) => {
     if (!activeBlockId) return;
+    
+    // Save the current selection
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return;
+    const range = selection.getRangeAt(0);
+    
     document.execCommand('foreColor', false, color);
     
     // Store the formatted HTML
@@ -115,6 +121,12 @@ const ContentBlockList: React.FC<ContentBlockListProps> = ({
         .replace(/^\s*<br>/g, '');
         
       onContentBlockChange(activeBlockId, formattedHtml);
+      
+      // Restore selection
+      setTimeout(() => {
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }, 10);
     }
   };
 
@@ -125,8 +137,14 @@ const ContentBlockList: React.FC<ContentBlockListProps> = ({
     const selection = window.getSelection();
     if (!selection || selection.rangeCount === 0) return;
     
-    const range = selection.getRangeAt(0);
+    const range = selection.getRangeAt(0).cloneRange(); // Clone the range to restore later
     if (range.collapsed) return; // No text selected
+    
+    // Store start and end points to restore selection
+    const startContainer = range.startContainer;
+    const startOffset = range.startOffset;
+    const endContainer = range.endContainer;
+    const endOffset = range.endOffset;
     
     // Instead of surroundContents which can cause errors with complex selections,
     // use execCommand with fontSize and then apply classes with JavaScript
@@ -153,6 +171,20 @@ const ContentBlockList: React.FC<ContentBlockListProps> = ({
         .replace(/^\s*<br>/g, '');
         
       onContentBlockChange(activeBlockId, formattedHtml);
+      
+      // Restore selection
+      setTimeout(() => {
+        try {
+          const newRange = document.createRange();
+          newRange.setStart(startContainer, startOffset);
+          newRange.setEnd(endContainer, endOffset);
+          
+          selection.removeAllRanges();
+          selection.addRange(newRange);
+        } catch (error) {
+          console.log("Couldn't restore selection exactly, but the formatting was applied");
+        }
+      }, 10);
     }
   };
 
