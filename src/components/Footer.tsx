@@ -48,8 +48,8 @@ const Footer = () => {
           <div className="flex flex-col items-center md:items-start">
             <button 
               onClick={handleLogoClick}
-              className="mb-4 cursor-pointer"
-              style={{ background: 'transparent', border: 'none', padding: 0 }}
+              className="mb-4"
+              style={{ background: 'transparent', border: 'none', padding: 0, cursor: 'default' }}
             >
               <img 
                 src="/lovable-uploads/8e0f7a87-fcde-45bb-840a-20ba1452adde.png" 
