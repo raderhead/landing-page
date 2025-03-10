@@ -1,20 +1,44 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   const [clickCount, setClickCount] = useState(0);
+  const [lastClickTime, setLastClickTime] = useState(0);
   const navigate = useNavigate();
   
-  const handleLogoClick = () => {
-    const newCount = clickCount + 1;
-    setClickCount(newCount);
-    
-    if (newCount === 3) {
-      setClickCount(0); // Reset count
-      navigate('/auth'); // Navigate to auth page
+  const CLICK_THRESHOLD = 500; // milliseconds between clicks
+  
+  // Reset click count if time passes without clicks
+  useEffect(() => {
+    if (clickCount > 0) {
+      const timer = setTimeout(() => {
+        setClickCount(0);
+      }, CLICK_THRESHOLD + 100);
+      
+      return () => clearTimeout(timer);
     }
+  }, [clickCount]);
+  
+  const handleLogoClick = () => {
+    const currentTime = new Date().getTime();
+    
+    // Check if this click is within the threshold of the last click
+    if (lastClickTime && currentTime - lastClickTime <= CLICK_THRESHOLD) {
+      const newCount = clickCount + 1;
+      setClickCount(newCount);
+      
+      if (newCount === 3) {
+        setClickCount(0);
+        navigate('/auth');
+      }
+    } else {
+      // First click or clicks too slow, reset counter
+      setClickCount(1);
+    }
+    
+    setLastClickTime(currentTime);
   };
   
   return (
@@ -25,6 +49,7 @@ const Footer = () => {
             <button 
               onClick={handleLogoClick}
               className="mb-4 cursor-pointer"
+              style={{ background: 'transparent', border: 'none', padding: 0 }}
             >
               <img 
                 src="/lovable-uploads/8e0f7a87-fcde-45bb-840a-20ba1452adde.png" 
