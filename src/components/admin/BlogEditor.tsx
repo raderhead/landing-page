@@ -51,19 +51,30 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
         }
       }).join('\n\n');
       
+      // Log the data being saved to help with debugging
+      console.log('Saving blog with data:', {
+        id: currentBlog.id,
+        title: currentBlog.title,
+        excerpt: currentBlog.excerpt,
+        content: htmlContent,
+        blocksCount: processedBlocks.length
+      });
+      
       if (currentBlog.id) {
+        // For existing blogs, use upsert instead of update to ensure complete replacement
         const { error } = await supabase
           .from('blog_posts')
-          .update({
+          .upsert({
+            id: currentBlog.id,
             title: currentBlog.title,
             excerpt: currentBlog.excerpt,
             content: htmlContent,
             formattedContent: processedBlocks,
             image_url: currentBlog.image_url,
             category: currentBlog.category,
-            updated_at: new Date().toISOString()
-          })
-          .eq('id', currentBlog.id);
+            updated_at: new Date().toISOString(),
+            author_id: userId
+          });
           
         if (error) throw error;
         

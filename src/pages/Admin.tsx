@@ -87,7 +87,8 @@ const Admin = () => {
   };
 
   const handleEdit = (blog: BlogPost) => {
-    setCurrentBlog(blog);
+    console.log("Editing blog:", blog);
+    setCurrentBlog({...blog});
     setIsEditing(true);
     window.scrollTo(0, 0);
   };
@@ -107,6 +108,7 @@ const Admin = () => {
         throw error;
       }
       
+      // Verify deletion
       const { data: checkData } = await supabase
         .from('blog_posts')
         .select('id')
@@ -124,6 +126,7 @@ const Admin = () => {
         description: "Blog post deleted successfully",
       });
       
+      // Re-fetch blogs to ensure data is in sync
       setTimeout(() => {
         fetchBlogs();
       }, 500);
@@ -149,6 +152,7 @@ const Admin = () => {
       category: 'Market Trends',
       image_url: '',
     });
+    // Ensure we get the latest data after saving
     fetchBlogs();
   };
 
