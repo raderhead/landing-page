@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
@@ -56,6 +55,12 @@ const Blog = () => {
     }
   };
 
+  // Function to safely strip HTML tags
+  const stripHtml = (html: string) => {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || '';
+  };
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     // Filter happens client-side in the filteredBlogs variable
@@ -69,7 +74,7 @@ const Blog = () => {
   const filteredBlogs = blogs.filter(blog => {
     const matchesSearch = searchQuery === '' || 
       blog.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-      blog.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
+      stripHtml(blog.excerpt).toLowerCase().includes(searchQuery.toLowerCase());
       
     const matchesCategory = activeCategory === 'All' || blog.category === activeCategory;
     
@@ -160,7 +165,7 @@ const Blog = () => {
                         {blog.title}
                       </h3>
                       <p className="text-luxury-gray mb-4 line-clamp-2">
-                        {blog.excerpt}
+                        {stripHtml(blog.excerpt)}
                       </p>
                       <div className="flex items-center text-sm text-luxury-slate gap-4 mb-4">
                         <div className="flex items-center gap-1">
@@ -173,7 +178,7 @@ const Blog = () => {
                         </div>
                         <div className="flex items-center gap-1">
                           <Clock size={14} />
-                          <span>{Math.ceil(blog.content.length / 1000)} min read</span>
+                          <span>{Math.ceil(stripHtml(blog.content).length / 1000)} min read</span>
                         </div>
                       </div>
                       <Link to={`/blog/${blog.id}`} className="text-luxury-gold hover:text-luxury-khaki transition-colors flex items-center gap-1 font-medium">

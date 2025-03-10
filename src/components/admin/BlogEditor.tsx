@@ -10,7 +10,7 @@ interface BlogEditorProps {
   setCurrentBlog: React.Dispatch<React.SetStateAction<Partial<BlogPost>>>;
   onSave: () => void;
   onCancel: () => void;
-  userId: string; // This prop is still accepted but we'll get the current user ID directly
+  userId?: string; // Make userId optional since we're getting it directly
 }
 
 const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel }: BlogEditorProps) => {

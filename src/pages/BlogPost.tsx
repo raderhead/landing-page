@@ -1,3 +1,4 @@
+
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Clock, Calendar, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -67,6 +68,12 @@ const BlogPost = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Function to safely strip HTML tags 
+  const stripHtml = (html: string) => {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || '';
   };
 
   // Function to render content with preserved line breaks
@@ -240,20 +247,20 @@ const BlogPost = () => {
           
           <div className="relative h-[40vh] rounded-lg overflow-hidden mb-8">
             <img 
-              src={post.image_url || "https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-1.2.1&auto=format&fit=crop&q=80"} 
-              alt={post.title} 
+              src={post?.image_url || "https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-1.2.1&auto=format&fit=crop&q=80"} 
+              alt={post?.title} 
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
               <div className="p-8">
                 <div className="text-luxury-khaki text-sm mb-2">
-                  {new Date(post.created_at).toLocaleDateString('en-US', {
+                  {post && new Date(post.created_at).toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric'
                   })} • By Josh Rader
                 </div>
-                <h1 className="text-3xl md:text-4xl font-bold text-white">{post.title}</h1>
+                <h1 className="text-3xl md:text-4xl font-bold text-white">{post?.title}</h1>
               </div>
             </div>
           </div>
@@ -261,7 +268,7 @@ const BlogPost = () => {
           <div className="flex items-center text-sm text-luxury-slate gap-4 mb-8 border-b border-luxury-khaki/20 pb-4">
             <div className="flex items-center gap-1">
               <Calendar size={14} />
-              <span>{new Date(post.created_at).toLocaleDateString('en-US', {
+              <span>{post && new Date(post.created_at).toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
@@ -273,7 +280,7 @@ const BlogPost = () => {
             </div>
             <div className="flex items-center gap-1">
               <Clock size={14} />
-              <span>{Math.ceil(post.content.length / 1000)} min read</span>
+              <span>{post ? Math.ceil((stripHtml(post.content).length) / 1000) : 0} min read</span>
             </div>
           </div>
           

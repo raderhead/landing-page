@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -42,6 +43,12 @@ const BlogsSection = () => {
     }
   };
 
+  // Function to safely remove HTML tags from text
+  const stripHtml = (html: string) => {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || '';
+  };
+
   return (
     <section id="blogs" className="section bg-white">
       <div className="container">
@@ -82,7 +89,7 @@ const BlogsSection = () => {
                     {blog.title}
                   </h3>
                   <p className="text-luxury-gray mb-4 line-clamp-2">
-                    {blog.excerpt}
+                    {stripHtml(blog.excerpt)}
                   </p>
                   <div className="flex items-center text-sm text-luxury-slate gap-4 mb-4">
                     <div className="flex items-center gap-1">
@@ -95,7 +102,7 @@ const BlogsSection = () => {
                     </div>
                     <div className="flex items-center gap-1">
                       <Clock size={14} />
-                      <span>{Math.ceil(blog.content.length / 1000)} min read</span>
+                      <span>{Math.ceil(stripHtml(blog.content).length / 1000)} min read</span>
                     </div>
                   </div>
                   <Link to={`/blog/${blog.id}`} className="text-luxury-gold hover:text-luxury-khaki transition-colors flex items-center gap-1 font-medium">
