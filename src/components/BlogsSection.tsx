@@ -67,27 +67,26 @@ const BlogsSection = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
             {blogs.map((blog) => (
-              <div key={blog.id} className="luxury-card overflow-hidden hover-lift group">
-                <div className="h-52 overflow-hidden">
+              <div key={blog.id} className="luxury-card overflow-hidden group hover-lift transition-all duration-300 border-luxury-khaki/20 hover:border-luxury-gold/40">
+                <div className="relative h-52 overflow-hidden">
                   <img 
                     src={blog.image_url || "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-1.2.1&auto=format&fit=crop&q=80"} 
                     alt={blog.title} 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
+                  <div className="absolute top-4 left-4">
+                    <Badge className="bg-luxury-gold hover:bg-luxury-khaki text-luxury-black font-medium">
+                      {blog.category}
+                    </Badge>
+                  </div>
                 </div>
                 <div className="p-6">
-                  <Badge variant="outline" className="border-luxury-khaki text-luxury-khaki mb-3">
-                    {blog.category}
-                  </Badge>
-                  <h3 className="text-xl font-bold mb-3 group-hover:text-luxury-gold transition-colors">
+                  <h3 className="text-xl font-bold mb-3 group-hover:text-luxury-gold transition-colors line-clamp-2">
                     {blog.title}
                   </h3>
-                  <div className="text-luxury-gray mb-4 line-clamp-2"
-                       dangerouslySetInnerHTML={{ __html: blog.excerpt }}>
-                  </div>
-                  <div className="flex items-center text-sm text-luxury-slate gap-4 mb-4">
+                  <div className="flex items-center text-sm text-luxury-slate gap-4 mb-3">
                     <div className="flex items-center gap-1">
-                      <Calendar size={14} />
+                      <Calendar size={14} className="text-luxury-gold" />
                       <span>{new Date(blog.created_at).toLocaleDateString('en-US', {
                         year: 'numeric',
                         month: 'long',
@@ -95,12 +94,18 @@ const BlogsSection = () => {
                       })}</span>
                     </div>
                     <div className="flex items-center gap-1">
-                      <Clock size={14} />
+                      <Clock size={14} className="text-luxury-gold" />
                       <span>{Math.ceil((blog.content || "").length / 1000)} min read</span>
                     </div>
                   </div>
-                  <Link to={`/blog/${blog.id}`} className="text-luxury-gold hover:text-luxury-khaki transition-colors flex items-center gap-1 font-medium">
-                    Read more <ArrowRight size={16} />
+                  <div className="text-luxury-gray mb-4 line-clamp-2 min-h-[48px]"
+                       dangerouslySetInnerHTML={{ __html: blog.excerpt }}>
+                  </div>
+                  <Link 
+                    to={`/blog/${blog.id}`} 
+                    className="text-luxury-gold hover:text-luxury-khaki transition-colors flex items-center gap-1 font-medium group-hover:font-semibold hover-underline-grow"
+                  >
+                    Read more <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
                   </Link>
                 </div>
               </div>
@@ -111,11 +116,11 @@ const BlogsSection = () => {
         <div className="text-center">
           <Button 
             variant="outline" 
-            className="border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm"
+            className="border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black transition-all duration-300 rounded-sm hover:scale-105"
             asChild
           >
-            <Link to="/blog">
-              <Book className="mr-2 h-5 w-5" />
+            <Link to="/blog" className="flex items-center gap-2">
+              <Book className="h-5 w-5" />
               View All Articles
             </Link>
           </Button>
