@@ -9,7 +9,6 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
 import { BlogPost as BlogPostType, BlogContentBlock } from '@/types/blog';
 import { cn } from '@/lib/utils';
-
 const BlogPost = () => {
   const {
     id
@@ -19,11 +18,9 @@ const BlogPost = () => {
   const [post, setPost] = useState<BlogPostType | null>(null);
   const [relatedPosts, setRelatedPosts] = useState<BlogPostType[]>([]);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     fetchBlogPost();
   }, [id]);
-
   const fetchBlogPost = async () => {
     try {
       setLoading(true);
@@ -59,7 +56,6 @@ const BlogPost = () => {
       setLoading(false);
     }
   };
-
   const generateShareUrls = () => {
     if (!post) return {
       twitter: '',
@@ -75,7 +71,6 @@ const BlogPost = () => {
       linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${url}`
     };
   };
-
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href).then(() => {
       toast({
@@ -90,7 +85,6 @@ const BlogPost = () => {
       });
     });
   };
-
   const renderFormattedContent = () => {
     if (!post) return null;
     if (post.formattedContent && post.formattedContent.length > 0) {
@@ -148,7 +142,6 @@ const BlogPost = () => {
       __html: post.content
     }} />;
   };
-
   if (loading) {
     return <div className="min-h-screen">
         <Navbar />
@@ -160,7 +153,6 @@ const BlogPost = () => {
         <Footer />
       </div>;
   }
-
   if (!post) {
     return <div className="min-h-screen">
         <Navbar />
@@ -176,9 +168,7 @@ const BlogPost = () => {
         <Footer />
       </div>;
   }
-
   const shareUrls = generateShareUrls();
-
   return <div className="min-h-screen">
       <Navbar />
       <main>
@@ -228,7 +218,7 @@ const BlogPost = () => {
               
               <div className="flex items-center justify-between p-6 luxury-card">
                 <div className="text-luxury-slate font-medium">Share this article:</div>
-                <div className="flex gap-6">
+                <div className="flex gap-3">
                   <Button size="sm" variant="outline" className="rounded-full w-10 h-10 p-0 flex items-center justify-center border-luxury-khaki/30 hover:border-luxury-gold hover:bg-luxury-gold/10 transition-colors" onClick={() => window.open(shareUrls.twitter, '_blank')} title="Share on Twitter">
                     <Twitter size={18} className="text-luxury-slate" />
                   </Button>
@@ -300,5 +290,4 @@ const BlogPost = () => {
       <Footer />
     </div>;
 };
-
 export default BlogPost;
