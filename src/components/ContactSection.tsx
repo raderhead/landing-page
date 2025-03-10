@@ -32,9 +32,17 @@ const ContactSection = () => {
     try {
       console.log("Submitting form data:", formData);
       
-      // Send data to Supabase Edge Function
+      // Validate form data
+      if (!formData.name || !formData.email || !formData.message) {
+        throw new Error("Please fill in all required fields");
+      }
+
+      // Send data to Supabase Edge Function with a longer timeout
       const { data, error } = await supabase.functions.invoke('send-contact-email', {
-        body: formData
+        body: formData,
+        headers: {
+          "Content-Type": "application/json"
+        }
       });
 
       if (error) {

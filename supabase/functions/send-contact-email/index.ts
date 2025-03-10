@@ -6,6 +6,7 @@ const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type",
 };
@@ -22,13 +23,43 @@ const handler = async (req: Request): Promise<Response> => {
   
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { 
+      status: 204, 
+      headers: corsHeaders 
+    });
   }
 
   try {
-    const { name, email, phone, message }: ContactFormData = await req.json();
+    const body = await req.text();
+    console.log("Request body:", body);
+    
+    let formData: ContactFormData;
+    try {
+      formData = JSON.parse(body);
+    } catch (parseError) {
+      console.error("Error parsing JSON:", parseError);
+      return new Response(
+        JSON.stringify({ error: "Invalid JSON payload" }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
 
-    console.log("Received form data:", { name, email, phone, message });
+    const { name, email, phone, message } = formData;
+    console.log("Processed form data:", { name, email, phone, message });
+
+    if (!name || !email || !message) {
+      console.error("Missing required fields");
+      return new Response(
+        JSON.stringify({ error: "Missing required fields" }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
 
     // Format the message with proper HTML
     const htmlContent = `
@@ -40,6 +71,7 @@ const handler = async (req: Request): Promise<Response> => {
       <p>${message.replace(/\n/g, '<br>')}</p>
     `;
 
+    console.log("Attempting to send email with Resend...");
     const emailResponse = await resend.emails.send({
       from: "Josh Rader Commercial <onboarding@resend.dev>",
       to: ["josh.rader@example.com"], // Primary recipient
@@ -60,7 +92,7 @@ const handler = async (req: Request): Promise<Response> => {
   } catch (error: any) {
     console.error("Error in send-contact-email function:", error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: error.message || "Unknown error occurred" }),
       {
         status: 500,
         headers: { "Content-Type": "application/json", ...corsHeaders },
