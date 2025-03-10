@@ -1,4 +1,4 @@
-import { Building, Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
+import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -8,9 +8,12 @@ const Footer = () => {
       <div className="container">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           <div className="flex flex-col items-center md:items-start">
-            <div className="flex items-center gap-2 mb-4">
-              <Building className="h-6 w-6 text-luxury-gold" />
-              <span className="font-bold text-xl">Josh Rader</span>
+            <div className="mb-4">
+              <img 
+                src="/lovable-uploads/8e0f7a87-fcde-45bb-840a-20ba1452adde.png" 
+                alt="Josh Rader" 
+                className="h-20 w-auto drop-shadow-md"
+              />
             </div>
             <p className="text-luxury-khaki mb-6">
               Licensed commercial real estate agent serving Abilene, TX and surrounding areas with expertise in all types of commercial properties.
