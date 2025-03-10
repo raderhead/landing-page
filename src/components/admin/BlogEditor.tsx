@@ -49,12 +49,19 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
         throw new Error("Please fill all required fields");
       }
       
-      // Ensure the user is authenticated
-      const { data: sessionData } = await supabase.auth.getSession();
+      // Force refresh authentication status to ensure we have the latest session
+      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+      
+      if (sessionError) {
+        console.error("Session error:", sessionError);
+        throw new Error(`Authentication error: ${sessionError.message}`);
+      }
+      
       const currentSession = sessionData.session;
       
       if (!currentSession) {
-        throw new Error("You must be logged in to save blog posts");
+        console.error("No active session found");
+        throw new Error("You must be logged in to save blog posts. Please sign in again.");
       }
       
       const currentUserId = currentSession.user.id;
@@ -100,7 +107,22 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
       });
       
       if (currentBlog.id) {
-        // For existing blogs, use upsert instead of update to ensure complete replacement
+        // Check if the current user is authorized to update this blog post
+        const { data: blogCheck, error: blogCheckError } = await supabase
+          .from('blog_posts')
+          .select('author_id')
+          .eq('id', currentBlog.id)
+          .single();
+        
+        if (blogCheckError && blogCheckError.code !== 'PGRST116') {
+          console.error("Error checking blog ownership:", blogCheckError);
+          throw new Error(`Cannot verify blog ownership: ${blogCheckError.message}`);
+        }
+        
+        if (blogCheck && blogCheck.author_id !== currentUserId) {
+          throw new Error("You don't have permission to edit this blog post");
+        }
+        
         const { data, error } = await supabase
           .from('blog_posts')
           .upsert({
