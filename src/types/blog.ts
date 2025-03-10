@@ -22,6 +22,7 @@ export type BlogPost = {
   image_url?: string;
   category: string;
   created_at: string;
+  author_id: string;  // Added the author_id field to match the database schema
 };
 
 export const BLOG_CATEGORIES = [

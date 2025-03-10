@@ -5,17 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Pen, Trash2, Eye, AlertTriangle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-
-type BlogPost = {
-  id: string;
-  title: string;
-  excerpt: string;
-  content: string;
-  image_url?: string;
-  category: string;
-  created_at: string;
-  author_id: string;
-};
+import { BlogPost } from "@/types/blog";
 
 interface BlogCardProps {
   blog: BlogPost;

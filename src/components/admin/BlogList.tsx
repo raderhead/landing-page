@@ -1,16 +1,7 @@
 
 import React from 'react';
 import BlogCard from './BlogCard';
-
-type BlogPost = {
-  id: string;
-  title: string;
-  excerpt: string;
-  content: string;
-  image_url?: string;
-  category: string;
-  created_at: string;
-};
+import { BlogPost } from '@/types/blog';
 
 interface BlogListProps {
   blogs: BlogPost[];
