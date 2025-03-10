@@ -62,19 +62,12 @@ const Admin = () => {
         
       if (error) throw error;
       
-      const filteredData = data ? data.filter(blog => 
-        !blog.title.includes("Abilene") && 
-        !blog.excerpt.includes("Trump") && 
-        !blog.excerpt.includes("Abilene Market")
-      ) : [];
-      
-      const formattedBlogs: BlogPost[] = filteredData.map(blog => ({
+      const formattedBlogs: BlogPost[] = data ? data.map(blog => ({
         ...blog,
         formattedContent: blog.formattedContent as unknown as BlogContentBlock[] | null
-      }));
+      })) : [];
       
       setBlogs(formattedBlogs);
-      console.log("Filtered blogs:", formattedBlogs);
     } catch (error: any) {
       toast({
         title: "Error fetching blogs",
@@ -92,15 +85,6 @@ const Admin = () => {
   };
 
   const handleEdit = (blog: BlogPost) => {
-    if (user && blog.author_id !== user.id) {
-      toast({
-        title: "Permission denied",
-        description: "You don't have permission to edit this blog post",
-        variant: "destructive"
-      });
-      return;
-    }
-    
     console.log("Editing blog:", blog);
     setCurrentBlog({...blog});
     setIsEditing(true);
@@ -113,20 +97,6 @@ const Admin = () => {
     try {
       setLoading(true);
       
-      const { data: blogData, error: fetchError } = await supabase
-        .from('blog_posts')
-        .select('author_id')
-        .eq('id', id)
-        .single();
-      
-      if (fetchError) {
-        throw new Error("Failed to verify blog ownership");
-      }
-      
-      if (user && blogData.author_id !== user.id) {
-        throw new Error("You don't have permission to delete this blog post");
-      }
-      
       const { error } = await supabase
         .from('blog_posts')
         .delete()
@@ -136,6 +106,16 @@ const Admin = () => {
         throw error;
       }
       
+      const { data: checkData } = await supabase
+        .from('blog_posts')
+        .select('id')
+        .eq('id', id)
+        .single();
+      
+      if (checkData) {
+        throw new Error("Failed to delete the blog post completely. Please try again.");
+      }
+      
       setBlogs(blogs.filter(blog => blog.id !== id));
       
       toast({
@@ -143,7 +123,9 @@ const Admin = () => {
         description: "Blog post deleted successfully",
       });
       
-      fetchBlogs();
+      setTimeout(() => {
+        fetchBlogs();
+      }, 500);
       
     } catch (error: any) {
       toast({
@@ -151,7 +133,7 @@ const Admin = () => {
         description: error.message,
         variant: "destructive"
       });
-      console.error("Delete error:", error);
+      fetchBlogs();
     } finally {
       setLoading(false);
     }

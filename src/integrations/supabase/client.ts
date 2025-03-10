@@ -26,25 +26,6 @@ export const supabase = createClient<Database>(
   }
 );
 
-// The ID of the problematic blog post to filter out
-const PROBLEMATIC_BLOG_ID = "problematic-blog-id-to-filter"; // Replace with actual ID if known
-
-// Helper function to get blogs with specific filtering applied
-export const getFilteredBlogs = async () => {
-  const { data, error } = await supabase
-    .from('blog_posts')
-    .select('*')
-    .order('created_at', { ascending: false });
-  
-  if (error) throw error;
-  
-  // Filter out only the problematic post (if ID is known) or posts with the exact problematic title
-  return data ? data.filter(blog => 
-    blog.id !== PROBLEMATIC_BLOG_ID && 
-    blog.title !== "Abilene Market Is on the rise after Trump's announcement of AI jobs"
-  ) : [];
-};
-
 // Helper function to get the current user session
 export const getCurrentSession = async () => {
   // Force refresh the session to ensure we have the latest state
