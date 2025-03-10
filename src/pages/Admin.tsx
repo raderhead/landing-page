@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
-import { LogOut, Plus, Book, Pen } from "lucide-react";
+import { LogOut, Plus, Pen, FileText } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BlogEditor from "@/components/admin/BlogEditor";
@@ -92,8 +92,6 @@ const Admin = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm("Are you sure you want to delete this blog post?")) return;
-    
     try {
       setLoading(true);
       
@@ -106,16 +104,6 @@ const Admin = () => {
         throw error;
       }
       
-      const { data: checkData } = await supabase
-        .from('blog_posts')
-        .select('id')
-        .eq('id', id)
-        .single();
-      
-      if (checkData) {
-        throw new Error("Failed to delete the blog post completely. Please try again.");
-      }
-      
       setBlogs(blogs.filter(blog => blog.id !== id));
       
       toast({
@@ -123,17 +111,12 @@ const Admin = () => {
         description: "Blog post deleted successfully",
       });
       
-      setTimeout(() => {
-        fetchBlogs();
-      }, 500);
-      
     } catch (error: any) {
       toast({
         title: "Error deleting blog",
         description: error.message,
         variant: "destructive"
       });
-      fetchBlogs();
     } finally {
       setLoading(false);
     }
@@ -180,7 +163,7 @@ const Admin = () => {
         <div className="container py-24">
           <div className="flex justify-center items-center min-h-[50vh]">
             <div className="animate-pulse flex items-center gap-2 text-luxury-gold">
-              <Book className="h-6 w-6 animate-bounce" />
+              <FileText className="h-6 w-6 animate-bounce" />
               <span className="text-lg font-medium">Loading blog management...</span>
             </div>
           </div>
@@ -194,29 +177,33 @@ const Admin = () => {
     <div className="min-h-screen bg-gradient-to-b from-white to-luxury-cream">
       <Navbar />
       <main className="container py-24">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
-          <div>
-            <h1 className="text-4xl font-bold text-luxury-black mb-2 flex items-center gap-3">
-              <Pen className="h-8 w-8 text-luxury-gold" /> Blog Management
-            </h1>
-            <p className="text-luxury-gray">Create and manage your blog content</p>
-          </div>
-          <div className="flex flex-col sm:flex-row gap-4">
-            {!isEditing ? (
-              <Button 
-                onClick={handleNewBlog}
-                className="bg-luxury-gold hover:bg-luxury-khaki text-luxury-black font-medium px-6"
-              >
-                <Plus className="mr-2 h-4 w-4" /> New Blog Post
-              </Button>
-            ) : null}
-            <Button 
-              variant="outline" 
-              onClick={handleSignOut}
-              className="text-luxury-slate hover:text-luxury-black border-luxury-slate/20 hover:border-luxury-black/40"
-            >
-              <LogOut className="mr-2 h-4 w-4" /> Sign Out
-            </Button>
+        <div className="mb-12">
+          <div className="bg-gradient-to-r from-luxury-gold/10 via-luxury-cream to-white p-8 rounded-lg shadow-sm border border-luxury-gold/10 mb-8">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+              <div>
+                <h1 className="text-4xl font-bold text-luxury-black mb-2 flex items-center gap-3">
+                  <Pen className="h-8 w-8 text-luxury-gold" /> Blog Management
+                </h1>
+                <p className="text-luxury-gray">Create and manage your luxury real estate blog content</p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-4">
+                {!isEditing ? (
+                  <Button 
+                    onClick={handleNewBlog}
+                    className="bg-luxury-gold hover:bg-luxury-khaki text-luxury-black font-medium px-6"
+                  >
+                    <Plus className="mr-2 h-4 w-4" /> New Blog Post
+                  </Button>
+                ) : null}
+                <Button 
+                  variant="outline" 
+                  onClick={handleSignOut}
+                  className="text-luxury-slate hover:text-luxury-black border-luxury-slate/20 hover:border-luxury-black/40"
+                >
+                  <LogOut className="mr-2 h-4 w-4" /> Sign Out
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
         
