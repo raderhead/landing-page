@@ -29,6 +29,12 @@ const BlogCard = ({ blog, onEdit, onDelete }: BlogCardProps) => {
     checkUser();
   }, [blog.author_id]);
 
+  const handleDelete = () => {
+    if (window.confirm(`Are you sure you want to delete "${blog.title}"?`)) {
+      onDelete(blog.id);
+    }
+  };
+
   return (
     <div className={`luxury-card p-6 flex flex-col md:flex-row gap-6 hover:border-luxury-gold/40 transition-all duration-300 ${!isOwner ? 'border-red-300 bg-red-50' : ''}`}>
       {blog.image_url && (
@@ -72,7 +78,7 @@ const BlogCard = ({ blog, onEdit, onDelete }: BlogCardProps) => {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => onDelete(blog.id)}
+              onClick={handleDelete}
               className={`${isOwner ? 'text-luxury-slate hover:text-destructive hover:border-destructive' : 'text-gray-400 cursor-not-allowed'} transition-colors`}
               disabled={!isOwner}
             >
