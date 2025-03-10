@@ -183,9 +183,7 @@ const BlogPost = () => {
                   Back to Blog
                 </Link>
               </Button>
-              <Badge className="bg-luxury-gold text-luxury-black mb-4 px-4 py-1.5">
-                {post?.category}
-              </Badge>
+              
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-4">{post?.title}</h1>
               <div className="flex items-center text-sm text-luxury-khaki gap-6">
                 <div className="flex items-center gap-1">
