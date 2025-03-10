@@ -1,27 +1,19 @@
 
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Clock, Calendar, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
-
-interface BlogPost {
-  id: string;
-  title: string;
-  excerpt: string;
-  content: string;
-  image_url: string | null;
-  category: string;
-  created_at: string;
-}
+import { BlogPost as BlogPostType, BlogContentBlock } from '@/types/blog';
+import { cn } from '@/lib/utils';
 
 const BlogPost = () => {
   const { id } = useParams<{ id: string }>();
-  const [post, setPost] = useState<BlogPost | null>(null);
-  const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
+  const [post, setPost] = useState<BlogPostType | null>(null);
+  const [relatedPosts, setRelatedPosts] = useState<BlogPostType[]>([]);
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
@@ -64,6 +56,106 @@ const BlogPost = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const renderFormattedContent = () => {
+    if (!post) return null;
+    
+    // If we have formatted content blocks, render those
+    if (post.formattedContent && post.formattedContent.length > 0) {
+      return (
+        <div className="space-y-6">
+          {post.formattedContent.map((block: BlogContentBlock) => {
+            const textAlign = block.style?.align ? `text-${block.style.align}` : '';
+            const textColor = block.style?.color ? block.style.color : '';
+            const fontSize = block.style?.fontSize || '';
+            const fontWeight = block.style?.fontWeight ? `font-${block.style.fontWeight}` : '';
+            const fontStyle = block.style?.fontStyle === 'italic' ? 'italic' : '';
+            
+            const className = cn(
+              textAlign,
+              fontSize,
+              fontWeight,
+              fontStyle,
+              "max-w-none leading-relaxed"
+            );
+            
+            switch (block.type) {
+              case 'heading':
+                return (
+                  <h2 
+                    key={block.id}
+                    className={cn("font-bold text-2xl my-4", className)}
+                    style={{ color: textColor }}
+                  >
+                    {block.content}
+                  </h2>
+                );
+              case 'paragraph':
+                return (
+                  <p 
+                    key={block.id}
+                    className={className}
+                    style={{ color: textColor }}
+                  >
+                    {block.content}
+                  </p>
+                );
+              case 'quote':
+                return (
+                  <blockquote 
+                    key={block.id}
+                    className={cn("border-l-4 border-luxury-gold pl-4 italic py-2", className)}
+                    style={{ color: textColor }}
+                  >
+                    {block.content}
+                  </blockquote>
+                );
+              case 'list':
+                return (
+                  <ul 
+                    key={block.id}
+                    className={cn("list-disc pl-5", className)}
+                    style={{ color: textColor }}
+                  >
+                    {block.content.split('\n').map((item, i) => (
+                      <li key={i}>{item}</li>
+                    ))}
+                  </ul>
+                );
+              case 'image':
+                return (
+                  <div key={block.id} className="my-6">
+                    <img 
+                      src={block.content} 
+                      alt="Blog content" 
+                      className="w-full rounded-lg"
+                    />
+                  </div>
+                );
+              default:
+                return (
+                  <p 
+                    key={block.id}
+                    className={className}
+                    style={{ color: textColor }}
+                  >
+                    {block.content}
+                  </p>
+                );
+            }
+          })}
+        </div>
+      );
+    }
+    
+    // Fallback to regular HTML content if no formatted blocks
+    return (
+      <div 
+        className="prose prose-lg max-w-none leading-relaxed"
+        dangerouslySetInnerHTML={{ __html: post.content }}
+      />
+    );
   };
   
   if (loading) {
@@ -130,8 +222,27 @@ const BlogPost = () => {
             </div>
           </div>
           
-          <article className="prose prose-lg max-w-none">
-            <div dangerouslySetInnerHTML={{ __html: post.content }} />
+          <div className="flex items-center text-sm text-luxury-slate gap-4 mb-8 border-b border-luxury-khaki/20 pb-4">
+            <div className="flex items-center gap-1">
+              <Calendar size={14} />
+              <span>{new Date(post.created_at).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <User size={14} />
+              <span>Josh Rader</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Clock size={14} />
+              <span>{Math.ceil(post.content.length / 1000)} min read</span>
+            </div>
+          </div>
+          
+          <article className="max-w-4xl mx-auto">
+            {renderFormattedContent()}
           </article>
         </div>
         
