@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, EyeOff, Eye } from "lucide-react";
 import { BlogContentBlock } from '@/types/blog';
 import ContentBlock from './ContentBlock';
 

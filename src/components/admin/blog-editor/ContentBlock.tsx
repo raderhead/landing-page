@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -7,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { BlogContentBlock, TEXT_COLORS, FONT_SIZES, TEXT_ALIGNMENTS } from "@/types/blog";
 import { 
   AlignLeft, AlignCenter, AlignRight, AlignJustify, Bold, 
-  Italic, Type, Quote, List, FileImage, Underline, Trash2 
+  Italic, Type, Quote, List, FileImage, Underline, Trash2, Eye, Code
 } from "lucide-react";
 
 interface ContentBlockProps {
@@ -35,6 +34,15 @@ const ContentBlock: React.FC<ContentBlockProps> = ({
   onFormatSelection,
   textareaRef
 }) => {
+  const [showRawHtml, setShowRawHtml] = useState(false);
+  
+  const getCleanContent = () => {
+    return block.content
+      .replace(/<strong>(.*?)<\/strong>/g, '$1')
+      .replace(/<em>(.*?)<\/em>/g, '$1')
+      .replace(/<u>(.*?)<\/u>/g, '$1');
+  };
+
   return (
     <div 
       className={cn(
@@ -91,15 +99,27 @@ const ContentBlock: React.FC<ContentBlockProps> = ({
             <FileImage className="h-4 w-4" />
           </Button>
         </div>
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          onClick={() => onRemoveBlock(block.id)}
-          className="text-destructive hover:bg-destructive/10"
-        >
-          <Trash2 className="h-4 w-4" />
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowRawHtml(!showRawHtml)}
+            className={showRawHtml ? "bg-muted" : ""}
+            title={showRawHtml ? "Show formatted view" : "Show HTML tags"}
+          >
+            <Code className="h-4 w-4" />
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => onRemoveBlock(block.id)}
+            className="text-destructive hover:bg-destructive/10"
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
       
       {block.type === 'image' ? (
@@ -111,21 +131,64 @@ const ContentBlock: React.FC<ContentBlockProps> = ({
           className="w-full"
         />
       ) : (
-        <Textarea
-          id={`block-${block.id}`}
-          ref={textareaRef}
-          value={block.content || ''}
-          onChange={(e) => onContentChange(block.id, e.target.value)}
-          placeholder={
-            block.type === 'paragraph' ? "Enter paragraph text" :
-            block.type === 'heading' ? "Enter heading text" :
-            block.type === 'quote' ? "Enter quote text" :
-            block.type === 'list' ? "Enter list items (one per line)" :
-            "Enter content"
-          }
-          rows={block.type === 'paragraph' ? 4 : block.type === 'list' ? 3 : 2}
-          className="w-full"
-        />
+        <div>
+          {showRawHtml ? (
+            <Textarea
+              id={`block-${block.id}`}
+              ref={textareaRef}
+              value={block.content || ''}
+              onChange={(e) => onContentChange(block.id, e.target.value)}
+              placeholder={
+                block.type === 'paragraph' ? "Enter paragraph text" :
+                block.type === 'heading' ? "Enter heading text" :
+                block.type === 'quote' ? "Enter quote text" :
+                block.type === 'list' ? "Enter list items (one per line)" :
+                "Enter content"
+              }
+              rows={block.type === 'paragraph' ? 4 : block.type === 'list' ? 3 : 2}
+              className="w-full"
+            />
+          ) : (
+            <div
+              className={cn(
+                "min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                block.style?.fontSize || 'text-base',
+                block.style?.align ? `text-${block.style.align}` : 'text-left',
+                "focus-within:border-luxury-gold"
+              )}
+              style={{ color: block.style?.color || '#121212' }}
+              contentEditable
+              suppressContentEditableWarning
+              onInput={(e) => {
+                const html = e.currentTarget.innerHTML
+                  .replace(/<div>/g, '\n')
+                  .replace(/<\/div>/g, '')
+                  .replace(/<br>/g, '\n')
+                  .replace(/&nbsp;/g, ' ');
+                
+                let processedContent = html;
+                
+                if (block.style?.fontWeight === 'bold' || e.currentTarget.querySelector('.font-bold')) {
+                  processedContent = `<strong>${processedContent}</strong>`;
+                }
+                if (block.style?.fontStyle === 'italic' || e.currentTarget.querySelector('.italic')) {
+                  processedContent = `<em>${processedContent}</em>`;
+                }
+                if (block.style?.textDecoration === 'underline' || e.currentTarget.querySelector('.underline')) {
+                  processedContent = `<u>${processedContent}</u>`;
+                }
+                
+                onContentChange(block.id, processedContent);
+              }}
+              onFocus={() => onSetActiveBlock(block.id)}
+              dangerouslySetInnerHTML={{ 
+                __html: block.type === 'list' 
+                  ? block.content.split('\n').map(item => `<div>${item}</div>`).join('')
+                  : getCleanContent().replace(/\n/g, '<br />')
+              }}
+            />
+          )}
+        </div>
       )}
       
       <FormatToolbar 
@@ -136,11 +199,14 @@ const ContentBlock: React.FC<ContentBlockProps> = ({
         }}
       />
       
-      {block.content && (
-        <BlockPreview 
-          block={block} 
-          formatTextForPreview={formatTextForPreview} 
-        />
+      {block.content && !showRawHtml && block.type !== 'image' && (
+        <div className="mt-2 p-2 border rounded-md bg-muted/50">
+          <div className="text-xs text-luxury-slate mb-1">Preview:</div>
+          <BlockPreview 
+            block={block} 
+            formatTextForPreview={formatTextForPreview} 
+          />
+        </div>
       )}
     </div>
   );
@@ -258,33 +324,30 @@ interface BlockPreviewProps {
 
 const BlockPreview: React.FC<BlockPreviewProps> = ({ block, formatTextForPreview }) => {
   return (
-    <div className="mt-2 p-2 border rounded-md bg-muted">
-      <div className="text-xs text-luxury-slate mb-1">Preview:</div>
-      <div
-        className={cn(
-          block.style?.fontSize || 'text-base',
-          block.style?.align ? `text-${block.style.align}` : 'text-left',
-        )}
-        style={{ color: block.style?.color || '#121212' }}
-      >
-        {block.type === 'image' ? (
-          <img src={block.content} alt="Preview" className="max-h-32 object-contain" />
-        ) : block.type === 'list' ? (
-          <ul className="list-disc pl-5">
-            {block.content.split('\n').map((item, i) => (
-              <li key={i}>{item}</li>
-            ))}
-          </ul>
-        ) : (
-          <div dangerouslySetInnerHTML={{ 
-            __html: block.content
-              .replace(/\n/g, '<br />')
-              .replace(/<strong>(.*?)<\/strong>/g, '<span class="font-bold">$1</span>')
-              .replace(/<em>(.*?)<\/em>/g, '<span class="italic">$1</span>')
-              .replace(/<u>(.*?)<\/u>/g, '<span class="underline">$1</span>')
-          }} />
-        )}
-      </div>
+    <div
+      className={cn(
+        block.style?.fontSize || 'text-base',
+        block.style?.align ? `text-${block.style.align}` : 'text-left',
+      )}
+      style={{ color: block.style?.color || '#121212' }}
+    >
+      {block.type === 'image' ? (
+        <img src={block.content} alt="Preview" className="max-h-32 object-contain" />
+      ) : block.type === 'list' ? (
+        <ul className="list-disc pl-5">
+          {block.content.split('\n').map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+        </ul>
+      ) : (
+        <div dangerouslySetInnerHTML={{ 
+          __html: block.content
+            .replace(/\n/g, '<br />')
+            .replace(/<strong>(.*?)<\/strong>/g, '<span class="font-bold">$1</span>')
+            .replace(/<em>(.*?)<\/em>/g, '<span class="italic">$1</span>')
+            .replace(/<u>(.*?)<\/u>/g, '<span class="underline">$1</span>')
+        }} />
+      )}
     </div>
   );
 };

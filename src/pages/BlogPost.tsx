@@ -1,4 +1,3 @@
-
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Clock, Calendar, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -74,8 +73,14 @@ const BlogPost = () => {
   const renderContentWithLineBreaks = (content: string) => {
     if (!content) return null;
     
+    // Remove HTML tags and split by \n to preserve line breaks
+    const cleanContent = content
+      .replace(/<strong>(.*?)<\/strong>/g, '$1')
+      .replace(/<em>(.*?)<\/em>/g, '$1')
+      .replace(/<u>(.*?)<\/u>/g, '$1');
+    
     // Split by \n and wrap each line in spans with block display
-    return content.split('\n').map((line, i) => (
+    return cleanContent.split('\n').map((line, i) => (
       <span key={i} className="block">
         {line.length > 0 ? line : <br />}
       </span>
@@ -144,9 +149,14 @@ const BlogPost = () => {
                     className={cn("list-disc pl-5", className)}
                     style={{ color: textColor }}
                   >
-                    {block.content.split('\n').map((item, i) => (
-                      <li key={i}>{item}</li>
-                    ))}
+                    {block.content.split('\n').map((item, i) => {
+                      // Clean HTML tags from list items
+                      const cleanItem = item
+                        .replace(/<strong>(.*?)<\/strong>/g, '$1')
+                        .replace(/<em>(.*?)<\/em>/g, '$1')
+                        .replace(/<u>(.*?)<\/u>/g, '$1');
+                      return <li key={i}>{cleanItem}</li>;
+                    })}
                   </ul>
                 );
               case 'image':
