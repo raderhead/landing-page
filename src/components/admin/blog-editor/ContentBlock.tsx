@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+
+import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { BlogContentBlock, TEXT_COLORS, FONT_SIZES, TEXT_ALIGNMENTS } from "@/types/blog";
 import { 
   AlignLeft, AlignCenter, AlignRight, AlignJustify, Bold, 
-  Italic, Type, Quote, List, FileImage, Underline, Trash2, Eye, Code
+  Italic, Type, Quote, List, FileImage, Underline, Trash2, Code
 } from "lucide-react";
 
 interface ContentBlockProps {
@@ -34,14 +34,86 @@ const ContentBlock: React.FC<ContentBlockProps> = ({
   onFormatSelection,
   textareaRef
 }) => {
-  const [showRawHtml, setShowRawHtml] = useState(false);
+  const [showCodeView, setShowCodeView] = useState(false);
+  const editorRef = useRef<HTMLDivElement>(null);
   
-  const getCleanContent = () => {
-    return block.content
+  // Convert HTML content to plain text with formatting
+  const stripTags = (htmlContent: string): string => {
+    return htmlContent
       .replace(/<strong>(.*?)<\/strong>/g, '$1')
       .replace(/<em>(.*?)<\/em>/g, '$1')
-      .replace(/<u>(.*?)<\/u>/g, '$1');
+      .replace(/<u>(.*?)<\/u>/g, '$1')
+      .replace(/<br\s*\/?>/g, '\n')
+      .replace(/<div>/g, '')
+      .replace(/<\/div>/g, '\n')
+      .replace(/&nbsp;/g, ' ');
   };
+  
+  // Add HTML formatting based on content
+  const addFormattingTags = (content: string): string => {
+    let processedContent = content;
+    const selection = window.getSelection();
+    
+    if (selection && selection.rangeCount > 0) {
+      const range = selection.getRangeAt(0);
+      if (range.startContainer.parentElement?.classList.contains('font-bold')) {
+        processedContent = `<strong>${processedContent}</strong>`;
+      }
+      if (range.startContainer.parentElement?.classList.contains('italic')) {
+        processedContent = `<em>${processedContent}</em>`;
+      }
+      if (range.startContainer.parentElement?.classList.contains('underline')) {
+        processedContent = `<u>${processedContent}</u>`;
+      }
+    }
+    
+    return processedContent;
+  };
+
+  // Handle format commands (bold, italic, underline)
+  const handleFormatCommand = (command: string) => {
+    if (!editorRef.current) return;
+    
+    document.execCommand(command, false);
+    
+    // Store the formatted HTML
+    const formattedHtml = editorRef.current.innerHTML;
+    
+    // Convert the formatted HTML to our storage format
+    let storedContent = formattedHtml
+      .replace(/<b>(.*?)<\/b>/g, '<strong>$1</strong>')
+      .replace(/<i>(.*?)<\/i>/g, '<em>$1</em>')
+      .replace(/<div><br><\/div>/g, '<br>')
+      .replace(/<div>/g, '<br>')
+      .replace(/<\/div>/g, '')
+      .replace(/^\s*<br>/g, ''); // Remove leading <br>
+      
+    // Ensure paragraphs have proper formatting
+    if (block.type === 'paragraph' && !storedContent.startsWith('<p>')) {
+      storedContent = `<p>${storedContent}</p>`;
+    }
+    
+    onContentChange(block.id, storedContent);
+  };
+  
+  // Initialize the editor content
+  useEffect(() => {
+    if (!editorRef.current) return;
+    
+    // Only set innerHTML if it's different to avoid cursor jumping
+    const displayHtml = showCodeView 
+      ? block.content 
+      : block.content
+          .replace(/<strong>(.*?)<\/strong>/g, '<b>$1</b>')
+          .replace(/<em>(.*?)<\/em>/g, '<i>$1</i>')
+          .replace(/<u>(.*?)<\/u>/g, '<u>$1</u>')
+          .replace(/<p>(.*?)<\/p>/g, '$1')
+          .replace(/<br\s*\/?>/g, '<div><br></div>');
+          
+    if (editorRef.current.innerHTML !== displayHtml) {
+      editorRef.current.innerHTML = displayHtml;
+    }
+  }, [block.content, showCodeView]);
 
   return (
     <div 
@@ -104,9 +176,9 @@ const ContentBlock: React.FC<ContentBlockProps> = ({
             type="button"
             variant="ghost"
             size="sm"
-            onClick={() => setShowRawHtml(!showRawHtml)}
-            className={showRawHtml ? "bg-muted" : ""}
-            title={showRawHtml ? "Show formatted view" : "Show HTML tags"}
+            onClick={() => setShowCodeView(!showCodeView)}
+            className={showCodeView ? "bg-muted" : ""}
+            title={showCodeView ? "Show visual editor" : "Show HTML code"}
           >
             <Code className="h-4 w-4" />
           </Button>
@@ -132,60 +204,37 @@ const ContentBlock: React.FC<ContentBlockProps> = ({
         />
       ) : (
         <div>
-          {showRawHtml ? (
-            <Textarea
-              id={`block-${block.id}`}
+          {showCodeView ? (
+            <textarea
               ref={textareaRef}
-              value={block.content || ''}
+              value={block.content}
               onChange={(e) => onContentChange(block.id, e.target.value)}
-              placeholder={
-                block.type === 'paragraph' ? "Enter paragraph text" :
-                block.type === 'heading' ? "Enter heading text" :
-                block.type === 'quote' ? "Enter quote text" :
-                block.type === 'list' ? "Enter list items (one per line)" :
-                "Enter content"
-              }
-              rows={block.type === 'paragraph' ? 4 : block.type === 'list' ? 3 : 2}
-              className="w-full"
+              className="w-full min-h-[150px] p-3 border rounded-md font-mono text-sm"
+              placeholder="HTML content"
             />
           ) : (
             <div
+              ref={editorRef}
               className={cn(
-                "min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                "min-h-[150px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:border-luxury-gold overflow-auto",
                 block.style?.fontSize || 'text-base',
                 block.style?.align ? `text-${block.style.align}` : 'text-left',
-                "focus-within:border-luxury-gold"
               )}
               style={{ color: block.style?.color || '#121212' }}
               contentEditable
               suppressContentEditableWarning
-              onInput={(e) => {
-                const html = e.currentTarget.innerHTML
-                  .replace(/<div>/g, '\n')
-                  .replace(/<\/div>/g, '')
-                  .replace(/<br>/g, '\n')
-                  .replace(/&nbsp;/g, ' ');
-                
-                let processedContent = html;
-                
-                if (block.style?.fontWeight === 'bold' || e.currentTarget.querySelector('.font-bold')) {
-                  processedContent = `<strong>${processedContent}</strong>`;
+              onInput={() => {
+                if (editorRef.current) {
+                  onContentChange(block.id, editorRef.current.innerHTML
+                    .replace(/<b>(.*?)<\/b>/g, '<strong>$1</strong>')
+                    .replace(/<i>(.*?)<\/i>/g, '<em>$1</em>')
+                    .replace(/<div><br><\/div>/g, '<br>')
+                    .replace(/<div>/g, '<br>')
+                    .replace(/<\/div>/g, '')
+                  );
                 }
-                if (block.style?.fontStyle === 'italic' || e.currentTarget.querySelector('.italic')) {
-                  processedContent = `<em>${processedContent}</em>`;
-                }
-                if (block.style?.textDecoration === 'underline' || e.currentTarget.querySelector('.underline')) {
-                  processedContent = `<u>${processedContent}</u>`;
-                }
-                
-                onContentChange(block.id, processedContent);
               }}
               onFocus={() => onSetActiveBlock(block.id)}
-              dangerouslySetInnerHTML={{ 
-                __html: block.type === 'list' 
-                  ? block.content.split('\n').map(item => `<div>${item}</div>`).join('')
-                  : getCleanContent().replace(/\n/g, '<br />')
-              }}
             />
           )}
         </div>
@@ -194,20 +243,9 @@ const ContentBlock: React.FC<ContentBlockProps> = ({
       <FormatToolbar 
         block={block}
         onBlockStyleChange={onBlockStyleChange}
-        onFormatSelection={(formatType, formatValue) => {
-          onFormatSelection(block.id, formatType, formatValue);
-        }}
+        onFormatCommand={handleFormatCommand}
+        showCodeView={showCodeView}
       />
-      
-      {block.content && !showRawHtml && block.type !== 'image' && (
-        <div className="mt-2 p-2 border rounded-md bg-muted/50">
-          <div className="text-xs text-luxury-slate mb-1">Preview:</div>
-          <BlockPreview 
-            block={block} 
-            formatTextForPreview={formatTextForPreview} 
-          />
-        </div>
-      )}
     </div>
   );
 };
@@ -215,14 +253,18 @@ const ContentBlock: React.FC<ContentBlockProps> = ({
 interface FormatToolbarProps {
   block: BlogContentBlock;
   onBlockStyleChange: (id: string, styleProp: string, value: string) => void;
-  onFormatSelection: (formatType: string, formatValue: string) => void;
+  onFormatCommand: (command: string) => void;
+  showCodeView: boolean;
 }
 
 const FormatToolbar: React.FC<FormatToolbarProps> = ({ 
   block, 
   onBlockStyleChange,
-  onFormatSelection 
+  onFormatCommand,
+  showCodeView
 }) => {
+  if (showCodeView) return null;
+  
   return (
     <div className="flex flex-wrap gap-2 items-center">
       <div className="flex border rounded-md">
@@ -269,8 +311,8 @@ const FormatToolbar: React.FC<FormatToolbarProps> = ({
           type="button"
           variant="ghost"
           size="sm"
-          onClick={() => onFormatSelection('fontWeight', 'bold')}
-          title="Bold (select text first)"
+          onClick={() => onFormatCommand('bold')}
+          title="Bold text"
         >
           <Bold className="h-3 w-3" />
         </Button>
@@ -278,8 +320,8 @@ const FormatToolbar: React.FC<FormatToolbarProps> = ({
           type="button"
           variant="ghost"
           size="sm"
-          onClick={() => onFormatSelection('fontStyle', 'italic')}
-          title="Italic (select text first)"
+          onClick={() => onFormatCommand('italic')}
+          title="Italic text"
         >
           <Italic className="h-3 w-3" />
         </Button>
@@ -287,8 +329,8 @@ const FormatToolbar: React.FC<FormatToolbarProps> = ({
           type="button"
           variant="ghost"
           size="sm"
-          onClick={() => onFormatSelection('textDecoration', 'underline')}
-          title="Underline (select text first)"
+          onClick={() => onFormatCommand('underline')}
+          title="Underline text"
         >
           <Underline className="h-3 w-3" />
         </Button>
@@ -313,41 +355,6 @@ const FormatToolbar: React.FC<FormatToolbarProps> = ({
           <option key={color.value} value={color.value}>{color.name}</option>
         ))}
       </select>
-    </div>
-  );
-};
-
-interface BlockPreviewProps {
-  block: BlogContentBlock;
-  formatTextForPreview: (content: string) => React.ReactNode;
-}
-
-const BlockPreview: React.FC<BlockPreviewProps> = ({ block, formatTextForPreview }) => {
-  return (
-    <div
-      className={cn(
-        block.style?.fontSize || 'text-base',
-        block.style?.align ? `text-${block.style.align}` : 'text-left',
-      )}
-      style={{ color: block.style?.color || '#121212' }}
-    >
-      {block.type === 'image' ? (
-        <img src={block.content} alt="Preview" className="max-h-32 object-contain" />
-      ) : block.type === 'list' ? (
-        <ul className="list-disc pl-5">
-          {block.content.split('\n').map((item, i) => (
-            <li key={i}>{item}</li>
-          ))}
-        </ul>
-      ) : (
-        <div dangerouslySetInnerHTML={{ 
-          __html: block.content
-            .replace(/\n/g, '<br />')
-            .replace(/<strong>(.*?)<\/strong>/g, '<span class="font-bold">$1</span>')
-            .replace(/<em>(.*?)<\/em>/g, '<span class="italic">$1</span>')
-            .replace(/<u>(.*?)<\/u>/g, '<span class="underline">$1</span>')
-        }} />
-      )}
     </div>
   );
 };
