@@ -22,7 +22,7 @@ const HeroSection = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   
-  return <section ref={sectionRef} className="relative flex items-center overflow-hidden min-h-[calc(100vh-4rem)] md:min-h-screen pt-16 pb-52">
+  return <section ref={sectionRef} className="relative flex items-center overflow-hidden min-h-[calc(100vh-4rem)] md:min-h-screen pt-28 md:pt-32 pb-52">
       {/* Background Image with Parallax Effect */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-r from-luxury-black/95 to-luxury-charcoal/90 z-10" style={{
