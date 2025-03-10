@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from "@/integrations/supabase/client";
@@ -85,6 +86,16 @@ const Admin = () => {
   };
 
   const handleEdit = (blog: BlogPost) => {
+    // Check if current user is the author of the blog
+    if (user && blog.author_id !== user.id) {
+      toast({
+        title: "Permission denied",
+        description: "You don't have permission to edit this blog post",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     console.log("Editing blog:", blog);
     setCurrentBlog({...blog});
     setIsEditing(true);
@@ -97,6 +108,22 @@ const Admin = () => {
     try {
       setLoading(true);
       
+      // First, verify ownership
+      const { data: blogData, error: fetchError } = await supabase
+        .from('blog_posts')
+        .select('author_id')
+        .eq('id', id)
+        .single();
+      
+      if (fetchError) {
+        throw new Error("Failed to verify blog ownership");
+      }
+      
+      if (user && blogData.author_id !== user.id) {
+        throw new Error("You don't have permission to delete this blog post");
+      }
+      
+      // Then proceed with deletion
       const { error } = await supabase
         .from('blog_posts')
         .delete()
@@ -106,16 +133,6 @@ const Admin = () => {
         throw error;
       }
       
-      const { data: checkData } = await supabase
-        .from('blog_posts')
-        .select('id')
-        .eq('id', id)
-        .single();
-      
-      if (checkData) {
-        throw new Error("Failed to delete the blog post completely. Please try again.");
-      }
-      
       setBlogs(blogs.filter(blog => blog.id !== id));
       
       toast({
@@ -123,9 +140,7 @@ const Admin = () => {
         description: "Blog post deleted successfully",
       });
       
-      setTimeout(() => {
-        fetchBlogs();
-      }, 500);
+      fetchBlogs();
       
     } catch (error: any) {
       toast({
@@ -133,7 +148,7 @@ const Admin = () => {
         description: error.message,
         variant: "destructive"
       });
-      fetchBlogs();
+      console.error("Delete error:", error);
     } finally {
       setLoading(false);
     }
