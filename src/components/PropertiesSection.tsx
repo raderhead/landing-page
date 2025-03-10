@@ -1,7 +1,9 @@
+
 import { Button } from "@/components/ui/button";
 import { MapPin, Building, ArrowRight } from "lucide-react";
 import { useRef, useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
+
 const properties = [{
   image: "https://images.unsplash.com/photo-1497366858526-0766cadbe8fa?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
   title: "Downtown Office Building",
@@ -24,9 +26,11 @@ const properties = [{
   size: "12,000 sq ft",
   price: "$850,000"
 }];
+
 const PropertiesSection = () => {
   const [scrollY, setScrollY] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
+  
   useEffect(() => {
     const handleScroll = () => {
       if (sectionRef.current) {
@@ -39,6 +43,7 @@ const PropertiesSection = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+  
   return <section id="properties" ref={sectionRef} className="section bg-black relative overflow-hidden py-[45px]">
       <div className="absolute top-0 left-0 w-24 h-24 rounded-full bg-luxury-gold/5 -translate-x-1/2 parallax-layer" style={{
       transform: `translateX(${scrollY * 0.03}px) translateY(${scrollY * 0.02}px)`
@@ -51,8 +56,8 @@ const PropertiesSection = () => {
       
       <div className="container relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <h2 className="section-title text-white">Featured Properties</h2>
-          <p className="section-subtitle text-luxury-khaki">
+          <h2 className="section-title text-white font-sans">Featured <span className="font-serif text-luxury-gold">Properties</span></h2>
+          <p className="section-subtitle text-luxury-khaki font-sans">
             Explore our selection of premium commercial properties available in Abilene, TX
           </p>
         </div>
@@ -70,13 +75,13 @@ const PropertiesSection = () => {
               </div>
               
               <div className="p-6">
-                <h3 className="text-xl font-bold mb-2 text-white group-hover:text-luxury-gold transition-colors">{property.title}</h3>
-                <div className="flex items-center text-luxury-khaki mb-4">
+                <h3 className="text-xl font-bold mb-2 text-white group-hover:text-luxury-gold transition-colors font-sans">{property.title}</h3>
+                <div className="flex items-center text-luxury-khaki mb-4 font-sans">
                   <MapPin className="h-4 w-4 mr-1 group-hover:text-luxury-gold transition-colors" />
                   <span className="text-sm">{property.address}</span>
                 </div>
                 
-                <div className="grid grid-cols-2 gap-4 mb-6">
+                <div className="grid grid-cols-2 gap-4 mb-6 font-sans">
                   <div>
                     <p className="text-sm text-luxury-khaki/70">Size</p>
                     <p className="font-medium text-white">{property.size}</p>
@@ -87,7 +92,7 @@ const PropertiesSection = () => {
                   </div>
                 </div>
                 
-                <Button variant="outline" className="w-full border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm group-hover:bg-luxury-gold/10 transition-all">
+                <Button variant="outline" className="w-full border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm group-hover:bg-luxury-gold/10 transition-all font-sans">
                   View Details
                 </Button>
               </div>
@@ -96,7 +101,7 @@ const PropertiesSection = () => {
         
         <div className="mt-12 text-center">
           <Link to="/properties">
-            <Button variant="default" size="lg" className="bg-luxury-gold hover:bg-luxury-khaki text-luxury-black rounded-sm hover-scale group">
+            <Button variant="default" size="lg" className="bg-luxury-gold hover:bg-luxury-khaki text-luxury-black rounded-sm hover-scale group font-sans">
               View All Properties
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
             </Button>
@@ -105,4 +110,5 @@ const PropertiesSection = () => {
       </div>
     </section>;
 };
+
 export default PropertiesSection;

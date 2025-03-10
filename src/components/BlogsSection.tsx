@@ -47,21 +47,21 @@ const BlogsSection = () => {
     <section id="blogs" className="section bg-white">
       <div className="container">
         <div className="mb-12 text-center">
-          <Badge variant="outline" className="border-luxury-gold text-luxury-gold px-4 py-1 text-sm mb-4">
+          <Badge variant="outline" className="border-luxury-gold text-luxury-gold px-4 py-1 text-sm mb-4 font-sans">
             INSIGHTS
           </Badge>
-          <h2 className="section-title mb-4">Latest from the Blog</h2>
-          <p className="text-luxury-gray max-w-2xl mx-auto">
+          <h2 className="section-title mb-4 font-sans">Latest from the <span className="font-serif text-luxury-gold">Blog</span></h2>
+          <p className="text-luxury-gray max-w-2xl mx-auto font-sans">
             Stay informed with the latest insights, trends, and opportunities in Abilene's commercial real estate market.
           </p>
         </div>
 
         {loading ? (
-          <div className="flex justify-center items-center py-12">
+          <div className="flex justify-center items-center py-12 font-sans">
             <div className="animate-pulse">Loading latest articles...</div>
           </div>
         ) : blogs.length === 0 ? (
-          <div className="text-center py-12">
+          <div className="text-center py-12 font-sans">
             <p>No blog posts available yet.</p>
           </div>
         ) : (
@@ -75,16 +75,16 @@ const BlogsSection = () => {
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute top-4 left-4">
-                    <Badge className="bg-luxury-gold hover:bg-luxury-khaki text-luxury-black font-medium">
+                    <Badge className="bg-luxury-gold hover:bg-luxury-khaki text-luxury-black font-medium font-sans">
                       {blog.category}
                     </Badge>
                   </div>
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-bold mb-3 group-hover:text-luxury-gold transition-colors line-clamp-2">
+                  <h3 className="text-xl font-bold mb-3 group-hover:text-luxury-gold transition-colors line-clamp-2 font-sans">
                     {blog.title}
                   </h3>
-                  <div className="flex items-center text-sm text-luxury-slate gap-4 mb-3">
+                  <div className="flex items-center text-sm text-luxury-slate gap-4 mb-3 font-sans">
                     <div className="flex items-center gap-1">
                       <Calendar size={14} className="text-luxury-gold" />
                       <span>{new Date(blog.created_at).toLocaleDateString('en-US', {
@@ -98,12 +98,12 @@ const BlogsSection = () => {
                       <span>{Math.ceil((blog.content || "").length / 1000)} min read</span>
                     </div>
                   </div>
-                  <div className="text-luxury-gray mb-4 line-clamp-2 min-h-[48px]"
+                  <div className="text-luxury-gray mb-4 line-clamp-2 min-h-[48px] font-sans"
                        dangerouslySetInnerHTML={{ __html: blog.excerpt }}>
                   </div>
                   <Link 
                     to={`/blog/${blog.id}`} 
-                    className="text-luxury-gold hover:text-luxury-khaki transition-colors flex items-center gap-1 font-medium group-hover:font-semibold hover-underline-grow"
+                    className="text-luxury-gold hover:text-luxury-khaki transition-colors flex items-center gap-1 font-medium group-hover:font-semibold hover-underline-grow font-sans"
                   >
                     Read more <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
                   </Link>
@@ -116,7 +116,7 @@ const BlogsSection = () => {
         <div className="text-center">
           <Button 
             variant="outline" 
-            className="border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black transition-all duration-300 rounded-sm hover:scale-105"
+            className="border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black transition-all duration-300 rounded-sm hover:scale-105 font-sans"
             asChild
           >
             <Link to="/blog" className="flex items-center gap-2">
