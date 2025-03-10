@@ -1,0 +1,44 @@
+
+import React from 'react';
+import BlogCard from './BlogCard';
+
+type BlogPost = {
+  id: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  image_url?: string;
+  category: string;
+  created_at: string;
+};
+
+interface BlogListProps {
+  blogs: BlogPost[];
+  onEdit: (blog: BlogPost) => void;
+  onDelete: (id: string) => void;
+}
+
+const BlogList = ({ blogs, onEdit, onDelete }: BlogListProps) => {
+  return (
+    <div className="space-y-6">
+      <h2 className="text-xl font-bold mb-4">Your Blog Posts</h2>
+      
+      {blogs.length === 0 ? (
+        <div className="text-center py-12 luxury-card">
+          <p className="text-luxury-slate">You haven't created any blog posts yet.</p>
+        </div>
+      ) : (
+        blogs.map(blog => (
+          <BlogCard 
+            key={blog.id} 
+            blog={blog} 
+            onEdit={onEdit} 
+            onDelete={onDelete} 
+          />
+        ))
+      )}
+    </div>
+  );
+};
+
+export default BlogList;
