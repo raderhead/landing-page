@@ -128,16 +128,22 @@ const ContentBlockList: React.FC<ContentBlockListProps> = ({
     const range = selection.getRangeAt(0);
     if (range.collapsed) return; // No text selected
     
-    // Create a span with the font size class
-    const span = document.createElement('span');
-    span.className = fontSize;
+    // Instead of surroundContents which can cause errors with complex selections,
+    // use execCommand with fontSize and then apply classes with JavaScript
+    document.execCommand('fontSize', false, '7'); // Use a temporary size
     
-    // Apply the span to the selected text
-    range.surroundContents(span);
-    
-    // Store the updated HTML
+    // Now find all font elements with size 7 and replace them with spans
     const editorElement = document.getElementById(`editor-${activeBlockId}`);
     if (editorElement) {
+      const fontElements = editorElement.querySelectorAll('font[size="7"]');
+      fontElements.forEach(element => {
+        const span = document.createElement('span');
+        span.className = fontSize;
+        span.innerHTML = element.innerHTML;
+        element.parentNode?.replaceChild(span, element);
+      });
+      
+      // Store the formatted HTML
       const formattedHtml = editorElement.innerHTML
         .replace(/<b>(.*?)<\/b>/g, '<strong>$1</strong>')
         .replace(/<i>(.*?)<\/i>/g, '<em>$1</em>')
@@ -243,22 +249,63 @@ const ContentBlockList: React.FC<ContentBlockListProps> = ({
           ))}
         </select>
         
-        <select
-          value=""
-          onChange={(e) => {
-            if (e.target.value) {
-              handleTextColor(e.target.value);
-              e.target.value = ""; // Reset after selection
-            }
-          }}
-          className="h-9 rounded-md border border-input bg-background px-2 text-sm"
-          disabled={!activeBlockId}
-        >
-          <option value="">Text Color</option>
+        <div className="relative">
+          <select
+            value=""
+            onChange={(e) => {
+              if (e.target.value) {
+                handleTextColor(e.target.value);
+                e.target.value = ""; // Reset after selection
+              }
+            }}
+            className="h-9 rounded-md border border-input bg-background px-2 pr-8 text-sm appearance-none"
+            disabled={!activeBlockId}
+          >
+            <option value="">Text Color</option>
+            {TEXT_COLORS.map(color => (
+              <option key={color.value} value={color.value}>{color.name}</option>
+            ))}
+          </select>
+          
+          {/* Color swatches preview */}
+          <div className="absolute top-full left-0 mt-1 p-2 bg-white border rounded-md shadow-md z-10 grid grid-cols-3 gap-1 w-48 hidden group-hover:block">
+            {TEXT_COLORS.map(color => (
+              <button
+                key={color.value}
+                type="button"
+                className="w-14 h-10 rounded cursor-pointer flex flex-col items-center justify-center text-xs overflow-hidden"
+                style={{ backgroundColor: color.value }}
+                onClick={() => handleTextColor(color.value)}
+                title={color.name}
+              >
+                <span className={`text-center ${color.value === '#FFFFFF' ? 'text-gray-800' : 'text-white'} font-semibold text-[10px] leading-tight`}>
+                  {color.name}
+                </span>
+                <span className="block text-[9px]">{color.value}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Color swatches display */}
+      <div className="flex flex-wrap gap-2 mb-4 p-2 border rounded-md">
+        <div className="text-xs font-medium text-muted-foreground mb-1 w-full">Available Colors:</div>
+        <div className="flex flex-wrap gap-1">
           {TEXT_COLORS.map(color => (
-            <option key={color.value} value={color.value}>{color.name}</option>
+            <button
+              key={color.value}
+              type="button"
+              className="w-10 h-10 rounded cursor-pointer flex flex-col items-center justify-center text-xs overflow-hidden relative group"
+              style={{ backgroundColor: color.value }}
+              onClick={() => handleTextColor(color.value)}
+              title={`${color.name} (${color.value})`}
+              disabled={!activeBlockId}
+            >
+              <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all"></div>
+            </button>
           ))}
-        </select>
+        </div>
       </div>
 
       {contentBlocks.map((block) => (
