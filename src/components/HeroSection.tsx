@@ -35,7 +35,7 @@ const HeroSection = () => {
       </div>
       
       <div className="container relative z-20 flex md:flex-row flex-col items-center">
-        <div className="max-w-2xl md:mr-12 mb-20">
+        <div className="max-w-2xl">
           <div className="flex items-center gap-2 text-luxury-khaki mb-4 opacity-0 animate-fade-in">
             <div className="inline-flex items-center">
               <MapPin className="h-4 w-4 mr-1 text-luxury-gold" />
@@ -81,15 +81,6 @@ const HeroSection = () => {
               Book Your Strategy Call
             </Button>
           </div>
-        </div>
-        
-        {/* Add Josh Rader's Photo */}
-        <div className="hidden md:block w-64 h-80 rounded-sm overflow-hidden shadow-xl opacity-0 animate-fade-in-delay-3">
-          <img 
-            src="/lovable-uploads/bd4ad840-cf8b-4ffb-a39b-d42c5ab101a0.jpg" 
-            alt="Josh Rader" 
-            className="w-full h-full object-cover object-center hover-scale"
-          />
         </div>
       </div>
       
