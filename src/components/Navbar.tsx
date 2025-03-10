@@ -72,7 +72,7 @@ const Navbar = () => {
             <img 
               src="/lovable-uploads/8e0f7a87-fcde-45bb-840a-20ba1452adde.png" 
               alt="Josh Rader" 
-              className="h-12 w-auto group-hover:scale-110 transition-transform drop-shadow-md"
+              className="h-16 w-auto group-hover:scale-110 transition-transform drop-shadow-md"
             />
           </a>
           
