@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from "@/integrations/supabase/client";
@@ -63,10 +62,14 @@ const Admin = () => {
         
       if (error) throw error;
       
-      const formattedBlogs: BlogPost[] = data ? data.map(blog => ({
+      const filteredData = data ? data.filter(blog => 
+        blog.title !== "Abilene Market Is on the rise after Trump's announcement of AI jobs"
+      ) : [];
+      
+      const formattedBlogs: BlogPost[] = filteredData.map(blog => ({
         ...blog,
         formattedContent: blog.formattedContent as unknown as BlogContentBlock[] | null
-      })) : [];
+      }));
       
       setBlogs(formattedBlogs);
     } catch (error: any) {
@@ -86,7 +89,6 @@ const Admin = () => {
   };
 
   const handleEdit = (blog: BlogPost) => {
-    // Check if current user is the author of the blog
     if (user && blog.author_id !== user.id) {
       toast({
         title: "Permission denied",
@@ -108,7 +110,6 @@ const Admin = () => {
     try {
       setLoading(true);
       
-      // First, verify ownership
       const { data: blogData, error: fetchError } = await supabase
         .from('blog_posts')
         .select('author_id')
@@ -123,7 +124,6 @@ const Admin = () => {
         throw new Error("You don't have permission to delete this blog post");
       }
       
-      // Then proceed with deletion
       const { error } = await supabase
         .from('blog_posts')
         .delete()
