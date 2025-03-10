@@ -4,9 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { BlogContentBlock } from "@/types/blog";
-import { 
-  Type, Quote, List, FileImage, Trash2, Code
-} from "lucide-react";
+import { Code, Trash2 } from "lucide-react";
 
 interface ContentBlockProps {
   block: BlogContentBlock;
@@ -63,54 +61,7 @@ const ContentBlock: React.FC<ContentBlockProps> = ({
       )}
       onClick={() => onSetActiveBlock(block.id)}
     >
-      <div className="flex justify-between items-center mb-2">
-        <div className="flex gap-2">
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={() => onBlockTypeChange(block.id, 'paragraph')}
-            className={block.type === 'paragraph' ? "bg-luxury-gold/20" : ""}
-          >
-            <Type className="h-4 w-4" />
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={() => onBlockTypeChange(block.id, 'heading')}
-            className={block.type === 'heading' ? "bg-luxury-gold/20" : ""}
-          >
-            <span className="font-bold">H</span>
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={() => onBlockTypeChange(block.id, 'quote')}
-            className={block.type === 'quote' ? "bg-luxury-gold/20" : ""}
-          >
-            <Quote className="h-4 w-4" />
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={() => onBlockTypeChange(block.id, 'list')}
-            className={block.type === 'list' ? "bg-luxury-gold/20" : ""}
-          >
-            <List className="h-4 w-4" />
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={() => onBlockTypeChange(block.id, 'image')}
-            className={block.type === 'image' ? "bg-luxury-gold/20" : ""}
-          >
-            <FileImage className="h-4 w-4" />
-          </Button>
-        </div>
+      <div className="flex justify-end items-center mb-2">
         <div className="flex gap-2">
           <Button
             type="button"

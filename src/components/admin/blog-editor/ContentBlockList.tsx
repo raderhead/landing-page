@@ -6,7 +6,7 @@ import { BlogContentBlock, TEXT_COLORS, FONT_SIZES, TEXT_ALIGNMENTS } from '@/ty
 import ContentBlock from './ContentBlock';
 import { 
   AlignLeft, AlignCenter, AlignRight, AlignJustify, Bold, 
-  Italic, Type, Quote, List, FileImage, Underline, Code
+  Italic, Underline
 } from "lucide-react";
 
 interface ContentBlockListProps {
