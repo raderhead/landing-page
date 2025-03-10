@@ -130,7 +130,7 @@ export default {
 			},
 			fontFamily: {
 				'sans': ['Montserrat', 'sans-serif'],
-				'serif': ['Lora', 'serif']
+				'serif': ['Playfair Display', 'Lora', 'serif']
 			}
 		}
 	},
