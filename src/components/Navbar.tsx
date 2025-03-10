@@ -1,6 +1,7 @@
+
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { Building, Menu, X, Phone, BookText, LogIn, User } from "lucide-react";
+import { Menu, X, Phone, BookText, LogIn, User } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -68,8 +69,11 @@ const Navbar = () => {
       <nav className="container flex items-center justify-between">
         <div className="flex items-center gap-4">
           <a href="/" className="flex items-center gap-2 text-white group">
-            <Building className="h-8 w-8 text-luxury-gold group-hover:scale-110 transition-transform drop-shadow-md" />
-            <span className="font-bold text-xl group-hover:text-luxury-gold transition-colors drop-shadow-md">Josh Rader</span>
+            <img 
+              src="/lovable-uploads/a53fd21d-337c-4f2f-90fa-0ca367f3804e.png" 
+              alt="Josh Rader" 
+              className="h-10 w-auto group-hover:scale-110 transition-transform drop-shadow-md"
+            />
           </a>
           
           <a href="https://mccullarproperties.com/" target="_blank" rel="noopener noreferrer" className="hidden md:flex items-center gap-2 border-l border-luxury-gold/30 pl-4 group hover:bg-luxury-charcoal/30 transition-all p-1 rounded">
