@@ -1,4 +1,3 @@
-
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Clock, Calendar, User, Share2, Twitter, Facebook, Linkedin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -25,7 +24,6 @@ const BlogPost = () => {
     try {
       setLoading(true);
       
-      // Fetch the current blog post
       const { data, error } = await supabase
         .from('blog_posts')
         .select('*')
@@ -34,13 +32,11 @@ const BlogPost = () => {
         
       if (error) throw error;
       
-      // Cast formattedContent properly
       setPost({
         ...data,
         formattedContent: data.formattedContent as unknown as BlogContentBlock[] | null
       });
       
-      // Fetch related posts (same category, excluding current post)
       if (data) {
         const { data: relatedData, error: relatedError } = await supabase
           .from('blog_posts')
@@ -51,7 +47,6 @@ const BlogPost = () => {
           
         if (relatedError) throw relatedError;
         
-        // Cast formattedContent for related posts
         const formattedRelatedPosts = relatedData ? relatedData.map(blog => ({
           ...blog,
           formattedContent: blog.formattedContent as unknown as BlogContentBlock[] | null
@@ -71,11 +66,40 @@ const BlogPost = () => {
     }
   };
 
-  // Function to render formatted content blocks
+  const generateShareUrls = () => {
+    if (!post) return { twitter: '', facebook: '', linkedin: '' };
+    
+    const currentUrl = window.location.href;
+    const title = encodeURIComponent(post.title);
+    const url = encodeURIComponent(currentUrl);
+    
+    return {
+      twitter: `https://twitter.com/intent/tweet?text=${title}&url=${url}`,
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+      linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${url}`
+    };
+  };
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window.location.href)
+      .then(() => {
+        toast({
+          title: "Link copied!",
+          description: "Blog post URL has been copied to clipboard",
+        });
+      })
+      .catch(() => {
+        toast({
+          title: "Error",
+          description: "Failed to copy link to clipboard",
+          variant: "destructive"
+        });
+      });
+  };
+
   const renderFormattedContent = () => {
     if (!post) return null;
     
-    // If we have formatted content blocks, render those
     if (post.formattedContent && post.formattedContent.length > 0) {
       return (
         <div className="space-y-6">
@@ -161,7 +185,6 @@ const BlogPost = () => {
       );
     }
     
-    // Fallback to regular HTML content if no formatted blocks
     return (
       <div 
         className="prose prose-lg max-w-none leading-relaxed text-luxury-slate"
@@ -202,11 +225,12 @@ const BlogPost = () => {
     );
   }
   
+  const shareUrls = generateShareUrls();
+  
   return (
     <div className="min-h-screen">
       <Navbar />
       <main>
-        {/* Hero Banner */}
         <div className="relative h-[50vh] w-full">
           <div className="absolute inset-0 bg-gradient-to-t from-luxury-black via-luxury-black/80 to-transparent z-10"></div>
           <img 
@@ -250,33 +274,54 @@ const BlogPost = () => {
         
         <div className="container py-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            {/* Main Content */}
             <div className="lg:col-span-8">
               <article className="luxury-card p-8 mb-8">
                 {renderFormattedContent()}
               </article>
               
-              {/* Social Sharing */}
               <div className="flex items-center justify-between p-6 luxury-card">
                 <div className="text-luxury-slate font-medium">Share this article:</div>
                 <div className="flex gap-3">
-                  <Button size="sm" variant="outline" className="rounded-full w-10 h-10 p-0 flex items-center justify-center border-luxury-khaki/30 hover:border-luxury-gold hover:bg-luxury-gold/10 transition-colors">
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="rounded-full w-10 h-10 p-0 flex items-center justify-center border-luxury-khaki/30 hover:border-luxury-gold hover:bg-luxury-gold/10 transition-colors"
+                    onClick={() => window.open(shareUrls.twitter, '_blank')}
+                    title="Share on Twitter"
+                  >
                     <Twitter size={18} className="text-luxury-slate" />
                   </Button>
-                  <Button size="sm" variant="outline" className="rounded-full w-10 h-10 p-0 flex items-center justify-center border-luxury-khaki/30 hover:border-luxury-gold hover:bg-luxury-gold/10 transition-colors">
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="rounded-full w-10 h-10 p-0 flex items-center justify-center border-luxury-khaki/30 hover:border-luxury-gold hover:bg-luxury-gold/10 transition-colors"
+                    onClick={() => window.open(shareUrls.facebook, '_blank')}
+                    title="Share on Facebook"
+                  >
                     <Facebook size={18} className="text-luxury-slate" />
                   </Button>
-                  <Button size="sm" variant="outline" className="rounded-full w-10 h-10 p-0 flex items-center justify-center border-luxury-khaki/30 hover:border-luxury-gold hover:bg-luxury-gold/10 transition-colors">
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="rounded-full w-10 h-10 p-0 flex items-center justify-center border-luxury-khaki/30 hover:border-luxury-gold hover:bg-luxury-gold/10 transition-colors"
+                    onClick={() => window.open(shareUrls.linkedin, '_blank')}
+                    title="Share on LinkedIn"
+                  >
                     <Linkedin size={18} className="text-luxury-slate" />
                   </Button>
-                  <Button size="sm" variant="outline" className="rounded-full w-10 h-10 p-0 flex items-center justify-center border-luxury-khaki/30 hover:border-luxury-gold hover:bg-luxury-gold/10 transition-colors">
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="rounded-full w-10 h-10 p-0 flex items-center justify-center border-luxury-khaki/30 hover:border-luxury-gold hover:bg-luxury-gold/10 transition-colors"
+                    onClick={handleCopyLink}
+                    title="Copy link to clipboard"
+                  >
                     <Share2 size={18} className="text-luxury-slate" />
                   </Button>
                 </div>
               </div>
             </div>
             
-            {/* Sidebar */}
             <div className="lg:col-span-4">
               <div className="luxury-card p-6 mb-8 sticky top-24">
                 <h3 className="text-xl font-bold mb-4 text-luxury-black">About the Author</h3>
