@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -29,11 +28,9 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
   ];
 
   useEffect(() => {
-    // Initialize content blocks from existing formattedContent or create a default paragraph
     if (currentBlog.formattedContent && currentBlog.formattedContent.length > 0) {
       setContentBlocks(currentBlog.formattedContent);
     } else if (currentBlog.content) {
-      // Create initial block from content
       const initialBlock: BlogContentBlock = {
         id: uuidv4(),
         type: 'paragraph',
@@ -45,7 +42,6 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
       };
       setContentBlocks([initialBlock]);
     } else {
-      // Create empty paragraph
       const emptyBlock: BlogContentBlock = {
         id: uuidv4(),
         type: 'paragraph',
@@ -133,11 +129,9 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
     const textarea = textareaRefs.current[id];
     if (!textarea) return;
     
-    // Get the current selection
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
     
-    // If there's no selection, don't apply formatting
     if (start === end) {
       toast({
         title: "No text selected",
@@ -147,14 +141,11 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
       return;
     }
     
-    // Get the current block content
     const block = contentBlocks.find(b => b.id === id);
     if (!block) return;
     
-    // Get the selected text
     const selectedText = block.content.substring(start, end);
     
-    // Create HTML-like formatting
     let formattedText = "";
     if (formatType === 'fontWeight' && formatValue === 'bold') {
       formattedText = `<strong>${selectedText}</strong>`;
@@ -164,13 +155,10 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
       formattedText = `<u>${selectedText}</u>`;
     }
     
-    // Replace the selected text with the formatted text
     const newContent = block.content.substring(0, start) + formattedText + block.content.substring(end);
     
-    // Update the block content
     handleContentBlockChange(id, newContent);
     
-    // Set the selection to include the formatted text
     setTimeout(() => {
       if (textarea) {
         textarea.focus();
@@ -183,7 +171,6 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
     setContentBlocks(blocks => 
       blocks.map(block => {
         if (block.id === id) {
-          // Reset some styles when changing to heading for better appearance
           let updatedStyle = { ...block.style };
           if (newType === 'heading') {
             updatedStyle.fontSize = 'text-2xl';
@@ -213,7 +200,6 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
     };
     
     setContentBlocks([...contentBlocks, newBlock]);
-    // Focus the new block
     setTimeout(() => {
       setActiveBlockId(newBlock.id);
       const newBlockElement = document.getElementById(`block-${newBlock.id}`);
@@ -224,7 +210,6 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
   };
 
   const removeContentBlock = (id: string) => {
-    // Don't remove if it's the only block
     if (contentBlocks.length <= 1) {
       toast({
         title: "Cannot remove",
@@ -245,19 +230,14 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
         throw new Error("Please fill all required fields");
       }
       
-      // Process the content blocks to handle HTML-like formatting tags
       const processedBlocks = contentBlocks.map(block => {
-        // Process the content to handle HTML tags
         let processedContent = block.content;
-        
-        // Create a copy of the block with processed content
         return {
           ...block,
           content: processedContent
         };
       });
       
-      // Generate HTML content from blocks for backward compatibility
       const htmlContent = processedBlocks.map(block => {
         switch(block.type) {
           case 'heading':
@@ -326,36 +306,22 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
     }
   };
 
-  // Function to format text based on HTML-like tags for preview
   const formatTextForPreview = (content: string) => {
     if (!content) return null;
 
-    // Replace HTML-like tags with styled spans
     let formattedContent = content
       .replace(/<strong>(.*?)<\/strong>/g, '<span class="font-bold">$1</span>')
       .replace(/<em>(.*?)<\/em>/g, '<span class="italic">$1</span>')
       .replace(/<u>(.*?)<\/u>/g, '<span class="underline">$1</span>');
     
-    // Replace newlines with <br /> tags
-    formattedContent = formattedContent.split('\n').map((line, i, arr) => (
+    const elementsWithLineBreaks = formattedContent.split('\n').map((line, i, arr) => (
       <React.Fragment key={i}>
         <span dangerouslySetInnerHTML={{ __html: line }} />
         {i < arr.length - 1 && <br />}
       </React.Fragment>
     ));
     
-    return formattedContent;
-  };
-
-  // Function to preserve line breaks in preview
-  const formatContentWithLineBreaks = (content: string) => {
-    if (!content) return null;
-    return content.split('\n').map((line, i) => (
-      <React.Fragment key={i}>
-        {line}
-        {i < content.split('\n').length - 1 && <br />}
-      </React.Fragment>
-    ));
+    return elementsWithLineBreaks;
   };
 
   return (
@@ -503,7 +469,6 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
                 )}
                 
                 <div className="flex flex-wrap gap-2 items-center">
-                  {/* Text alignment controls */}
                   <div className="flex border rounded-md">
                     <Button
                       type="button"
@@ -543,7 +508,6 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
                     </Button>
                   </div>
                   
-                  {/* Font style controls */}
                   <div className="flex border rounded-md">
                     <Button
                       type="button"
@@ -574,7 +538,6 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
                     </Button>
                   </div>
                   
-                  {/* Font size selector */}
                   <select
                     value={block.style?.fontSize || 'text-base'}
                     onChange={(e) => handleBlockStyleChange(block.id, 'fontSize', e.target.value)}
@@ -585,7 +548,6 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
                     ))}
                   </select>
                   
-                  {/* Text color selector */}
                   <select
                     value={block.style?.color || '#121212'}
                     onChange={(e) => handleBlockStyleChange(block.id, 'color', e.target.value)}
@@ -597,7 +559,6 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
                   </select>
                 </div>
                 
-                {/* Preview of the content */}
                 {block.content && (
                   <div className="mt-2 p-2 border rounded-md bg-muted">
                     <div className="text-xs text-luxury-slate mb-1">Preview:</div>

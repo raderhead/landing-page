@@ -18,7 +18,7 @@ export type BlogPost = {
   title: string;
   excerpt: string;
   content: string;
-  formattedContent?: BlogContentBlock[];
+  formattedContent?: BlogContentBlock[] | null;
   image_url?: string;
   category: string;
   created_at: string;

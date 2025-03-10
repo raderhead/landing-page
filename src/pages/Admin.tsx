@@ -9,7 +9,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BlogEditor from "@/components/admin/BlogEditor";
 import BlogList from "@/components/admin/BlogList";
-import { BlogPost } from "@/types/blog";
+import { BlogPost, BlogContentBlock } from "@/types/blog";
 
 const Admin = () => {
   const [blogs, setBlogs] = useState<BlogPost[]>([]);
@@ -62,7 +62,14 @@ const Admin = () => {
         .order('created_at', { ascending: false });
         
       if (error) throw error;
-      setBlogs(data || []);
+      
+      // Cast the formattedContent properly
+      const formattedBlogs: BlogPost[] = data ? data.map(blog => ({
+        ...blog,
+        formattedContent: blog.formattedContent as unknown as BlogContentBlock[] | null
+      })) : [];
+      
+      setBlogs(formattedBlogs);
     } catch (error: any) {
       toast({
         title: "Error fetching blogs",

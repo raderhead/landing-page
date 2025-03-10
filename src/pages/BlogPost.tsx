@@ -32,7 +32,12 @@ const BlogPost = () => {
         .single();
         
       if (error) throw error;
-      setPost(data);
+      
+      // Cast formattedContent properly
+      setPost({
+        ...data,
+        formattedContent: data.formattedContent as unknown as BlogContentBlock[] | null
+      });
       
       // Fetch related posts (same category, excluding current post)
       if (data) {
@@ -44,7 +49,14 @@ const BlogPost = () => {
           .limit(3);
           
         if (relatedError) throw relatedError;
-        setRelatedPosts(relatedData || []);
+        
+        // Cast formattedContent for related posts
+        const formattedRelatedPosts = relatedData ? relatedData.map(blog => ({
+          ...blog,
+          formattedContent: blog.formattedContent as unknown as BlogContentBlock[] | null
+        })) : [];
+        
+        setRelatedPosts(formattedRelatedPosts);
       }
     } catch (error: any) {
       console.error('Error fetching blog post:', error);
