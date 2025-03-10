@@ -3,7 +3,6 @@ import { useState, useRef, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 import { Send, Bot, User } from "lucide-react";
 
@@ -28,6 +27,8 @@ const ChatBot = ({ initialSystemPrompt = "You are a helpful real estate assistan
   ]);
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [apiKey, setApiKey] = useState<string | null>(null);
+  const [showKeyInput, setShowKeyInput] = useState(false);
 
   useEffect(() => {
     scrollToBottom();
@@ -71,6 +72,7 @@ const ChatBot = ({ initialSystemPrompt = "You are a helpful real estate assistan
       });
 
       if (error) {
+        console.error("Supabase function error:", error);
         throw new Error(error.message);
       }
 
@@ -84,12 +86,14 @@ const ChatBot = ({ initialSystemPrompt = "You are a helpful real estate assistan
         },
       ]);
     } catch (error) {
+      console.error("Chat error:", error);
+      
+      // Show a more user-friendly error message
       toast({
         title: "Error",
-        description: `Failed to get response: ${error.message}`,
+        description: "We're having trouble connecting to our assistant right now. Please try again later.",
         variant: "destructive",
       });
-      console.error("Chat error:", error);
     } finally {
       setIsLoading(false);
     }

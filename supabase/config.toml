@@ -32,3 +32,4 @@ enabled = false
 
 [functions.gemini-chat]
 verify_jwt = false
+
