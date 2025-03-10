@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from "@/integrations/supabase/client";
@@ -37,7 +36,6 @@ const Admin = () => {
   
   const navigate = useNavigate();
   
-  // Categories for dropdown
   const categories = [
     "Market Trends", "Leasing", "Investment", "Due Diligence", "Property Management"
   ];
@@ -71,6 +69,7 @@ const Admin = () => {
 
   const fetchBlogs = async () => {
     try {
+      setLoading(true);
       const { data, error } = await supabase
         .from('blog_posts')
         .select('*')
@@ -151,7 +150,6 @@ const Admin = () => {
       }
       
       if (currentBlog.id) {
-        // Update existing blog
         const { error } = await supabase
           .from('blog_posts')
           .update({
@@ -171,7 +169,6 @@ const Admin = () => {
           description: "Blog post updated successfully",
         });
       } else {
-        // Create new blog
         const { error } = await supabase
           .from('blog_posts')
           .insert({
@@ -220,26 +217,44 @@ const Admin = () => {
     
     try {
       setLoading(true);
+      
       const { error } = await supabase
         .from('blog_posts')
         .delete()
         .eq('id', id);
         
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
       
-      // Update the blogs state by filtering out the deleted blog
+      const { data: checkData } = await supabase
+        .from('blog_posts')
+        .select('id')
+        .eq('id', id)
+        .single();
+      
+      if (checkData) {
+        throw new Error("Failed to delete the blog post completely. Please try again.");
+      }
+      
       setBlogs(blogs.filter(blog => blog.id !== id));
       
       toast({
         title: "Success",
         description: "Blog post deleted successfully",
       });
+      
+      setTimeout(() => {
+        fetchBlogs();
+      }, 500);
+      
     } catch (error: any) {
       toast({
         title: "Error deleting blog",
         description: error.message,
         variant: "destructive"
       });
+      fetchBlogs();
     } finally {
       setLoading(false);
     }

@@ -26,6 +26,7 @@ const BlogsSection = () => {
 
   const fetchBlogPosts = async () => {
     try {
+      setLoading(true);
       const { data, error } = await supabase
         .from('blog_posts')
         .select('*')
