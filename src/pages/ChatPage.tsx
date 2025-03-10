@@ -1,6 +1,5 @@
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -25,20 +24,7 @@ const ChatPage = () => {
       navigate("/auth");
     }
     
-    // Check if user is logged in
-    const checkSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      if (!data.session) {
-        toast({
-          title: "Authentication Required",
-          description: "You need to be logged in to use the chatbot.",
-          variant: "destructive"
-        });
-        navigate("/auth");
-      }
-    };
-    
-    checkSession();
+    // No longer checking if user is logged in
   }, [navigate]);
 
   if (!isVerified) {

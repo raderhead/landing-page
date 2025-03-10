@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from "@/integrations/supabase/client";
@@ -116,6 +115,11 @@ const Auth = () => {
         title: "Success!",
         description: "Invite code verified successfully.",
       });
+      
+      toast({
+        title: "Chat Assistant Available",
+        description: "You can now access our real estate chat assistant!",
+      });
     } else {
       toast({
         title: "Error",
@@ -133,6 +137,17 @@ const Auth = () => {
     <div className="min-h-screen">
       <Navbar />
       <main className="container py-16">
+        {isVerified && (
+          <div className="max-w-md mx-auto mb-8">
+            <Button
+              onClick={navigateToChat}
+              className="w-full bg-luxury-gold hover:bg-luxury-khaki text-luxury-dark py-6 text-lg"
+            >
+              Access Real Estate Chat Assistant
+            </Button>
+          </div>
+        )}
+        
         <div className={`max-w-md mx-auto luxury-card p-8 ${!isVerified ? 'blur-sm pointer-events-none' : ''}`}>
           <h1 className="text-2xl font-bold text-center mb-8">
             {isLogin ? "Sign In" : "Create Account"}
@@ -210,17 +225,6 @@ const Auth = () => {
               {isLogin ? "Need an account? Sign up" : "Already have an account? Sign in"}
             </button>
           </div>
-
-          {isVerified && (
-            <div className="mt-6 text-center">
-              <Button
-                onClick={navigateToChat}
-                className="w-full bg-luxury-navy hover:bg-luxury-navy/80 text-white"
-              >
-                Go to Chat Bot
-              </Button>
-            </div>
-          )}
         </div>
       </main>
 
@@ -252,11 +256,14 @@ const Auth = () => {
             >
               Verify Code
             </Button>
+            <div className="text-center text-sm mt-4">
+              <p>After verification, you'll be able to access the Real Estate Chat Assistant.</p>
+            </div>
           </div>
           <button 
             className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground cursor-default"
             onClick={() => navigate('/')}
-            aria-label="Close and return to homepage"
+            aria-label="Close"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
               <line x1="18" y1="6" x2="6" y2="18"></line>
