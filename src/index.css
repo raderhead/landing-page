@@ -111,4 +111,13 @@
     @apply will-change-transform;
     transform: translateZ(0);
   }
+  
+  /* Modern Admin UI utilities */
+  .admin-card {
+    @apply bg-white rounded-lg border shadow-sm transition-all;
+  }
+  
+  .admin-input {
+    @apply border-0 shadow-none focus-visible:ring-1 focus-visible:ring-primary/30;
+  }
 }

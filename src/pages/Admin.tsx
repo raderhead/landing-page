@@ -158,13 +158,13 @@ const Admin = () => {
 
   if (loading && blogs.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-white to-luxury-cream">
+      <div className="min-h-screen bg-background">
         <Navbar />
-        <div className="container py-24">
+        <div className="container py-20">
           <div className="flex justify-center items-center min-h-[50vh]">
-            <div className="animate-pulse flex items-center gap-2 text-luxury-gold">
-              <FileText className="h-6 w-6 animate-bounce" />
-              <span className="text-lg font-medium">Loading blog management...</span>
+            <div className="animate-pulse flex items-center gap-2 text-muted-foreground">
+              <FileText className="h-5 w-5" />
+              <span className="text-base">Loading blog management...</span>
             </div>
           </div>
         </div>
@@ -174,33 +174,32 @@ const Admin = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-luxury-cream">
+    <div className="min-h-screen bg-background">
       <Navbar />
-      <main className="container py-24">
-        <div className="mb-12">
-          <div className="bg-gradient-to-r from-luxury-gold/10 via-luxury-cream to-white p-8 rounded-lg shadow-sm border border-luxury-gold/10 mb-8">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+      <main className="container py-16 max-w-5xl">
+        <div className="mb-8">
+          <div className="p-6 mb-6 bg-white rounded-lg shadow-sm">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div>
-                <h1 className="text-4xl font-bold text-luxury-black mb-2 flex items-center gap-3">
-                  <Pen className="h-8 w-8 text-luxury-gold" /> Blog Management
-                </h1>
-                <p className="text-luxury-gray">Create and manage your luxury real estate blog content</p>
+                <h1 className="text-2xl font-semibold text-foreground mb-1">Blog Management</h1>
+                <p className="text-muted-foreground text-sm">Create and manage your blog content</p>
               </div>
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-3">
                 {!isEditing ? (
                   <Button 
                     onClick={handleNewBlog}
-                    className="bg-luxury-gold hover:bg-luxury-khaki text-luxury-black font-medium px-6"
+                    size="sm"
+                    className="bg-primary hover:bg-primary/90"
                   >
-                    <Plus className="mr-2 h-4 w-4" /> New Blog Post
+                    <Plus className="h-4 w-4 mr-1" /> New Post
                   </Button>
                 ) : null}
                 <Button 
                   variant="outline" 
+                  size="sm"
                   onClick={handleSignOut}
-                  className="text-luxury-slate hover:text-luxury-black border-luxury-slate/20 hover:border-luxury-black/40"
                 >
-                  <LogOut className="mr-2 h-4 w-4" /> Sign Out
+                  <LogOut className="h-4 w-4 mr-1" /> Sign Out
                 </Button>
               </div>
             </div>
@@ -208,7 +207,7 @@ const Admin = () => {
         </div>
         
         {isEditing ? (
-          <div className="bg-white rounded-lg shadow-lg border border-luxury-gold/10 overflow-hidden mb-12">
+          <div className="bg-white rounded-lg shadow-sm border overflow-hidden mb-10">
             <BlogEditor 
               currentBlog={currentBlog}
               setCurrentBlog={setCurrentBlog}
