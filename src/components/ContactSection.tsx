@@ -30,12 +30,15 @@ const ContactSection = () => {
     setLoading(true);
 
     try {
+      console.log("Submitting form data:", formData);
+      
       // Send data to Supabase Edge Function
       const { data, error } = await supabase.functions.invoke('send-contact-email', {
         body: formData
       });
 
       if (error) {
+        console.error("Supabase function error:", error);
         throw error;
       }
 
@@ -65,7 +68,8 @@ const ContactSection = () => {
     }
   };
 
-  return <section id="contact" className="section bg-luxury-dark py-[50px]">
+  return (
+    <section id="contact" className="section bg-luxury-dark py-[50px]">
       <div className="container">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <h2 className="section-title text-white">Contact Josh</h2>
@@ -160,6 +164,8 @@ const ContactSection = () => {
           </div>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default ContactSection;

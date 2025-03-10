@@ -18,6 +18,8 @@ interface ContactFormData {
 }
 
 const handler = async (req: Request): Promise<Response> => {
+  console.log("Received request to send-contact-email function");
+  
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -25,6 +27,8 @@ const handler = async (req: Request): Promise<Response> => {
 
   try {
     const { name, email, phone, message }: ContactFormData = await req.json();
+
+    console.log("Received form data:", { name, email, phone, message });
 
     // Format the message with proper HTML
     const htmlContent = `
