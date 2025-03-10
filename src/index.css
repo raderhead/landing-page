@@ -120,4 +120,29 @@
   .admin-input {
     @apply border-0 shadow-none focus-visible:ring-1 focus-visible:ring-primary/30;
   }
+  
+  /* New utility classes for admin panel */
+  .admin-header {
+    @apply bg-luxury-black/95 backdrop-blur-sm shadow-md;
+  }
+  
+  .admin-container {
+    @apply bg-gradient-to-b from-background to-muted/30;
+  }
+  
+  .admin-title-container {
+    @apply border-b border-luxury-gold/10 shadow-sm;
+  }
+  
+  .admin-card-enhanced {
+    @apply bg-white rounded-lg border border-luxury-khaki/20 shadow-sm hover:shadow-md transition-all;
+  }
+  
+  .admin-section-title {
+    @apply text-xl font-medium text-foreground;
+  }
+  
+  .admin-section-subtitle {
+    @apply text-sm text-muted-foreground;
+  }
 }
