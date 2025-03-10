@@ -219,6 +219,7 @@ const Admin = () => {
     if (!window.confirm("Are you sure you want to delete this blog post?")) return;
     
     try {
+      setLoading(true);
       const { error } = await supabase
         .from('blog_posts')
         .delete()
@@ -226,18 +227,21 @@ const Admin = () => {
         
       if (error) throw error;
       
+      // Update the blogs state by filtering out the deleted blog
+      setBlogs(blogs.filter(blog => blog.id !== id));
+      
       toast({
         title: "Success",
         description: "Blog post deleted successfully",
       });
-      
-      fetchBlogs();
     } catch (error: any) {
       toast({
         title: "Error deleting blog",
         description: error.message,
         variant: "destructive"
       });
+    } finally {
+      setLoading(false);
     }
   };
 
