@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -30,6 +29,7 @@ const BlogsSection = () => {
       const { data, error } = await supabase
         .from('blog_posts')
         .select('*')
+        .eq('published', true)
         .order('created_at', { ascending: false })
         .limit(3);
         

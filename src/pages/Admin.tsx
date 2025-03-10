@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from "@/integrations/supabase/client";
@@ -63,7 +62,6 @@ const Admin = () => {
         
       if (error) throw error;
       
-      // Cast the formattedContent properly
       const formattedBlogs: BlogPost[] = data ? data.map(blog => ({
         ...blog,
         formattedContent: blog.formattedContent as unknown as BlogContentBlock[] | null
@@ -108,7 +106,6 @@ const Admin = () => {
         throw error;
       }
       
-      // Verify deletion
       const { data: checkData } = await supabase
         .from('blog_posts')
         .select('id')
@@ -126,7 +123,6 @@ const Admin = () => {
         description: "Blog post deleted successfully",
       });
       
-      // Re-fetch blogs to ensure data is in sync
       setTimeout(() => {
         fetchBlogs();
       }, 500);
@@ -152,7 +148,6 @@ const Admin = () => {
       category: 'Market Trends',
       image_url: '',
     });
-    // Ensure we get the latest data after saving
     fetchBlogs();
   };
 
@@ -223,7 +218,6 @@ const Admin = () => {
             setCurrentBlog={setCurrentBlog}
             onSave={handleSaveComplete}
             onCancel={handleCancel}
-            userId={user?.id}
           />
         ) : null}
         

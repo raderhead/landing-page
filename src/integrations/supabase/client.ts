@@ -13,7 +13,9 @@ export const supabase = createClient<Database>(
     auth: {
       persistSession: true,
       autoRefreshToken: true,
-      detectSessionInUrl: true
+      detectSessionInUrl: true,
+      storageKey: 'supabase.auth.token', // Consistent storage key
+      flowType: 'pkce' // More secure authentication flow
     },
     global: {
       headers: {
@@ -23,3 +25,24 @@ export const supabase = createClient<Database>(
     }
   }
 );
+
+// Helper function to get the current user session
+export const getCurrentSession = async () => {
+  // Force refresh the session to ensure we have the latest state
+  const { data, error } = await supabase.auth.getSession();
+  if (error) {
+    console.error("Error fetching session:", error);
+    throw error;
+  }
+  
+  return data.session;
+};
+
+// Helper function to get the current user ID
+export const getCurrentUserId = async () => {
+  const session = await getCurrentSession();
+  if (!session) {
+    throw new Error("No active session. Please sign in.");
+  }
+  return session.user.id;
+};

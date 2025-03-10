@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, getCurrentSession, getCurrentUserId } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/use-toast";
 import { BlogPost } from '@/types/blog';
 import BlogEditorForm from './blog-editor/BlogEditorForm';
@@ -10,27 +10,39 @@ interface BlogEditorProps {
   setCurrentBlog: React.Dispatch<React.SetStateAction<Partial<BlogPost>>>;
   onSave: () => void;
   onCancel: () => void;
-  userId: string;
+  userId: string; // This prop is still accepted but we'll get the current user ID directly
 }
 
-const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: BlogEditorProps) => {
+const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel }: BlogEditorProps) => {
   const [saving, setSaving] = useState(false);
   const [session, setSession] = useState<any>(null);
+  const [authChecked, setAuthChecked] = useState(false);
 
   // Fetch the session on component mount
   useEffect(() => {
     const fetchSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      setSession(data.session);
-      console.log("Current session:", data.session);
+      try {
+        const sessionData = await getCurrentSession();
+        setSession(sessionData);
+        console.log("Current session loaded:", sessionData?.user?.id);
+        setAuthChecked(true);
+      } catch (error) {
+        console.error("Error loading session:", error);
+        toast({
+          title: "Authentication Error",
+          description: "Please sign in again to continue.",
+          variant: "destructive"
+        });
+        setAuthChecked(true);
+      }
     };
     
     fetchSession();
     
     // Set up auth state change listener
     const { data: authListener } = supabase.auth.onAuthStateChange((event, newSession) => {
+      console.log("Auth state changed:", event);
       setSession(newSession);
-      console.log("Auth state changed:", event, newSession?.user?.id);
     });
     
     return () => {
@@ -49,27 +61,9 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
         throw new Error("Please fill all required fields");
       }
       
-      // Force refresh authentication status to ensure we have the latest session
-      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-      
-      if (sessionError) {
-        console.error("Session error:", sessionError);
-        throw new Error(`Authentication error: ${sessionError.message}`);
-      }
-      
-      const currentSession = sessionData.session;
-      
-      if (!currentSession) {
-        console.error("No active session found");
-        throw new Error("You must be logged in to save blog posts. Please sign in again.");
-      }
-      
-      const currentUserId = currentSession.user.id;
+      // Get the current user ID - this will throw if not authenticated
+      const currentUserId = await getCurrentUserId();
       console.log("Current user ID for saving:", currentUserId);
-      
-      if (!currentUserId) {
-        throw new Error("Unable to identify current user");
-      }
       
       const processedBlocks = currentBlog.formattedContent.map(block => {
         let processedContent = block.content;
@@ -103,7 +97,7 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
         excerpt: currentBlog.excerpt,
         content: htmlContent,
         blocksCount: processedBlocks.length,
-        author_id: currentUserId // Use the current session user ID
+        author_id: currentUserId
       });
       
       if (currentBlog.id) {
@@ -114,12 +108,19 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
           .eq('id', currentBlog.id)
           .single();
         
-        if (blogCheckError && blogCheckError.code !== 'PGRST116') {
+        if (blogCheckError) {
           console.error("Error checking blog ownership:", blogCheckError);
-          throw new Error(`Cannot verify blog ownership: ${blogCheckError.message}`);
+          // If the error is not "no rows found", it's a real error
+          if (blogCheckError.code !== 'PGRST116') {
+            throw new Error(`Cannot verify blog ownership: ${blogCheckError.message}`);
+          }
         }
         
         if (blogCheck && blogCheck.author_id !== currentUserId) {
+          console.error("Author ID mismatch:", { 
+            currentUserId, 
+            blogAuthorId: blogCheck.author_id 
+          });
           throw new Error("You don't have permission to edit this blog post");
         }
         
@@ -134,7 +135,7 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
             image_url: currentBlog.image_url,
             category: currentBlog.category,
             updated_at: new Date().toISOString(),
-            author_id: currentUserId // Use the current session user ID
+            author_id: currentUserId
           });
           
         if (error) {
@@ -158,7 +159,7 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
             formattedContent: processedBlocks,
             image_url: currentBlog.image_url,
             category: currentBlog.category,
-            author_id: currentUserId // Use the current session user ID
+            author_id: currentUserId
           });
           
         if (error) {
@@ -186,6 +187,16 @@ const BlogEditor = ({ currentBlog, setCurrentBlog, onSave, onCancel, userId }: B
       setSaving(false);
     }
   };
+
+  // Show authentication warning if needed
+  if (authChecked && !session) {
+    return (
+      <div className="luxury-card p-8 mb-8">
+        <h2 className="text-xl font-bold mb-6 text-red-600">Authentication Required</h2>
+        <p>You must be logged in to edit blog posts. Please sign in to continue.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="luxury-card p-8 mb-8">
