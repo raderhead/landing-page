@@ -70,30 +70,7 @@ const BlogPost = () => {
     }
   };
 
-  // Function to safely strip HTML tags 
-  const stripHtml = (html: string) => {
-    const doc = new DOMParser().parseFromString(html, 'text/html');
-    return doc.body.textContent || '';
-  };
-
-  // Function to render content with preserved line breaks
-  const renderContentWithLineBreaks = (content: string) => {
-    if (!content) return null;
-    
-    // Remove HTML tags and split by \n to preserve line breaks
-    const cleanContent = content
-      .replace(/<strong>(.*?)<\/strong>/g, '$1')
-      .replace(/<em>(.*?)<\/em>/g, '$1')
-      .replace(/<u>(.*?)<\/u>/g, '$1');
-    
-    // Split by \n and wrap each line in spans with block display
-    return cleanContent.split('\n').map((line, i) => (
-      <span key={i} className="block">
-        {line.length > 0 ? line : <br />}
-      </span>
-    ));
-  };
-
+  // Function to render formatted content blocks
   const renderFormattedContent = () => {
     if (!post) return null;
     
@@ -125,19 +102,17 @@ const BlogPost = () => {
                     key={block.id}
                     className={cn("font-bold text-2xl my-4", className)}
                     style={{ color: textColor }}
-                  >
-                    {renderContentWithLineBreaks(block.content)}
-                  </h2>
+                    dangerouslySetInnerHTML={{ __html: block.content }}
+                  />
                 );
               case 'paragraph':
                 return (
-                  <p 
+                  <div 
                     key={block.id}
                     className={className}
                     style={{ color: textColor }}
-                  >
-                    {renderContentWithLineBreaks(block.content)}
-                  </p>
+                    dangerouslySetInnerHTML={{ __html: block.content.replace(/\n/g, '<br>') }}
+                  />
                 );
               case 'quote':
                 return (
@@ -145,9 +120,8 @@ const BlogPost = () => {
                     key={block.id}
                     className={cn("border-l-4 border-luxury-gold pl-4 italic py-2", className)}
                     style={{ color: textColor }}
-                  >
-                    {renderContentWithLineBreaks(block.content)}
-                  </blockquote>
+                    dangerouslySetInnerHTML={{ __html: block.content.replace(/\n/g, '<br>') }}
+                  />
                 );
               case 'list':
                 return (
@@ -156,14 +130,9 @@ const BlogPost = () => {
                     className={cn("list-disc pl-5", className)}
                     style={{ color: textColor }}
                   >
-                    {block.content.split('\n').map((item, i) => {
-                      // Clean HTML tags from list items
-                      const cleanItem = item
-                        .replace(/<strong>(.*?)<\/strong>/g, '$1')
-                        .replace(/<em>(.*?)<\/em>/g, '$1')
-                        .replace(/<u>(.*?)<\/u>/g, '$1');
-                      return <li key={i}>{cleanItem}</li>;
-                    })}
+                    {block.content.split('\n').map((item, i) => (
+                      <li key={i} dangerouslySetInnerHTML={{ __html: item }} />
+                    ))}
                   </ul>
                 );
               case 'image':
@@ -178,13 +147,12 @@ const BlogPost = () => {
                 );
               default:
                 return (
-                  <p 
+                  <div 
                     key={block.id}
                     className={className}
                     style={{ color: textColor }}
-                  >
-                    {renderContentWithLineBreaks(block.content)}
-                  </p>
+                    dangerouslySetInnerHTML={{ __html: block.content.replace(/\n/g, '<br>') }}
+                  />
                 );
             }
           })}
@@ -280,7 +248,7 @@ const BlogPost = () => {
             </div>
             <div className="flex items-center gap-1">
               <Clock size={14} />
-              <span>{post ? Math.ceil((stripHtml(post.content).length) / 1000) : 0} min read</span>
+              <span>{post ? Math.ceil((post.content).length / 1000) : 0} min read</span>
             </div>
           </div>
           
