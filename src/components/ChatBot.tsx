@@ -98,8 +98,8 @@ const ChatBot = ({ initialSystemPrompt = "You are a helpful real estate assistan
   };
 
   return (
-    <div className="flex flex-col h-[600px] md:h-[700px] rounded-lg border bg-card text-card-foreground shadow-sm">
-      <div className="flex items-center justify-between px-6 py-4 border-b">
+    <div className="flex flex-col h-full rounded-lg bg-card text-card-foreground">
+      <div className="flex items-center justify-between px-4 py-3 border-b">
         <div className="flex items-center space-x-2">
           <Bot className="h-5 w-5 text-luxury-gold" />
           <h3 className="font-semibold text-lg">Josh Rader Realty Assistant</h3>
@@ -157,7 +157,7 @@ const ChatBot = ({ initialSystemPrompt = "You are a helpful real estate assistan
         <div ref={messagesEndRef} />
       </div>
       
-      <form onSubmit={handleSendMessage} className="p-4 border-t">
+      <form onSubmit={handleSendMessage} className="p-3 border-t">
         <div className="flex space-x-2">
           <Input
             value={message}

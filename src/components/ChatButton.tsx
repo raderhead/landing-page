@@ -31,10 +31,10 @@ const ChatButton = () => {
 
   return (
     <>
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="fixed bottom-0 right-6 z-50">
         <Button
           onClick={handleChatClick}
-          className="bg-luxury-gold hover:bg-luxury-khaki text-luxury-dark rounded-full w-16 h-16 shadow-lg hover:scale-110 transition-all duration-300"
+          className="bg-luxury-gold hover:bg-luxury-khaki text-luxury-dark rounded-full w-16 h-16 shadow-lg hover:scale-110 transition-all duration-300 mb-4"
           aria-label="Chat with Real Estate Assistant"
         >
           <MessageSquare className="h-6 w-6" />
@@ -43,7 +43,7 @@ const ChatButton = () => {
         {isOpen && (
           <div 
             ref={chatboxRef}
-            className="absolute bottom-20 right-0 w-[350px] sm:w-[400px] h-[500px] bg-white rounded-lg border shadow-lg overflow-hidden animate-slide-up"
+            className="absolute bottom-20 right-0 w-[350px] sm:w-[400px] h-[500px] bg-white rounded-lg border shadow-lg overflow-hidden"
             style={{
               transformOrigin: 'bottom right',
               animation: 'slideUp 0.3s ease-out forwards'
@@ -56,7 +56,7 @@ const ChatButton = () => {
               >
                 <X className="h-4 w-4" />
               </Button>
-              <div className="h-full">
+              <div className="h-full overflow-hidden">
                 <ChatBot />
               </div>
             </div>
@@ -64,7 +64,7 @@ const ChatButton = () => {
         )}
       </div>
 
-      <style jsx="true">{`
+      <style>{`
         @keyframes slideUp {
           from {
             opacity: 0;
