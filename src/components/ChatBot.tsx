@@ -16,6 +16,22 @@ interface ChatBotProps {
   initialSystemPrompt?: string;
 }
 
+// Simple local fallback responses when the edge function is unavailable
+const fallbackResponses = [
+  "I can help you find properties that match your needs. What kind of home are you looking for?",
+  "Josh Rader Realty specializes in luxury properties throughout the area. Would you like to know more about our available listings?",
+  "We offer a range of services including home buying, selling, and property management. How can I assist you today?",
+  "The current real estate market in our area is quite active. Properties in good locations are selling quickly.",
+  "Our team has extensive experience in negotiating the best deals for our clients. Would you like to schedule a consultation?",
+  "I'd be happy to connect you with one of our agents who can provide more detailed information about your specific needs.",
+  "Thank you for your interest in Josh Rader Realty. We're committed to finding your dream home!",
+];
+
+const getLocalResponse = (userMessage: string) => {
+  const randomIndex = Math.floor(Math.random() * fallbackResponses.length);
+  return fallbackResponses[randomIndex];
+};
+
 const ChatBot = ({ initialSystemPrompt = "You are a helpful real estate assistant for Josh Rader Realty. You provide information about properties, real estate advice, and answer questions about real estate services. Keep your responses concise, professional, and focused on real estate topics." }: ChatBotProps) => {
   const [message, setMessage] = useState("");
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([
@@ -26,6 +42,7 @@ const ChatBot = ({ initialSystemPrompt = "You are a helpful real estate assistan
     },
   ]);
   const [isLoading, setIsLoading] = useState(false);
+  const [useLocalFallback, setUseLocalFallback] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -52,26 +69,44 @@ const ChatBot = ({ initialSystemPrompt = "You are a helpful real estate assistan
     setIsLoading(true);
 
     try {
-      // Format chat history for the API
-      const formattedHistory = chatHistory.map(msg => ({
-        role: msg.role,
-        content: msg.content
-      }));
+      let botResponse: string;
 
-      // Call the Supabase Edge Function
-      const { data, error } = await supabase.functions.invoke("gemini-chat", {
-        body: {
-          message: message,
-          chatHistory: [
-            { role: "system", content: initialSystemPrompt },
-            ...formattedHistory
-          ],
-        },
-      });
+      if (useLocalFallback) {
+        // Use local fallback if we've previously had a connection issue
+        botResponse = getLocalResponse(message);
+      } else {
+        // Format chat history for the API
+        const formattedHistory = chatHistory.map(msg => ({
+          role: msg.role,
+          content: msg.content
+        }));
 
-      if (error) {
-        console.error("Supabase function error:", error);
-        throw new Error(error.message);
+        // Call the Supabase Edge Function
+        const { data, error } = await supabase.functions.invoke("gemini-chat", {
+          body: {
+            message: message,
+            chatHistory: [
+              { role: "system", content: initialSystemPrompt },
+              ...formattedHistory
+            ],
+          },
+        });
+
+        if (error) {
+          console.error("Supabase function error:", error);
+          // Set flag to use local fallback for future messages
+          setUseLocalFallback(true);
+          // Get a local fallback response
+          botResponse = getLocalResponse(message);
+          // Show a toast but don't throw, as we'll continue with the fallback
+          toast({
+            title: "Connection issue",
+            description: "Using offline mode for responses. You can continue chatting.",
+            variant: "destructive",
+          });
+        } else {
+          botResponse = data.response;
+        }
       }
 
       // Add bot response to chat
@@ -79,19 +114,32 @@ const ChatBot = ({ initialSystemPrompt = "You are a helpful real estate assistan
         ...prev,
         {
           role: "assistant",
-          content: data.response,
+          content: botResponse,
           timestamp: new Date(),
         },
       ]);
     } catch (error) {
       console.error("Chat error:", error);
       
-      // Show a more user-friendly error message
+      // Set flag to use local fallback for future messages
+      setUseLocalFallback(true);
+      
+      // Show a user-friendly error message
       toast({
         title: "Error",
-        description: "We're having trouble connecting to our assistant right now. Please try again later.",
+        description: "We're having trouble connecting to our assistant right now. Switching to offline mode.",
         variant: "destructive",
       });
+      
+      // Add a fallback response
+      setChatHistory((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: "I'm sorry, I'm having trouble connecting to my knowledge base. I'll use my offline mode to help you. What kind of real estate information are you looking for?",
+          timestamp: new Date(),
+        },
+      ]);
     } finally {
       setIsLoading(false);
     }
@@ -104,6 +152,9 @@ const ChatBot = ({ initialSystemPrompt = "You are a helpful real estate assistan
           <Bot className="h-5 w-5 text-luxury-gold" />
           <h3 className="font-semibold text-lg">Josh Rader Realty Assistant</h3>
         </div>
+        {useLocalFallback && (
+          <span className="text-xs text-amber-600 bg-amber-100 px-2 py-1 rounded-full">Offline Mode</span>
+        )}
       </div>
       
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
