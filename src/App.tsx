@@ -11,9 +11,7 @@ import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
-import ChatPage from "./pages/ChatPage";
 import NotFound from "./pages/NotFound";
-import ChatButton from "./components/ChatButton";
 
 const queryClient = new QueryClient();
 
@@ -22,7 +20,7 @@ const ScrollToTop = () => {
   const { pathname, hash } = useLocation();
 
   // Don't show chat button on admin page
-  const showChatButton = pathname !== '/admin';
+  const showChatButton = false; // Removed chat button completely
 
   useEffect(() => {
     // If no hash, scroll to top
@@ -44,7 +42,7 @@ const ScrollToTop = () => {
     }, 100);
   }, [pathname, hash]);
 
-  return showChatButton ? <ChatButton /> : null;
+  return null; // Removed chat button component
 };
 
 const AppRoutes = () => {
@@ -58,7 +56,7 @@ const AppRoutes = () => {
         <Route path="/blog/:id" element={<BlogPost />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/admin" element={<Admin />} />
-        <Route path="/chat" element={<ChatPage />} />
+        {/* Removed ChatPage route */}
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
