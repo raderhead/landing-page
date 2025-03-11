@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import Index from "./pages/Index";
 import AllProperties from "./pages/AllProperties";
@@ -18,9 +18,6 @@ const queryClient = new QueryClient();
 // ScrollToTop component to handle hash navigation
 const ScrollToTop = () => {
   const { pathname, hash } = useLocation();
-
-  // Don't show chat button on admin page
-  const showChatButton = false; // Removed chat button completely
 
   useEffect(() => {
     // If no hash, scroll to top
@@ -42,7 +39,7 @@ const ScrollToTop = () => {
     }, 100);
   }, [pathname, hash]);
 
-  return null; // Removed chat button component
+  return null;
 };
 
 const AppRoutes = () => {
@@ -56,7 +53,6 @@ const AppRoutes = () => {
         <Route path="/blog/:id" element={<BlogPost />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/admin" element={<Admin />} />
-        {/* Removed ChatPage route */}
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
