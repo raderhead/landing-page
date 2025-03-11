@@ -16,15 +16,15 @@ interface ChatBotProps {
   initialSystemPrompt?: string;
 }
 
-// Simple local fallback responses when the edge function is unavailable
+// Commercial real estate specific fallback responses when the edge function is unavailable
 const fallbackResponses = [
-  "I can help you find properties that match your needs. What kind of home are you looking for?",
-  "Josh Rader Realty specializes in luxury properties throughout the area. Would you like to know more about our available listings?",
-  "We offer a range of services including home buying, selling, and property management. How can I assist you today?",
-  "The current real estate market in our area is quite active. Properties in good locations are selling quickly.",
-  "Our team has extensive experience in negotiating the best deals for our clients. Would you like to schedule a consultation?",
-  "I'd be happy to connect you with one of our agents who can provide more detailed information about your specific needs.",
-  "Thank you for your interest in Josh Rader Realty. We're committed to finding your dream home!",
+  "I specialize in commercial real estate in Abilene, TX. How can I assist you with your commercial property needs?",
+  "Josh Rader Realty offers expert commercial real estate services in Abilene. Would you like information about available commercial properties?",
+  "The commercial market in Abilene has several key areas including Downtown, South 14th Street, and Southwest Drive. Are you interested in a specific area?",
+  "We offer services for buying, selling, and leasing commercial properties in Abilene. Would you like to schedule a consultation with Josh Rader?",
+  "For detailed information about specific commercial listings or personalized advice, I'd recommend scheduling a meeting with Josh Rader directly.",
+  "Commercial real estate in Abilene includes retail spaces, office buildings, industrial properties, and development land. What type of property are you looking for?",
+  "I'm here to answer questions about commercial real estate in Abilene or help you schedule a meeting with Josh Rader. How can I assist you today?",
 ];
 
 const getLocalResponse = (userMessage: string) => {
@@ -32,12 +32,12 @@ const getLocalResponse = (userMessage: string) => {
   return fallbackResponses[randomIndex];
 };
 
-const ChatBot = ({ initialSystemPrompt = "You are a helpful real estate assistant for Josh Rader Realty. You provide information about properties, real estate advice, and answer questions about real estate services. Keep your responses concise, professional, and focused on real estate topics." }: ChatBotProps) => {
+const ChatBot = ({ initialSystemPrompt = "You are a specialized real estate assistant for Josh Rader Realty, focused EXCLUSIVELY on commercial real estate in Abilene, Texas. Only provide information about commercial real estate in Abilene or help schedule meetings with Josh Rader." }: ChatBotProps) => {
   const [message, setMessage] = useState("");
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([
     {
       role: "assistant",
-      content: "👋 Hi there! I'm your Josh Rader Realty assistant. How can I help you with your real estate needs today?",
+      content: "👋 Hi there! I'm your commercial real estate assistant for Josh Rader Realty. I can provide information about commercial properties in Abilene, TX or help you schedule a meeting with Josh Rader. How can I assist you today?",
       timestamp: new Date(),
     },
   ]);
@@ -136,7 +136,7 @@ const ChatBot = ({ initialSystemPrompt = "You are a helpful real estate assistan
         ...prev,
         {
           role: "assistant",
-          content: "I'm sorry, I'm having trouble connecting to my knowledge base. I'll use my offline mode to help you. What kind of real estate information are you looking for?",
+          content: "I'm sorry, I'm having trouble connecting to my knowledge base. I'll use my offline mode to help you. What kind of commercial real estate information for Abilene, TX are you looking for?",
           timestamp: new Date(),
         },
       ]);
