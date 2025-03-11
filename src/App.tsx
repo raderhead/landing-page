@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import Index from "./pages/Index";
 import AllProperties from "./pages/AllProperties";
@@ -20,10 +20,9 @@ const queryClient = new QueryClient();
 // ScrollToTop component to handle hash navigation
 const ScrollToTop = () => {
   const { pathname, hash } = useLocation();
-  const navigate = useNavigate();
 
-  // Don't show chat button on chat page
-  const showChatButton = pathname !== '/chat' && pathname !== '/admin';
+  // Don't show chat button on admin page
+  const showChatButton = pathname !== '/admin';
 
   useEffect(() => {
     // If no hash, scroll to top
