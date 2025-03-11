@@ -13,46 +13,72 @@ const perplexityApiKey = Deno.env.get('PERPLEXITY_API_KEY');
 const knowledgeBase = `
 # Josh Rader Commercial Real Estate - Abilene, TX Knowledge Base
 
-## About Josh Rader Realty
-Josh Rader Realty specializes in commercial real estate in Abilene, Texas. We provide expert guidance for buying, selling, and leasing commercial properties in the Abilene area.
+## About Josh Rader
+- Name: Josh Rader
+- Role: Licensed Commercial Real Estate Agent
+- Location Served: Abilene, Texas, and surrounding areas
+- Specialties: Retail Leasing, Office Leasing, Industrial Properties, Property Investment, and Market Analysis
+- Professional Background: Licensed commercial real estate agent specializing in commercial properties. Josh combines local market expertise with extensive industry knowledge.
+- Values: Josh prioritizes integrity, transparency, and client success. He is committed to providing clear communication, honest advice, and personalized solutions tailored to clients' unique real estate goals.
 
-## Abilene Commercial Real Estate Market
-Abilene, TX is experiencing steady growth in the commercial sector. The city's strategic location in West Texas makes it an attractive market for businesses. Key commercial corridors include South 14th Street, Southwest Drive, and the downtown business district.
+## Services Offered
+
+### Retail Leasing
+- Finding retail spaces suitable for businesses like stores, restaurants, and boutiques
+- Lease negotiations to secure favorable terms
+
+### Office Leasing
+- Helping businesses find ideal office spaces in Abilene tailored to company needs (traditional, open-plan, or hybrid workspaces)
+- Facilitating lease agreements and renewals
+
+### Industrial Properties
+- Locating warehouses, distribution centers, and manufacturing spaces
+- Guidance on industrial zoning and regulatory compliance
+
+### Property Investment
+- Assistance in identifying profitable commercial investment opportunities
+- Detailed market analyses and investment feasibility reports
+
+### Market Analysis
+- Providing comprehensive analyses on current Abilene commercial real estate trends, market values, and projections
+
+## Abilene Real Estate Market Insights (2025)
+
+### Growing Industries
+- Healthcare & Medical Offices
+- Educational Facilities
+- Manufacturing & Industrial Spaces
+- Retail & Hospitality Developments
+
+### Key Trends
+- Increased popularity of mixed-use developments
+- Strong demand for industrial and warehouse spaces
+- Shift toward flexible office spaces accommodating hybrid work models
+- Integration of smart technology and sustainable building practices
 
 ## Types of Commercial Properties Available
-1. Retail spaces - Strip malls, standalone retail buildings, and shopping centers
-2. Office spaces - Professional office buildings, medical offices, and flex spaces
-3. Industrial properties - Warehouses, manufacturing facilities, and distribution centers
-4. Investment properties - Multi-tenant buildings and income-producing properties
-5. Land - Development sites and commercial lots
+- Retail Spaces
+- Office Spaces
+- Industrial and Warehouse Facilities
+- Mixed-use Developments
+- Medical and Specialty Facilities
 
-## Popular Commercial Areas in Abilene
-- Downtown Abilene - Historic district with revitalization efforts
-- South 14th Street - Major retail corridor
-- Southwest Drive - Growing commercial and retail area
-- Buffalo Gap Road - Mixed retail and office space
-- Industrial parks near Abilene Regional Airport
+## Why Invest in Commercial Real Estate in Abilene
+- Stable local economy with consistent growth
+- Strategic location and excellent infrastructure
+- High demand across multiple sectors creating profitable investment opportunities
 
-## Commercial Real Estate Services Offered
-- Property sales and acquisition
-- Tenant and landlord representation
-- Investment property analysis
-- Site selection
-- Commercial property management
-- Lease negotiation and preparation
-- Market analysis and valuation
+## Frequently Asked Questions
 
-## Investment Opportunities
-Abilene offers various investment opportunities with generally higher cap rates compared to larger Texas markets. Popular investment properties include multi-tenant retail centers, office buildings, and industrial spaces.
-
-## Meeting with Josh Rader
-Josh Rader is available for consultations and property viewings by appointment. To schedule a meeting, clients should provide their name, contact information, and the nature of their commercial real estate needs.
+Q: How can Josh help me invest in commercial real estate?
+A: Josh offers personalized consultation, detailed market analysis, and professional guidance to secure the ideal property tailored to your investment objectives.
 
 ## Contact Information
-For all commercial real estate inquiries or to schedule an appointment with Josh Rader, please contact Josh Rader Realty directly.
-
-## Important Note
-This knowledge base contains information specific to commercial real estate in Abilene, TX. For questions outside this domain, users should be directed to schedule a meeting with Josh Rader for personalized assistance.
+- Josh Rader
+- Address: 123 Commercial Ave, Suite 200, Abilene, TX 79601
+- Phone: (Contact directly for phone number)
+- Email: josh.rader@example.com
+- Website: (Contact directly for website URL)
 `;
 
 serve(async (req) => {

@@ -20,10 +20,10 @@ interface ChatBotProps {
 const fallbackResponses = [
   "I specialize in commercial real estate in Abilene, TX. How can I assist you with your commercial property needs?",
   "Josh Rader Realty offers expert commercial real estate services in Abilene. Would you like information about available commercial properties?",
-  "The commercial market in Abilene has several key areas including Downtown, South 14th Street, and Southwest Drive. Are you interested in a specific area?",
-  "We offer services for buying, selling, and leasing commercial properties in Abilene. Would you like to schedule a consultation with Josh Rader?",
+  "The commercial market in Abilene has several key areas and growing industries including Healthcare, Educational Facilities, and Manufacturing spaces. Are you interested in a specific area?",
+  "We offer services for retail leasing, office leasing, industrial properties, and investment analysis. Would you like to schedule a consultation with Josh Rader?",
   "For detailed information about specific commercial listings or personalized advice, I'd recommend scheduling a meeting with Josh Rader directly.",
-  "Commercial real estate in Abilene includes retail spaces, office buildings, industrial properties, and development land. What type of property are you looking for?",
+  "Commercial real estate in Abilene includes retail spaces, office buildings, industrial properties, and mixed-use developments. What type of property are you looking for?",
   "I'm here to answer questions about commercial real estate in Abilene or help you schedule a meeting with Josh Rader. How can I assist you today?",
 ];
 
@@ -150,7 +150,7 @@ const ChatBot = ({ initialSystemPrompt = "You are a specialized real estate assi
       <div className="flex items-center justify-between px-4 py-3 border-b">
         <div className="flex items-center space-x-2">
           <Bot className="h-5 w-5 text-luxury-gold" />
-          <h3 className="font-semibold text-lg">Josh Rader Realty Assistant</h3>
+          <h3 className="font-semibold text-lg">Josh Rader Commercial Real Estate</h3>
         </div>
         {useLocalFallback && (
           <span className="text-xs text-amber-600 bg-amber-100 px-2 py-1 rounded-full">Offline Mode</span>
@@ -179,7 +179,7 @@ const ChatBot = ({ initialSystemPrompt = "You are a specialized real estate assi
                   <User className="h-4 w-4" />
                 )}
                 <p className="text-xs font-semibold">
-                  {msg.role === "user" ? "You" : "Josh Rader Assistant"}
+                  {msg.role === "user" ? "You" : "Commercial Real Estate Assistant"}
                 </p>
               </div>
               <div className="whitespace-pre-wrap text-sm">
@@ -193,7 +193,7 @@ const ChatBot = ({ initialSystemPrompt = "You are a specialized real estate assi
             <div className="max-w-[80%] rounded-lg px-4 py-3 bg-luxury-khaki/20 text-luxury-dark">
               <div className="flex items-center gap-2 mb-1">
                 <Bot className="h-4 w-4 text-luxury-gold" />
-                <p className="text-xs font-semibold">Josh Rader Assistant</p>
+                <p className="text-xs font-semibold">Commercial Real Estate Assistant</p>
               </div>
               <div className="whitespace-pre-wrap text-sm">
                 <div className="flex space-x-2">
@@ -213,7 +213,7 @@ const ChatBot = ({ initialSystemPrompt = "You are a specialized real estate assi
           <Input
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            placeholder="Type your message..."
+            placeholder="Ask about commercial real estate in Abilene..."
             disabled={isLoading}
             className="flex-1"
           />
