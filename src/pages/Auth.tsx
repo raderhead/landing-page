@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from "@/integrations/supabase/client";
@@ -14,7 +15,6 @@ import {
 } from "@/components/ui/dialog";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import ChatButton from "@/components/ChatButton";
 
 const INVITE_CODE = "Brotivator!";
 const INVITE_CODE_STORAGE_KEY = "invite_code_verified";
@@ -250,7 +250,6 @@ const Auth = () => {
       </Dialog>
 
       <Footer />
-      <ChatButton />
     </div>
   );
 };
