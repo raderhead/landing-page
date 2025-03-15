@@ -134,7 +134,7 @@ const ContactSection = () => {
                   </div>
                   <div>
                     <p className="font-medium text-white">Office Address</p>
-                    <p className="text-luxury-khaki">123 Commercial Ave, Suite 200<br />Abilene, TX 79601</p>
+                    <p className="text-luxury-khaki">1500 Industrial Blvd, Suite 300<br />Abilene, TX 79601</p>
                   </div>
                 </div>
                 

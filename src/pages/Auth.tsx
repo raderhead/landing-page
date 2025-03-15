@@ -1,10 +1,9 @@
-
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { supabase } from "@/integrations/supabase/client";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
 import { Mail, Lock, User, Eye, EyeOff, Key } from "lucide-react";
 import { 
   Dialog, 
@@ -29,6 +28,7 @@ const Auth = () => {
   const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
     // Check if user has already verified the invite code

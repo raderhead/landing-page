@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
@@ -101,7 +102,7 @@ const Footer = () => {
           <div>
             <h4 className="font-bold text-lg mb-4 text-white">Contact Info</h4>
             <address className="not-italic text-luxury-khaki space-y-2">
-              <p>123 Commercial Ave, Suite 200</p>
+              <p>1500 Industrial Blvd, Suite 300</p>
               <p>Abilene, TX 79601</p>
               <p>Phone: (325) 555-1234</p>
               <p>Email: josh.rader@example.com</p>
@@ -116,7 +117,7 @@ const Footer = () => {
             &copy; {currentYear} Josh Rader Commercial Real Estate. All rights reserved.
           </p>
           <p className="text-luxury-khaki text-sm">
-            Licensed Texas Real Estate Agent | TREC License #12345678
+            Licensed Texas Real Estate Agent | TREC License #0661281
           </p>
         </div>
       </div>
