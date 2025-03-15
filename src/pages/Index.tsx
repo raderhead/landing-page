@@ -8,22 +8,29 @@ import TestimonialsSection from "@/components/TestimonialsSection";
 import BlogsSection from "@/components/BlogsSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
+import { Helmet } from "react-helmet";
 
 const Index = () => {
   return (
-    <div className="min-h-screen">
-      <Navbar />
-      <main>
-        <HeroSection />
-        <ServicesSection />
-        <PropertiesSection />
-        <AboutSection />
-        <TestimonialsSection />
-        <BlogsSection />
-        <ContactSection />
-      </main>
-      <Footer />
-    </div>
+    <>
+      <Helmet>
+        <title>Josh Rader - Commercial Real Estate Agent | Abilene, TX</title>
+        <meta name="description" content="Josh Rader - Licensed Commercial Real Estate Agent serving Abilene, TX and surrounding areas. Specializing in commercial property sales, leasing, investments, and property management with local expertise." />
+      </Helmet>
+      <div className="min-h-screen">
+        <Navbar />
+        <main>
+          <HeroSection />
+          <ServicesSection />
+          <PropertiesSection />
+          <AboutSection />
+          <TestimonialsSection />
+          <BlogsSection />
+          <ContactSection />
+        </main>
+        <Footer />
+      </div>
+    </>
   );
 };
 
