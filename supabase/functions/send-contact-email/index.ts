@@ -82,10 +82,10 @@ const handler = async (req: Request): Promise<Response> => {
     try {
       const emailResponse = await resend.emails.send({
         from: "Josh Rader Commercial <onboarding@resend.dev>",
-        to: ["JxWayne890@gmail.com"], // Updated recipient email
+        to: ["jxwayne890@gmail.com"], // Updated to lowercase
         subject: `New Contact Form Submission from ${name}`,
         html: htmlContent,
-        reply_to: [email] // Updated to use an array for reply_to
+        reply_to: [email] // Using array for reply_to
       });
       
       console.log("Email response:", JSON.stringify(emailResponse));
