@@ -82,7 +82,7 @@ const handler = async (req: Request): Promise<Response> => {
     try {
       const emailResponse = await resend.emails.send({
         from: "Josh Rader Commercial <onboarding@resend.dev>",
-        to: ["thejohnwjohnson@gmail.com"], // Updated recipient email
+        to: ["JxWayne890@gmail.com"], // Updated recipient email
         subject: `New Contact Form Submission from ${name}`,
         html: htmlContent,
         reply_to: email
