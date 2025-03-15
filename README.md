@@ -1,69 +1,110 @@
-# Welcome to your Lovable project
+# 🚀 Abilene Commercial Website - First-Time Deployment Guide
 
-## Project info
+Welcome, Josh!  
+This guide will walk you through deploying your website to Netlify directly from GitHub for the first time. Once set up, Netlify will automatically update your site whenever you push changes to GitHub.
 
-**URL**: https://lovable.dev/projects/db34910e-7f3d-462f-8134-e2e12cffd064
+---
 
-## How can I edit this code?
+## Project Overview
 
-There are several ways of editing your application.
+Your website is built using:
+- **Vite + React + TailwindCSS** (frontend)
+- **Supabase** (for backend services like the contact form)
+- **Netlify** (for hosting)
 
-**Use Lovable**
+### What You’ll Accomplish
+- Connect your GitHub repository to Netlify  
+- Deploy your website live on the internet  
+- Enable automatic updates with GitHub pushes
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/db34910e-7f3d-462f-8134-e2e12cffd064) and start prompting.
+---
 
-Changes made via Lovable will be committed automatically to this repo.
+## Step 1: Create a Netlify Account
 
-**Use your preferred IDE**
+1. Go to [Netlify](https://www.netlify.com/) and click **Sign Up**.
+2. Sign up using **GitHub** (recommended) or your email.
+3. Complete the sign-up process and access your Netlify dashboard.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+---
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## Step 2: Connect Your GitHub Repository
 
-Follow these steps:
+1. In the Netlify dashboard, click **"Add a new site"** then **"Import an existing project"**.
+2. Choose **GitHub** as your Git provider.
+3. Authorize Netlify to access your GitHub repositories.
+4. Select your repository: `AbileneCommercial.com`.
+5. Click **Deploy Site**.
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+---
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## Step 3: Configure Deployment Settings
 
-# Step 3: Install the necessary dependencies.
-npm i
+1. In the build settings, enter the following:
+   - **Build command:**  
+     ```sh
+     npm run build
+     ```
+   - **Publish directory:**  
+     ```
+     dist
+     ```
+   - **Branch to deploy:**  
+     ```
+     main
+     ```
+2. Click **Deploy Site** to begin the deployment process.
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+---
 
-**Edit a file directly in GitHub**
+## Step 4: Wait for Deployment
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+1. Monitor the progress in the **Deploys** tab.
+2. Once the build and deployment are complete, Netlify will generate a temporary URL for your website.
+3. Click the temporary URL to view your live site.
 
-**Use GitHub Codespaces**
+---
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Step 5: (Optional) Set a Custom Domain
 
-## What technologies are used for this project?
+1. In the Netlify dashboard, go to **Domain Settings**.
+2. Click **Add Custom Domain** and enter `AbileneCommercial.com`.
+3. Follow the instructions to update your DNS settings with your domain provider.
+4. If you haven’t purchased a domain yet, you can continue using the temporary Netlify URL.
 
-This project is built with .
+---
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Step 6: Making Updates
 
-## How can I deploy this project?
+1. Make edits to your website files locally.
+2. Commit and push your changes to GitHub using:
+   ```sh
+   git add .
+   git commit -m "Updated website"
+   git push origin main
 
-Simply open [Lovable](https://lovable.dev/projects/db34910e-7f3d-462f-8134-e2e12cffd064) and click on Share -> Publish.
 
-## I want to use a custom domain - is that possible?
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+## Troubleshooting
+
+### Deployment Fails
+- Verify that your **build command** is set to `npm run build`.
+- Ensure that your **publish directory** is set to `dist`.
+- Clear the cache in Netlify and try redeploying from the **Deploys** tab.
+
+### Site Not Updating
+- Make sure your changes are committed and pushed to the `main` branch.
+- Check the **Deploys** tab for any errors.
+- If necessary, trigger a manual deploy from the Netlify dashboard.
+  
+
+## Need Help?
+
+If you have any questions or run into issues, feel free to reach out:
+-	Email: theJohnWJohnson@gmail.com
+-	Phone: (325) 249-5191
+
+
+
+# Congratulations! Your website is now live!
+
+## Thank you for trusting me to help with your site!
