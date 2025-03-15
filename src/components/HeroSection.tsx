@@ -1,13 +1,10 @@
-
 import { useEffect, useState, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, Phone, Search } from "lucide-react";
 import { Link } from 'react-router-dom';
-
 const HeroSection = () => {
   const [scrollY, setScrollY] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
-  
   useEffect(() => {
     const handleScroll = () => {
       if (sectionRef.current) {
@@ -21,7 +18,6 @@ const HeroSection = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  
   return <section ref={sectionRef} className="relative flex items-center overflow-hidden min-h-[calc(100vh-4rem)] md:min-h-screen pt-28 md:pt-32 pb-52">
       {/* Background Image with Parallax Effect */}
       <div className="absolute inset-0 z-0">
@@ -38,15 +34,15 @@ const HeroSection = () => {
         <div className="max-w-2xl">
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-luxury-khaki mb-4 opacity-0 animate-fade-in">
             <div className="inline-flex items-center">
-              <MapPin className="h-4 w-4 mr-1 text-luxury-gold" />
-              <span className="text-sm font-medium tracking-wide">Abilene, Texas</span>
+              
+              
             </div>
-            <span className="hidden sm:inline text-luxury-khaki/50">|</span>
-            <span className="text-sm font-medium tracking-wide text-luxury-khaki">Trusted by 50+ Investors & Businesses</span>
+            
+            
           </div>
           
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 opacity-0 animate-fade-in-delay-1 leading-tight">
-            <span className="font-sans">Elevate Your</span><br/>
+            <span className="font-sans">Elevate Your</span><br />
             <span className="font-serif text-4xl md:text-5xl lg:text-6xl text-luxury-gold hover-glow inline-block">Commercial Investment</span>
           </h1>
           
@@ -55,28 +51,19 @@ const HeroSection = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 mb-24 sm:mb-0 opacity-0 animate-fade-in-delay-3">
-            <Button
-              size="lg"
-              variant="default"
-              className="bg-luxury-gold/90 backdrop-blur-sm text-luxury-dark rounded-sm px-6 sm:px-8 
+            <Button size="lg" variant="default" className="bg-luxury-gold/90 backdrop-blur-sm text-luxury-dark rounded-sm px-6 sm:px-8 
                 hover:bg-luxury-gold hover:text-luxury-dark hover:scale-105 
                 transition-all duration-300 group shadow-[0_0_10px_rgba(212,184,123,0.2)]
-                hover:shadow-[0_0_15px_rgba(212,184,123,0.5)]"
-              asChild
-            >
+                hover:shadow-[0_0_15px_rgba(212,184,123,0.5)]" asChild>
               <Link to="/properties">
                 <Search className="mr-2 h-5 w-5 group-hover:rotate-12 transition-transform" />
                 Browse Prime Listings
               </Link>
             </Button>
-            <Button 
-              size="lg" 
-              variant="outline" 
-              className="border border-white/10 backdrop-blur-lg rounded-sm px-6 sm:px-8 
+            <Button size="lg" variant="outline" className="border border-white/10 backdrop-blur-lg rounded-sm px-6 sm:px-8 
                 bg-white/5 text-white hover:bg-white/10 hover:text-luxury-gold 
                 hover:scale-105 transition-all duration-300 group
-                hover:shadow-[0_0_15px_rgba(212,184,123,0.3)]"
-            >
+                hover:shadow-[0_0_15px_rgba(212,184,123,0.3)]">
               <Phone className="mr-2 h-5 w-5 group-hover:rotate-12 transition-transform text-luxury-gold" />
               Book Your Strategy Call
             </Button>
@@ -103,5 +90,4 @@ const HeroSection = () => {
       </div>
     </section>;
 };
-
 export default HeroSection;
