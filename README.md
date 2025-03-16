@@ -1,4 +1,4 @@
-# 🚀 AbileneCommercial.com - First-Time Deployment Guide
+# 🚀 AbileneCommercial.com: Deployment Guide
 
 Welcome, Josh!  
 This guide will walk you through deploying your website to Netlify directly from GitHub for the first time. Once set up, Netlify will automatically update your site whenever you push changes to GitHub.
