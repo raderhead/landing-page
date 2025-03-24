@@ -40,8 +40,12 @@ const PropertiesSection = () => {
           <iframe 
             src="https://www.immobel.com/Josh" 
             width="100%" 
-            height="800px" 
-            className="border-0"
+            height="900px" 
+            className="border-0 filter-none contrast-100 bg-transparent"
+            style={{
+              filter: "grayscale(0%) contrast(100%)",
+              background: "transparent"
+            }}
             title="Josh Rader IDX Property Listings"
             loading="lazy"
           ></iframe>
