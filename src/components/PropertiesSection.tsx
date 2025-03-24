@@ -36,7 +36,7 @@ const PropertiesSection = () => {
           </p>
         </div>
         
-        <div className="w-full bg-luxury-dark/80 rounded-lg overflow-hidden shadow-lg border border-luxury-khaki/10">
+        <div className="w-full bg-luxury-dark/90 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg border border-luxury-gold/10 hover:border-luxury-gold/20 transition-all duration-300">
           <iframe 
             src="https://www.immobel.com/Josh" 
             width="100%" 
