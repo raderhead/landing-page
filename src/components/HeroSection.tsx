@@ -1,3 +1,4 @@
+
 import { useEffect, useState, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, Phone, Search } from "lucide-react";
@@ -50,7 +51,7 @@ const HeroSection = () => {
             Josh Rader is a licensed commercial real estate agent specializing in helping businesses and investors find premium locations in Abilene.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 mb-24 sm:mb-0 opacity-0 animate-fade-in-delay-3">
+          <div className="flex flex-col sm:flex-row gap-4 mb-8 sm:mb-12 opacity-0 animate-fade-in-delay-3">
             <Button size="lg" variant="default" className="bg-luxury-gold/90 backdrop-blur-sm text-luxury-dark rounded-sm px-6 sm:px-8 
                 hover:bg-luxury-gold hover:text-luxury-dark hover:scale-105 
                 transition-all duration-300 group shadow-[0_0_10px_rgba(212,184,123,0.2)]
@@ -67,6 +68,17 @@ const HeroSection = () => {
               <Phone className="mr-2 h-5 w-5 group-hover:rotate-12 transition-transform text-luxury-gold" />
               Book Your Strategy Call
             </Button>
+          </div>
+
+          {/* Added Immobel iframe */}
+          <div className="w-full mt-8 mb-24 sm:mb-0 opacity-0 animate-fade-in-delay-4">
+            <iframe 
+              src="https://www.immobel.com/Josh" 
+              width="100%" 
+              height="800px" 
+              title="Property Listings" 
+              className="border-none shadow-lg rounded-md"
+            />
           </div>
         </div>
       </div>
