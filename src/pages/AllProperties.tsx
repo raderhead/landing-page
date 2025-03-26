@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -271,7 +272,7 @@ const AllProperties = () => {
                           )}
                           
                           {property.address && (
-                            <p className="text-sm font-medium text-white">
+                            <p className="text-base md:text-lg font-medium text-white">
                               {property.address}
                             </p>
                           )}
@@ -328,7 +329,7 @@ const AllProperties = () => {
                           )}
                           
                           {property.address && (
-                            <p className="text-base font-medium text-white mb-3">
+                            <p className="text-lg md:text-xl font-medium text-white mb-3">
                               {property.address}
                             </p>
                           )}
