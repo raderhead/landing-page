@@ -1,103 +1,86 @@
 
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-// Create a Supabase client with the auth role key
-const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
-const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
-
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
+import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { supabase } from '../_shared/supabase-client.ts';
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
 };
 
-serve(async (req) => {
+serve(async (req: Request): Promise<Response> => {
+  console.log("Received webhook request");
+  
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    console.log("Handling CORS preflight request");
+    return new Response(null, { 
+      status: 204, 
+      headers: corsHeaders 
+    });
   }
 
   try {
-    // Check if the request is a POST
-    if (req.method !== "POST") {
-      return new Response(
-        JSON.stringify({ error: "Method not allowed" }),
-        { 
-          status: 405, 
-          headers: { ...corsHeaders, "Content-Type": "application/json" } 
-        }
-      );
-    }
-
-    // Parse the request body
-    const payload = await req.json();
-    console.log("Received webhook payload:", payload);
-
-    // Validate the payload
-    let properties = [];
+    // Log request details for debugging
+    const url = new URL(req.url);
+    console.log(`Webhook path: ${url.pathname}`);
     
-    if (Array.isArray(payload)) {
-      properties = payload;
-    } else if (payload.properties && Array.isArray(payload.properties)) {
-      properties = payload.properties;
+    // Parse request data
+    let payload;
+    const contentType = req.headers.get("content-type") || "";
+    
+    if (contentType.includes("application/json")) {
+      payload = await req.json();
+    } else if (contentType.includes("application/x-www-form-urlencoded")) {
+      const formData = await req.formData();
+      payload = Object.fromEntries(formData.entries());
     } else {
-      // If it's a single property, wrap it in an array
-      properties = [payload];
+      payload = {
+        rawBody: await req.text(),
+        contentType
+      };
     }
 
-    // Process each property
-    const insertPromises = properties.map(async (property) => {
-      // Make sure we have the required fields
-      const propertyData = {
-        address: property.address || "",
-        mls: property.mls || "",
-        price: property.price || "",
-        image_url: property.image_url || ""
-      };
-
-      // Insert the property into the database
-      const { data, error } = await supabase
-        .from('properties')
-        .upsert(propertyData, { 
-          onConflict: 'address',
-          ignoreDuplicates: false
-        });
-
-      if (error) {
-        console.error("Error inserting property:", error);
-        return { success: false, error };
-      }
-
-      return { success: true, data };
-    });
-
-    // Wait for all insertions to complete
-    const results = await Promise.all(insertPromises);
+    console.log("Webhook payload:", JSON.stringify(payload));
     
-    // Return the results
+    // Store the webhook data in Supabase (if you want persistence)
+    // Uncomment and modify this code when you have a webhooks table
+    /*
+    const { data, error } = await supabase
+      .from('webhooks')
+      .insert({
+        source: url.pathname.split('/').pop() || 'unknown',
+        payload: payload,
+        received_at: new Date(),
+      });
+      
+    if (error) {
+      console.error("Error storing webhook:", error);
+    }
+    */
+    
+    // Return a successful response
     return new Response(
-      JSON.stringify({ 
-        message: "Webhook received and processed successfully", 
-        results 
-      }),
-      { 
-        status: 200, 
-        headers: { ...corsHeaders, "Content-Type": "application/json" } 
+      JSON.stringify({ success: true, message: "Webhook received successfully" }),
+      {
+        status: 200,
+        headers: { 
+          "Content-Type": "application/json",
+          ...corsHeaders 
+        },
       }
     );
   } catch (error) {
     console.error("Error processing webhook:", error);
-    
     return new Response(
-      JSON.stringify({ 
-        error: "Error processing webhook", 
-        details: error.message 
-      }),
-      { 
-        status: 500, 
-        headers: { ...corsHeaders, "Content-Type": "application/json" } 
+      JSON.stringify({ success: false, error: error.message }),
+      {
+        status: 500,
+        headers: { 
+          "Content-Type": "application/json",
+          ...corsHeaders 
+        },
       }
     );
   }

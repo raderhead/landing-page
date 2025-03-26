@@ -51,30 +51,6 @@ export type Database = {
         }
         Relationships: []
       }
-      properties: {
-        Row: {
-          address: string
-          id: string
-          image_url: string
-          mls: string
-          price: string
-        }
-        Insert: {
-          address: string
-          id?: string
-          image_url: string
-          mls: string
-          price: string
-        }
-        Update: {
-          address?: string
-          id?: string
-          image_url?: string
-          mls?: string
-          price?: string
-        }
-        Relationships: []
-      }
     }
     Views: {
       [_ in never]: never
