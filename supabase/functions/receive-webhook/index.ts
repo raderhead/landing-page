@@ -70,34 +70,13 @@ serve(async (req: Request): Promise<Response> => {
       // Debug log to see what's in each property
       console.log("Processing property:", JSON.stringify(property).substring(0, 200));
 
-      // Handle MLS format more specifically
-      let title, imageUrl, description, address;
-      
-      // Format specific mapping for MLS format (as seen in the payload example)
-      if (property.mls && property.address) {
-        title = `MLS #${property.mls}`;
-        address = property.address;
-        imageUrl = property.image || null;
-        description = `MLS #${property.mls}: ${property.address}`;
-      } 
-      // Standard format
-      else {
-        title = property.title || (property.mls ? `MLS #${property.mls}` : "Unknown Property");
-        address = property.address || '';
-        imageUrl = property.image_url || property.image || null;
-        description = property.description || (property.mls ? `MLS #${property.mls}` : "Property listing");
-      }
-
+      // Extract data based on our simplified schema
+      // For our new properties table: id, address, mls, price, image_url
       const propertyData = {
-        title: title,
-        address: address,
-        type: property.type || 'Residential',
-        size: property.size || '',
+        address: property.address || '',
+        mls: property.mls || '',
         price: property.price || '',
-        image_url: imageUrl,
-        description: description,
-        featured: property.featured !== undefined ? property.featured : true,
-        received_at: new Date().toISOString()
+        image_url: property.image_url || property.image || '',
       };
 
       console.log("Storing property data:", JSON.stringify(propertyData));
@@ -110,7 +89,7 @@ serve(async (req: Request): Promise<Response> => {
       if (error) {
         console.error("Error storing property:", error);
       } else {
-        console.log("Property stored successfully:", propertyData.title);
+        console.log("Property stored successfully, MLS:", propertyData.mls);
       }
     }
     

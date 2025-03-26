@@ -16,7 +16,7 @@ const WebhookTester = () => {
   const [webhookUrl, setWebhookUrl] = useState<string>("");
   const [webhookLogs, setWebhookLogs] = useState<any[]>([]);
   const [useCustomPayload, setUseCustomPayload] = useState(false);
-  const [customPayload, setCustomPayload] = useState('{\n  "title": "Downtown Office Building",\n  "address": "123 Main St, Abilene, TX",\n  "type": "Office",\n  "size": "3,500 sq ft",\n  "price": "$750,000",\n  "image_url": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",\n  "description": "Prime office space in downtown Abilene",\n  "featured": true\n}');
+  const [customPayload, setCustomPayload] = useState('{\n  "address": "123 Main St, Abilene, TX",\n  "mls": "20835911",\n  "price": "$750,000",\n  "image_url": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"\n}');
   
   // Generate the full webhook URL for the user to copy
   const baseUrl = window.location.origin;
@@ -33,37 +33,25 @@ const WebhookTester = () => {
 
   // Sample property listing payload
   const samplePropertyPayload = {
-    title: "Downtown Office Building",
     address: "123 Main St, Abilene, TX",
-    type: "Office",
-    size: "3,500 sq ft",
+    mls: "20835911",
     price: "$750,000",
-    image_url: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-    description: "Prime office space in downtown Abilene",
-    featured: true
+    image_url: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
   };
 
   // Sample for multiple properties
   const sampleMultiplePayload = [
     {
-      title: "Retail Space on Main",
       address: "456 Main St, Abilene, TX",
-      type: "Retail",
-      size: "2,200 sq ft",
+      mls: "20816564",
       price: "$550,000",
-      image_url: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      description: "Prime retail space in a high-traffic area",
-      featured: true
+      image_url: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
     },
     {
-      title: "Industrial Warehouse",
       address: "789 Industry Blvd, Abilene, TX",
-      type: "Industrial",
-      size: "15,000 sq ft",
+      mls: "20835912",
       price: "$1,200,000",
-      image_url: "https://images.unsplash.com/photo-1553335760-325a8d9e9c6d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      description: "Spacious warehouse with loading docks",
-      featured: true
+      image_url: "https://images.unsplash.com/photo-1553335760-325a8d9e9c6d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
     }
   ];
   
@@ -73,13 +61,13 @@ const WebhookTester = () => {
       "address": "2600 Ivanhoe Lane, Abilene Texas, 79605 USA",
       "mls": "20835911",
       "price": "4,000,000",
-      "image": "https://ntreis.immobel.com/img/369026/04/06/189811201_1.jpg"
+      "image_url": "https://ntreis.immobel.com/img/369026/04/06/189811201_1.jpg"
     },
     {
       "address": "5265 Willow Wood Drive, Abilene Texas, 79606 USA",
       "mls": "20816564",
       "price": "2,760,000",
-      "image": "https://ntreis.immobel.com/img/369026/14/0f/189574583_1.jpg"
+      "image_url": "https://ntreis.immobel.com/img/369026/14/0f/189574583_1.jpg"
     }
   ];
 
@@ -224,7 +212,7 @@ const WebhookTester = () => {
                 placeholder="Enter custom JSON payload"
               />
               <p className="text-sm text-muted-foreground mt-2">
-                Enter a valid JSON with property data. Must include at least a "title" field or address and MLS number.
+                Enter a valid JSON with property data. Must include MLS number, address, price, and image URL.
               </p>
             </div>
           )}
@@ -253,7 +241,7 @@ const WebhookTester = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Property Formatting Guide</CardTitle>
+          <CardTitle>Property Format Guide</CardTitle>
           <CardDescription>
             Required and optional fields for property listings
           </CardDescription>
@@ -269,49 +257,24 @@ const WebhookTester = () => {
             </TableHeader>
             <TableBody>
               <TableRow>
-                <TableCell className="font-medium">title</TableCell>
-                <TableCell>One of these is required</TableCell>
-                <TableCell>The name of the property</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">mls</TableCell>
-                <TableCell>One of these is required</TableCell>
-                <TableCell>MLS number (if title is missing, "MLS #123" will be used)</TableCell>
-              </TableRow>
-              <TableRow>
                 <TableCell className="font-medium">address</TableCell>
-                <TableCell>No</TableCell>
+                <TableCell>Yes</TableCell>
                 <TableCell>Full address including city and state</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell className="font-medium">type</TableCell>
-                <TableCell>No</TableCell>
-                <TableCell>Property type (Office, Retail, Industrial, etc.)</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">size</TableCell>
-                <TableCell>No</TableCell>
-                <TableCell>Size of the property (sq ft)</TableCell>
+                <TableCell className="font-medium">mls</TableCell>
+                <TableCell>Yes</TableCell>
+                <TableCell>MLS number</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell className="font-medium">price</TableCell>
-                <TableCell>No</TableCell>
+                <TableCell>Yes</TableCell>
                 <TableCell>Asking price or rent</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell className="font-medium">image_url or image</TableCell>
-                <TableCell>No</TableCell>
+                <TableCell className="font-medium">image_url</TableCell>
+                <TableCell>Yes</TableCell>
                 <TableCell>URL to the property image</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">description</TableCell>
-                <TableCell>No</TableCell>
-                <TableCell>Detailed description of the property</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">featured</TableCell>
-                <TableCell>No</TableCell>
-                <TableCell>Whether to show in featured listings (default: true)</TableCell>
               </TableRow>
             </TableBody>
           </Table>

@@ -54,39 +54,48 @@ export type Database = {
       properties: {
         Row: {
           address: string
-          description: string | null
-          featured: boolean
           id: string
-          image_url: string | null
+          image_url: string
+          mls: string
           price: string
-          received_at: string
-          size: string
-          title: string
-          type: string
         }
         Insert: {
           address?: string
-          description?: string | null
-          featured?: boolean
           id?: string
-          image_url?: string | null
+          image_url?: string
+          mls?: string
           price?: string
-          received_at?: string
-          size?: string
-          title: string
-          type?: string
         }
         Update: {
           address?: string
-          description?: string | null
-          featured?: boolean
           id?: string
-          image_url?: string | null
+          image_url?: string
+          mls?: string
           price?: string
-          received_at?: string
-          size?: string
-          title?: string
-          type?: string
+        }
+        Relationships: []
+      }
+      properties_backup: {
+        Row: {
+          id: string | null
+          image_url: string | null
+          mls: string | null
+          price: string | null
+          title: string | null
+        }
+        Insert: {
+          id?: string | null
+          image_url?: string | null
+          mls?: string | null
+          price?: string | null
+          title?: string | null
+        }
+        Update: {
+          id?: string | null
+          image_url?: string | null
+          mls?: string | null
+          price?: string | null
+          title?: string | null
         }
         Relationships: []
       }
