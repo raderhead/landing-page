@@ -46,7 +46,8 @@ const PropertiesSection = () => {
             loading="lazy"
           ></iframe>
           
-          <style jsx>{`
+          <style>
+            {`
             iframe {
               width: 100%;
               height: 900px;
@@ -59,7 +60,8 @@ const PropertiesSection = () => {
             iframe body .sidebar {
               display: none !important;
             }
-          `}</style>
+            `}
+          </style>
         </div>
       </div>
     </section>;
