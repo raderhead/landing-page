@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -238,7 +237,7 @@ const AllProperties = () => {
                   {currentProperties.map((property, index) => (
                     <div 
                       key={property.id} 
-                      className="bg-luxury-dark rounded-md overflow-hidden shadow-md hover:shadow-lg transition-all duration-500 hover:shadow-luxury-gold/20 hover:-translate-y-1 hover:scale-[1.01] border border-luxury-khaki/10 group h-[420px]"
+                      className="bg-luxury-dark rounded-md overflow-hidden shadow-md hover:shadow-lg transition-all duration-500 hover:shadow-luxury-gold/20 hover:-translate-y-1 hover:scale-[1.01] border border-luxury-khaki/10 group h-[400px]"
                       style={{ 
                         transitionDelay: `${index * 50}ms`,
                         transform: `translateY(${Math.min(10, Math.max(-10, (scrollY - 1200) * 0.02 * (index % 3 - 1)))}px)`
@@ -263,7 +262,7 @@ const AllProperties = () => {
                         )}
                       </div>
                       
-                      <div className="p-4 flex flex-col h-[calc(420px-256px)] justify-between">
+                      <div className="p-4 flex flex-col h-[calc(400px-256px)]">
                         <div>
                           {property.price && (
                             <p className="font-bold text-luxury-gold text-3xl mb-2 leading-tight">{property.price}</p>
@@ -280,15 +279,11 @@ const AllProperties = () => {
                         
                         <div>
                           {property.mls && (
-                            <div className="mb-3">
+                            <div>
                               <p className="text-xs text-luxury-khaki/70">MLS</p>
                               <p className="font-medium text-white text-sm">{property.mls}</p>
                             </div>
                           )}
-                          
-                          <Button variant="outline" className="w-full text-xs py-1 border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm group-hover:bg-luxury-gold/10 transition-all">
-                            View Details
-                          </Button>
                         </div>
                       </div>
                     </div>
@@ -356,10 +351,6 @@ const AllProperties = () => {
                               </div>
                             )}
                           </div>
-                          
-                          <Button variant="outline" className="w-fit text-sm px-6 h-9 border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm group-hover:bg-luxury-gold/10 transition-all">
-                            View Details
-                          </Button>
                         </div>
                       </div>
                     </div>
@@ -427,3 +418,4 @@ const AllProperties = () => {
 };
 
 export default AllProperties;
+

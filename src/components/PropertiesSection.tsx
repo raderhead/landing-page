@@ -1,4 +1,3 @@
-
 import { useRef, useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent } from "@/components/ui/card";
@@ -48,7 +47,6 @@ const PropertiesSection = () => {
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        // Fetch featured properties from Supabase, limited to 6 to have enough for the carousel
         const { data, error } = await supabase
           .from('properties')
           .select('*')
@@ -72,16 +70,13 @@ const PropertiesSection = () => {
     
     fetchProperties();
     
-    // Set up a realtime subscription to update properties when new ones are added
     const channel = supabase
       .channel('public:properties')
       .on('postgres_changes', 
         { event: 'INSERT', schema: 'public', table: 'properties' }, 
         (payload) => {
-          // Add the new property to the list if it's featured
           if (payload.new && payload.new.featured) {
             setProperties(current => {
-              // Only keep the newest 6 properties
               const updated = [payload.new as Property, ...current];
               return updated.slice(0, 6);
             });
@@ -130,7 +125,7 @@ const PropertiesSection = () => {
                 <CarouselContent className="-ml-2 md:-ml-4">
                   {properties.map((property) => (
                     <CarouselItem key={property.id} className="pl-2 md:pl-4 md:basis-1/3 lg:basis-1/3">
-                      <Card className="bg-luxury-dark border-luxury-gold/10 hover:border-luxury-gold/20 transition-all duration-300 hover:shadow-lg group h-[420px] overflow-hidden">
+                      <Card className="bg-luxury-dark border-luxury-gold/10 hover:border-luxury-gold/20 transition-all duration-300 hover:shadow-lg group h-[400px] overflow-hidden">
                         <div className="relative h-64 overflow-hidden">
                           {property.image_url ? (
                             <img 
@@ -147,7 +142,7 @@ const PropertiesSection = () => {
                             {property.type}
                           </div>
                         </div>
-                        <CardContent className="p-4 flex flex-col h-[calc(420px-256px)] justify-between">
+                        <CardContent className="p-4 flex flex-col h-[calc(400px-256px)]">
                           <div>
                             {property.price && (
                               <p className="font-bold text-luxury-gold text-3xl mb-2 leading-tight">{property.price}</p>
@@ -163,14 +158,11 @@ const PropertiesSection = () => {
                           
                           <div>
                             {property.mls && (
-                              <div className="mb-3">
+                              <div>
                                 <p className="text-xs text-luxury-khaki/70">MLS</p>
                                 <p className="font-medium text-white text-sm">{property.mls}</p>
                               </div>
                             )}
-                            <Button variant="outline" className="w-full text-sm py-1 border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm group-hover:bg-luxury-gold/10 transition-all">
-                              View Details
-                            </Button>
                           </div>
                         </CardContent>
                       </Card>
@@ -183,7 +175,6 @@ const PropertiesSection = () => {
                 </div>
               </Carousel>
               
-              {/* Show All Properties Button */}
               <div className="mt-8 text-center">
                 <Link to="/properties">
                   <Button 
