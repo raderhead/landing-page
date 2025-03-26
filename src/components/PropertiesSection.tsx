@@ -105,7 +105,7 @@ const PropertiesSection = () => {
       </div>
       
       <div className="container relative z-10">
-        <div className="text-center max-w-3xl mx-auto mb-12">
+        <div className="text-center max-w-3xl mx-auto mb-8">
           <h2 className="section-title text-white font-sans">Featured <span className="font-serif text-luxury-gold">Properties</span></h2>
           <p className="section-subtitle text-luxury-khaki font-sans">
             Explore our selection of premium commercial properties available in Abilene, TX
@@ -114,7 +114,7 @@ const PropertiesSection = () => {
         
         <div className="w-full rounded-lg overflow-hidden">
           {loading ? (
-            <div className="bg-luxury-dark/90 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg border border-luxury-gold/10 min-h-[300px] flex items-center justify-center">
+            <div className="bg-luxury-dark/90 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg border border-luxury-gold/10 min-h-[200px] flex items-center justify-center">
               <div className="text-luxury-gold animate-pulse">Loading properties...</div>
             </div>
           ) : properties.length > 0 ? (
@@ -129,8 +129,8 @@ const PropertiesSection = () => {
                 <CarouselContent className="-ml-2 md:-ml-4">
                   {properties.map((property) => (
                     <CarouselItem key={property.id} className="pl-2 md:pl-4 md:basis-1/3 lg:basis-1/3">
-                      <Card className="bg-luxury-dark/90 backdrop-blur-sm border-luxury-gold/10 hover:border-luxury-gold/20 transition-all duration-300 hover:shadow-lg group">
-                        <div className="relative h-48 overflow-hidden">
+                      <Card className="bg-luxury-dark/90 backdrop-blur-sm border-luxury-gold/10 hover:border-luxury-gold/20 transition-all duration-300 hover:shadow-lg group h-[340px]">
+                        <div className="relative h-32 overflow-hidden">
                           {property.image_url ? (
                             <img 
                               src={property.image_url} 
@@ -139,36 +139,36 @@ const PropertiesSection = () => {
                             />
                           ) : (
                             <div className="w-full h-full bg-luxury-dark flex items-center justify-center">
-                              <Building className="h-12 w-12 text-luxury-gold/20" />
+                              <Building className="h-10 w-10 text-luxury-gold/20" />
                             </div>
                           )}
-                          <div className="absolute top-4 right-4 bg-luxury-gold text-luxury-black py-1 px-3 rounded-sm text-sm font-medium">
+                          <div className="absolute top-2 right-2 bg-luxury-gold text-luxury-black py-1 px-2 rounded-sm text-xs font-medium">
                             {property.type}
                           </div>
                         </div>
-                        <CardContent className="p-5">
-                          <h3 className="text-lg font-bold mb-2 text-white group-hover:text-luxury-gold transition-colors">{property.title}</h3>
+                        <CardContent className="p-4">
+                          <h3 className="text-base font-bold mb-1 text-white group-hover:text-luxury-gold transition-colors truncate">{property.title}</h3>
                           {property.address && (
-                            <div className="flex items-center text-luxury-khaki mb-4">
-                              <MapPin className="h-4 w-4 mr-1 group-hover:text-luxury-gold transition-colors" />
-                              <span className="text-sm">{property.address}</span>
+                            <div className="flex items-center text-luxury-khaki mb-2">
+                              <MapPin className="h-3 w-3 mr-1 group-hover:text-luxury-gold transition-colors" />
+                              <span className="text-xs truncate">{property.address}</span>
                             </div>
                           )}
-                          <div className="grid grid-cols-2 gap-4 mb-4">
+                          <div className="grid grid-cols-2 gap-2 mb-3">
                             {property.size && (
                               <div>
-                                <p className="text-sm text-luxury-khaki/70">Size</p>
-                                <p className="font-medium text-white">{property.size}</p>
+                                <p className="text-xs text-luxury-khaki/70">Size</p>
+                                <p className="font-medium text-white text-sm">{property.size}</p>
                               </div>
                             )}
                             {property.price && (
                               <div>
-                                <p className="text-sm text-luxury-khaki/70">Price</p>
-                                <p className="font-medium text-white">{property.price}</p>
+                                <p className="text-xs text-luxury-khaki/70">Price</p>
+                                <p className="font-medium text-white text-sm">{property.price}</p>
                               </div>
                             )}
                           </div>
-                          <Button variant="outline" className="w-full border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm group-hover:bg-luxury-gold/10 transition-all">
+                          <Button variant="outline" className="w-full text-sm py-1 border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm group-hover:bg-luxury-gold/10 transition-all">
                             View Details
                           </Button>
                         </CardContent>
@@ -176,14 +176,14 @@ const PropertiesSection = () => {
                     </CarouselItem>
                   ))}
                 </CarouselContent>
-                <div className="flex justify-center mt-8 gap-4">
-                  <CarouselPrevious className="static translate-y-0 border-luxury-gold text-luxury-gold hover:text-luxury-black hover:bg-luxury-gold" />
-                  <CarouselNext className="static translate-y-0 border-luxury-gold text-luxury-gold hover:text-luxury-black hover:bg-luxury-gold" />
+                <div className="flex justify-center mt-6 gap-4">
+                  <CarouselPrevious className="static translate-y-0 border-luxury-gold text-luxury-gold hover:text-luxury-black hover:bg-luxury-gold h-8 w-8" />
+                  <CarouselNext className="static translate-y-0 border-luxury-gold text-luxury-gold hover:text-luxury-black hover:bg-luxury-gold h-8 w-8" />
                 </div>
               </Carousel>
               
               {/* Show All Properties Button */}
-              <div className="mt-10 text-center">
+              <div className="mt-8 text-center">
                 <Link to="/properties">
                   <Button 
                     variant="outline" 
@@ -196,9 +196,9 @@ const PropertiesSection = () => {
               </div>
             </>
           ) : (
-            <div className="bg-luxury-dark/90 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg border border-luxury-gold/10 min-h-[300px] flex flex-col items-center justify-center p-6 text-center">
-              <Building className="h-16 w-16 text-luxury-gold/30 mb-4" />
-              <h3 className="text-xl font-bold text-luxury-gold mb-2">No Properties Found</h3>
+            <div className="bg-luxury-dark/90 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg border border-luxury-gold/10 min-h-[200px] flex flex-col items-center justify-center p-6 text-center">
+              <Building className="h-12 w-12 text-luxury-gold/30 mb-4" />
+              <h3 className="text-lg font-bold text-luxury-gold mb-2">No Properties Found</h3>
               <p className="text-luxury-khaki mb-4">
                 Use the Webhook Tester to send property data to populate this section.
               </p>

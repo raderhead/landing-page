@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -120,7 +121,7 @@ const AllProperties = () => {
     <div className="min-h-screen bg-black">
       <Navbar />
       
-      <section className="relative pt-32 pb-16 bg-luxury-black overflow-hidden">
+      <section className="relative pt-28 pb-12 bg-luxury-black overflow-hidden">
         <div className="absolute inset-0 opacity-20 z-0">
           <div className="absolute inset-0 bg-gradient-to-b from-luxury-black via-transparent to-luxury-black z-10"></div>
           <img 
@@ -132,22 +133,22 @@ const AllProperties = () => {
         </div>
         
         <div className="container relative z-10">
-          <div className="max-w-3xl mb-8">
-            <a href="/" className="flex items-center gap-2 text-luxury-khaki mb-8 group hover:text-luxury-gold transition-colors">
+          <div className="max-w-3xl mb-6">
+            <a href="/" className="flex items-center gap-2 text-luxury-khaki mb-6 group hover:text-luxury-gold transition-colors">
               <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
               <span>Back to Home</span>
             </a>
             
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
               <span className="font-sans">Commercial Properties in</span> <span className="text-luxury-gold font-serif">Abilene</span>
             </h1>
             
-            <p className="text-luxury-khaki text-lg font-sans">
+            <p className="text-luxury-khaki text-base font-sans">
               Browse our curated selection of premium commercial real estate opportunities in the Abilene market.
             </p>
           </div>
           
-          <div className="bg-luxury-dark p-4 border border-luxury-khaki/20 rounded-md shadow-lg flex flex-col md:flex-row gap-4 animate-fade-in-delay-1">
+          <div className="bg-luxury-dark p-3 border border-luxury-khaki/20 rounded-md shadow-lg flex flex-col md:flex-row gap-3 animate-fade-in-delay-1">
             <div className="relative flex-grow">
               <Search className="absolute left-3 top-3 h-4 w-4 text-luxury-khaki" />
               <Input 
@@ -161,149 +162,89 @@ const AllProperties = () => {
             <div className="flex flex-wrap gap-2">
               <Button 
                 variant="outline" 
-                className={`rounded-full px-4 border-luxury-khaki/30 ${propertyType === 'All' ? 'bg-luxury-gold text-luxury-black border-luxury-gold' : 'text-luxury-khaki hover:border-luxury-gold hover:text-luxury-gold'}`}
+                size="sm"
+                className={`rounded-full px-3 py-0 border-luxury-khaki/30 ${propertyType === 'All' ? 'bg-luxury-gold text-luxury-black border-luxury-gold' : 'text-luxury-khaki hover:border-luxury-gold hover:text-luxury-gold'}`}
                 onClick={() => setPropertyType("All")}
               >
                 All
               </Button>
               <Button 
-                variant="outline" 
-                className={`rounded-full px-4 border-luxury-khaki/30 ${propertyType === 'Office' ? 'bg-luxury-gold text-luxury-black border-luxury-gold' : 'text-luxury-khaki hover:border-luxury-gold hover:text-luxury-gold'}`}
+                variant="outline"
+                size="sm"
+                className={`rounded-full px-3 py-0 border-luxury-khaki/30 ${propertyType === 'Office' ? 'bg-luxury-gold text-luxury-black border-luxury-gold' : 'text-luxury-khaki hover:border-luxury-gold hover:text-luxury-gold'}`}
                 onClick={() => setPropertyType("Office")}
               >
                 Office
               </Button>
               <Button 
-                variant="outline" 
-                className={`rounded-full px-4 border-luxury-khaki/30 ${propertyType === 'Retail' ? 'bg-luxury-gold text-luxury-black border-luxury-gold' : 'text-luxury-khaki hover:border-luxury-gold hover:text-luxury-gold'}`}
+                variant="outline"
+                size="sm"
+                className={`rounded-full px-3 py-0 border-luxury-khaki/30 ${propertyType === 'Retail' ? 'bg-luxury-gold text-luxury-black border-luxury-gold' : 'text-luxury-khaki hover:border-luxury-gold hover:text-luxury-gold'}`}
                 onClick={() => setPropertyType("Retail")}
               >
                 Retail
               </Button>
               <Button 
-                variant="outline" 
-                className={`rounded-full px-4 border-luxury-khaki/30 ${propertyType === 'Industrial' ? 'bg-luxury-gold text-luxury-black border-luxury-gold' : 'text-luxury-khaki hover:border-luxury-gold hover:text-luxury-gold'}`}
+                variant="outline"
+                size="sm"
+                className={`rounded-full px-3 py-0 border-luxury-khaki/30 ${propertyType === 'Industrial' ? 'bg-luxury-gold text-luxury-black border-luxury-gold' : 'text-luxury-khaki hover:border-luxury-gold hover:text-luxury-gold'}`}
                 onClick={() => setPropertyType("Industrial")}
               >
                 Industrial
               </Button>
               <Button 
-                variant="outline" 
-                className={`rounded-full px-4 border-luxury-khaki/30 ${propertyType === 'Other' ? 'bg-luxury-gold text-luxury-black border-luxury-gold' : 'text-luxury-khaki hover:border-luxury-gold hover:text-luxury-gold'}`}
+                variant="outline"
+                size="sm"
+                className={`rounded-full px-3 py-0 border-luxury-khaki/30 ${propertyType === 'Other' ? 'bg-luxury-gold text-luxury-black border-luxury-gold' : 'text-luxury-khaki hover:border-luxury-gold hover:text-luxury-gold'}`}
                 onClick={() => setPropertyType("Other")}
               >
                 Other
               </Button>
             </div>
             
-            <div className="flex gap-1 border-l border-luxury-khaki/20 pl-4 items-center">
+            <div className="flex gap-1 border-l border-luxury-khaki/20 pl-3 items-center">
               <Button 
                 variant="ghost"
-                className={`p-2 ${viewMode === 'grid' ? 'text-luxury-gold' : 'text-luxury-khaki hover:text-luxury-gold'}`}
+                size="sm"
+                className={`p-1 ${viewMode === 'grid' ? 'text-luxury-gold' : 'text-luxury-khaki hover:text-luxury-gold'}`}
                 onClick={() => setViewMode("grid")}
               >
-                <Grid className="h-5 w-5" />
+                <Grid className="h-4 w-4" />
               </Button>
               <Button 
                 variant="ghost"
-                className={`p-2 ${viewMode === 'list' ? 'text-luxury-gold' : 'text-luxury-khaki hover:text-luxury-gold'}`}
+                size="sm"
+                className={`p-1 ${viewMode === 'list' ? 'text-luxury-gold' : 'text-luxury-khaki hover:text-luxury-gold'}`}
                 onClick={() => setViewMode("list")}
               >
-                <List className="h-5 w-5" />
+                <List className="h-4 w-4" />
               </Button>
             </div>
           </div>
         </div>
       </section>
       
-      <section className="py-12 bg-black">
+      <section className="py-10 bg-black">
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-20">
-            <Loader2 className="h-12 w-12 text-luxury-gold animate-spin mb-4" />
+          <div className="flex flex-col items-center justify-center py-16">
+            <Loader2 className="h-10 w-10 text-luxury-gold animate-spin mb-3" />
             <p className="text-luxury-khaki">Loading properties...</p>
           </div>
         ) : currentProperties.length > 0 ? (
           <>
             {viewMode === "grid" ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {currentProperties.map((property, index) => (
-                  <div 
-                    key={property.id} 
-                    className="bg-luxury-dark rounded-md overflow-hidden shadow-md hover:shadow-lg transition-all duration-500 hover:shadow-luxury-gold/20 hover:-translate-y-2 hover:scale-[1.02] border border-luxury-khaki/10 group"
-                    style={{ 
-                      transitionDelay: `${index * 50}ms`,
-                      transform: `translateY(${Math.min(20, Math.max(-20, (scrollY - 1200) * 0.03 * (index % 3 - 1)))}px)`
-                    }}
-                  >
-                    <div className="relative h-64 overflow-hidden">
-                      {property.image_url ? (
-                        <img 
-                          src={property.image_url} 
-                          alt={property.title} 
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-luxury-dark/50 flex items-center justify-center">
-                          <Building className="h-16 w-16 text-luxury-gold/20" />
-                        </div>
-                      )}
-                      {property.type && (
-                        <div className="absolute top-4 right-4 bg-luxury-gold text-luxury-black py-1 px-3 rounded-sm text-sm font-medium group-hover:scale-110 transition-transform">
-                          {property.type}
-                        </div>
-                      )}
-                    </div>
-                    
-                    <div className="p-6">
-                      <h3 className="text-xl font-bold mb-2 text-white group-hover:text-luxury-gold transition-colors">{property.title}</h3>
-                      
-                      {property.address && (
-                        <div className="flex items-center text-luxury-khaki mb-4">
-                          <MapPin className="h-4 w-4 mr-1 group-hover:text-luxury-gold transition-colors" />
-                          <span className="text-sm">{property.address}</span>
-                        </div>
-                      )}
-                      
-                      <div className="grid grid-cols-2 gap-4 mb-6">
-                        {property.size && property.size !== 'Unknown' && (
-                          <div>
-                            <p className="text-sm text-luxury-khaki/70">Size</p>
-                            <p className="font-medium text-white">{property.size}</p>
-                          </div>
-                        )}
-                        
-                        <div>
-                          <p className="text-sm text-luxury-khaki/70">Price</p>
-                          <p className="font-medium text-white">{property.price}</p>
-                        </div>
-                        
-                        {property.mls && (
-                          <div>
-                            <p className="text-sm text-luxury-khaki/70">MLS</p>
-                            <p className="font-medium text-white">{property.mls}</p>
-                          </div>
-                        )}
-                      </div>
-                      
-                      <Button variant="outline" className="w-full border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm group-hover:bg-luxury-gold/10 transition-all">
-                        View Details
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="space-y-6">
-                {currentProperties.map((property, index) => (
-                  <div 
-                    key={property.id} 
-                    className="bg-luxury-dark rounded-md overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 hover:shadow-luxury-gold/20 border border-luxury-khaki/10 group"
-                    style={{ 
-                      transitionDelay: `${index * 50}ms`
-                    }}
-                  >
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                      <div className="relative md:col-span-1 h-48 md:h-full overflow-hidden">
+              <div className="container">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+                  {currentProperties.map((property, index) => (
+                    <div 
+                      key={property.id} 
+                      className="bg-luxury-dark rounded-md overflow-hidden shadow-md hover:shadow-lg transition-all duration-500 hover:shadow-luxury-gold/20 hover:-translate-y-1 hover:scale-[1.01] border border-luxury-khaki/10 group h-[290px]"
+                      style={{ 
+                        transitionDelay: `${index * 50}ms`,
+                        transform: `translateY(${Math.min(10, Math.max(-10, (scrollY - 1200) * 0.02 * (index % 3 - 1)))}px)`
+                      }}
+                    >
+                      <div className="relative h-28 overflow-hidden">
                         {property.image_url ? (
                           <img 
                             src={property.image_url} 
@@ -312,55 +253,124 @@ const AllProperties = () => {
                           />
                         ) : (
                           <div className="w-full h-full bg-luxury-dark/50 flex items-center justify-center">
-                            <Building className="h-16 w-16 text-luxury-gold/20" />
+                            <Building className="h-10 w-10 text-luxury-gold/20" />
                           </div>
                         )}
-                        
                         {property.type && (
-                          <div className="absolute top-4 right-4 bg-luxury-gold text-luxury-black py-1 px-3 rounded-sm text-sm font-medium group-hover:scale-110 transition-transform">
+                          <div className="absolute top-2 right-2 bg-luxury-gold text-luxury-black py-0.5 px-2 rounded-sm text-xs font-medium group-hover:scale-110 transition-transform">
                             {property.type}
                           </div>
                         )}
                       </div>
                       
-                      <div className="p-6 md:col-span-3 flex flex-col justify-between">
-                        <div>
-                          <h3 className="text-xl font-bold mb-2 text-white group-hover:text-luxury-gold transition-colors">{property.title}</h3>
-                          {property.address && (
-                            <div className="flex items-center text-luxury-khaki mb-4">
-                              <MapPin className="h-4 w-4 mr-1 group-hover:text-luxury-gold transition-colors" />
-                              <span className="text-sm">{property.address}</span>
-                            </div>
-                          )}
-                        </div>
+                      <div className="p-3">
+                        <h3 className="text-sm font-bold mb-1 text-white group-hover:text-luxury-gold transition-colors truncate">{property.title}</h3>
                         
-                        <div className="grid grid-cols-3 gap-4 mb-6">
+                        {property.address && (
+                          <div className="flex items-center text-luxury-khaki mb-2">
+                            <MapPin className="h-3 w-3 mr-1 flex-shrink-0 group-hover:text-luxury-gold transition-colors" />
+                            <span className="text-xs truncate">{property.address}</span>
+                          </div>
+                        )}
+                        
+                        <div className="grid grid-cols-2 gap-2 mb-3">
                           {property.size && property.size !== 'Unknown' && (
                             <div>
-                              <p className="text-sm text-luxury-khaki/70">Size</p>
-                              <p className="font-medium text-white">{property.size}</p>
+                              <p className="text-xs text-luxury-khaki/70">Size</p>
+                              <p className="font-medium text-white text-xs">{property.size}</p>
                             </div>
                           )}
                           
                           <div>
-                            <p className="text-sm text-luxury-khaki/70">Price</p>
-                            <p className="font-medium text-white">{property.price}</p>
-                          </div>
-                          
-                          <div>
-                            <p className="text-sm text-luxury-khaki/70">Type</p>
-                            <p className="font-medium text-white">{property.type}</p>
+                            <p className="text-xs text-luxury-khaki/70">Price</p>
+                            <p className="font-medium text-white text-xs">{property.price}</p>
                           </div>
                           
                           {property.mls && (
                             <div>
-                              <p className="text-sm text-luxury-khaki/70">MLS</p>
-                              <p className="font-medium text-white">{property.mls}</p>
+                              <p className="text-xs text-luxury-khaki/70">MLS</p>
+                              <p className="font-medium text-white text-xs">{property.mls}</p>
                             </div>
                           )}
                         </div>
                         
-                        <Button variant="outline" className="w-fit border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm group-hover:bg-luxury-gold/10 transition-all">
+                        <Button variant="outline" size="sm" className="w-full text-xs py-0 h-7 border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm group-hover:bg-luxury-gold/10 transition-all">
+                          View Details
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="container space-y-4">
+                {currentProperties.map((property, index) => (
+                  <div 
+                    key={property.id} 
+                    className="bg-luxury-dark rounded-md overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 hover:shadow-luxury-gold/20 border border-luxury-khaki/10 group"
+                    style={{ 
+                      transitionDelay: `${index * 50}ms`
+                    }}
+                  >
+                    <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+                      <div className="relative md:col-span-1 h-32 md:h-full overflow-hidden">
+                        {property.image_url ? (
+                          <img 
+                            src={property.image_url} 
+                            alt={property.title} 
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-luxury-dark/50 flex items-center justify-center">
+                            <Building className="h-10 w-10 text-luxury-gold/20" />
+                          </div>
+                        )}
+                        
+                        {property.type && (
+                          <div className="absolute top-2 right-2 bg-luxury-gold text-luxury-black py-0.5 px-2 rounded-sm text-xs font-medium group-hover:scale-110 transition-transform">
+                            {property.type}
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className="p-4 md:col-span-4 flex flex-col justify-between">
+                        <div>
+                          <h3 className="text-base font-bold mb-1 text-white group-hover:text-luxury-gold transition-colors">{property.title}</h3>
+                          {property.address && (
+                            <div className="flex items-center text-luxury-khaki mb-2">
+                              <MapPin className="h-3 w-3 mr-1 group-hover:text-luxury-gold transition-colors" />
+                              <span className="text-xs">{property.address}</span>
+                            </div>
+                          )}
+                        </div>
+                        
+                        <div className="grid grid-cols-4 gap-3 mb-3">
+                          {property.size && property.size !== 'Unknown' && (
+                            <div>
+                              <p className="text-xs text-luxury-khaki/70">Size</p>
+                              <p className="font-medium text-white text-sm">{property.size}</p>
+                            </div>
+                          )}
+                          
+                          <div>
+                            <p className="text-xs text-luxury-khaki/70">Price</p>
+                            <p className="font-medium text-white text-sm">{property.price}</p>
+                          </div>
+                          
+                          <div>
+                            <p className="text-xs text-luxury-khaki/70">Type</p>
+                            <p className="font-medium text-white text-sm">{property.type}</p>
+                          </div>
+                          
+                          {property.mls && (
+                            <div>
+                              <p className="text-xs text-luxury-khaki/70">MLS</p>
+                              <p className="font-medium text-white text-sm">{property.mls}</p>
+                            </div>
+                          )}
+                        </div>
+                        
+                        <Button variant="outline" size="sm" className="w-fit text-sm h-8 border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm group-hover:bg-luxury-gold/10 transition-all">
                           View Details
                         </Button>
                       </div>
@@ -371,7 +381,7 @@ const AllProperties = () => {
             )}
             
             {totalPages > 1 && (
-              <div className="mt-12">
+              <div className="mt-8 container">
                 <Pagination>
                   <PaginationContent>
                     <PaginationItem>
@@ -405,10 +415,10 @@ const AllProperties = () => {
             )}
           </>
         ) : (
-          <div className="text-center py-12">
-            <Building className="mx-auto h-16 w-16 text-luxury-khaki/30 mb-4" />
-            <h3 className="text-2xl font-bold text-luxury-gold mb-2">No properties found</h3>
-            <p className="text-luxury-khaki mb-6">Try adjusting your search criteria or browse all properties.</p>
+          <div className="text-center py-10 container">
+            <Building className="mx-auto h-12 w-12 text-luxury-khaki/30 mb-3" />
+            <h3 className="text-xl font-bold text-luxury-gold mb-2">No properties found</h3>
+            <p className="text-luxury-khaki mb-4">Try adjusting your search criteria or browse all properties.</p>
             <Button 
               variant="outline" 
               className="border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm"
