@@ -61,6 +61,10 @@ const WebhookTester = () => {
         payloadToSend = samplePropertyPayload;
       }
       
+      // Log the payload to help debugging
+      console.log("Sending webhook to:", fullWebhookUrl);
+      console.log("With payload:", payloadToSend);
+      
       // This is just for testing - sending a webhook to our own endpoint
       const response = await fetch(fullWebhookUrl, {
         method: "POST",

@@ -45,36 +45,59 @@ serve(async (req: Request): Promise<Response> => {
     console.log("Webhook payload:", JSON.stringify(payload));
     
     // Check if payload contains property listings
-    // This assumes the webhook sends an array of properties or a single property object
-    if (payload && (Array.isArray(payload.properties) || payload.title)) {
-      const properties = Array.isArray(payload.properties) ? payload.properties : [payload];
+    // This handles both array of properties or a single property object
+    if (payload) {
+      let properties = [];
+      
+      if (Array.isArray(payload.properties)) {
+        // If payload has a 'properties' array
+        properties = payload.properties;
+      } else if (payload.title) {
+        // If payload is a single property object
+        properties = [payload];
+      } else if (typeof payload === 'object') {
+        // Try to handle arbitrary property format
+        properties = Array.isArray(payload) ? payload : [payload];
+      }
+      
+      console.log(`Processing ${properties.length} properties`);
       
       // Store each property in the database
       for (const property of properties) {
-        // Ensure the property has the minimum required fields
-        if (property.title) {
+        // Ensure the property has at least one required field
+        if (property.title || property.address) {
+          // Prepare data object with all possible fields
+          const propertyData = {
+            title: property.title || 'Untitled Property',
+            address: property.address || '',
+            type: property.type || 'Other',
+            size: property.size || '',
+            price: property.price || '',
+            image_url: property.image_url || '',
+            description: property.description || '',
+            featured: property.featured !== undefined ? property.featured : true,
+            mls: property.mls || null,
+            received_at: new Date().toISOString()
+          };
+          
+          console.log("Inserting property:", JSON.stringify(propertyData));
+          
           // Store in properties table
           const { data: insertedProperty, error } = await supabase
             .from('properties')
-            .insert({
-              title: property.title,
-              address: property.address || '',
-              type: property.type || 'Other',
-              size: property.size || '',
-              price: property.price || '',
-              image_url: property.image_url || '',
-              description: property.description || '',
-              featured: property.featured || true,
-              received_at: new Date().toISOString()
-            });
+            .insert(propertyData);
             
           if (error) {
             console.error("Error storing property:", error);
           } else {
-            console.log("Property stored successfully:", property.title);
+            console.log("Property stored successfully:", propertyData.title);
           }
+        } else {
+          console.log("Skipping property without title or address:", JSON.stringify(property));
         }
       }
+    } else {
+      console.log("No valid property data found in payload");
     }
     
     // Return a successful response
