@@ -1,3 +1,4 @@
+
 import { useRef, useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent } from "@/components/ui/card";
@@ -142,28 +143,26 @@ const PropertiesSection = () => {
                             {property.type}
                           </div>
                         </div>
-                        <CardContent className="p-4 flex flex-col h-[calc(400px-256px)]">
-                          <div>
+                        <CardContent className="p-4 flex flex-col justify-between h-[calc(400px-256px)]">
+                          <div className="space-y-1">
                             {property.price && (
-                              <p className="font-bold text-luxury-gold text-3xl mb-2 leading-tight">{property.price}</p>
+                              <p className="font-bold text-luxury-gold text-3xl mb-1 leading-tight">{property.price}</p>
                             )}
                             <h3 className="text-sm font-medium text-white mb-1 truncate">{property.title}</h3>
                             {property.address && (
-                              <div className="flex items-center text-luxury-khaki mb-3">
+                              <div className="flex items-center text-luxury-khaki">
                                 <MapPin className="h-3 w-3 mr-1 flex-shrink-0 group-hover:text-luxury-gold transition-colors" />
                                 <span className="text-xs truncate">{property.address}</span>
                               </div>
                             )}
                           </div>
                           
-                          <div>
-                            {property.mls && (
-                              <div>
-                                <p className="text-xs text-luxury-khaki/70">MLS</p>
-                                <p className="font-medium text-white text-sm">{property.mls}</p>
-                              </div>
-                            )}
-                          </div>
+                          {property.mls && (
+                            <div className="mt-2">
+                              <p className="text-xs text-luxury-khaki/70">MLS</p>
+                              <p className="font-medium text-white text-sm">{property.mls}</p>
+                            </div>
+                          )}
                         </CardContent>
                       </Card>
                     </CarouselItem>
