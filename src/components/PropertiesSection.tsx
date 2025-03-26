@@ -1,9 +1,17 @@
+
 import { useRef, useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Building, MapPin, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { 
+  Carousel, 
+  CarouselContent, 
+  CarouselItem, 
+  CarouselNext, 
+  CarouselPrevious 
+} from "@/components/ui/carousel";
 
 type Property = {
   id: string;
@@ -39,7 +47,7 @@ const PropertiesSection = () => {
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        // Fetch featured properties from Supabase, limited to 6
+        // Fetch featured properties from Supabase, limited to 6 to have enough for the carousel
         const { data, error } = await supabase
           .from('properties')
           .select('*')
@@ -85,14 +93,15 @@ const PropertiesSection = () => {
     };
   }, []);
   
-  return <section id="properties" ref={sectionRef} className="section bg-black relative overflow-hidden py-[45px]">
+  return (
+    <section id="properties" ref={sectionRef} className="section bg-black relative overflow-hidden py-[45px]">
       <div className="absolute top-0 left-0 w-24 h-24 rounded-full bg-luxury-gold/5 -translate-x-1/2 parallax-layer" style={{
       transform: `translateX(${scrollY * 0.03}px) translateY(${scrollY * 0.02}px)`
-    }}>
+      }}>
       </div>
       <div className="absolute bottom-20 right-0 w-40 h-40 rounded-full bg-luxury-gold/10 translate-x-1/2 parallax-layer" style={{
       transform: `translateX(${-scrollY * 0.04}px) translateY(${-scrollY * 0.01}px)`
-    }}>
+      }}>
       </div>
       
       <div className="container relative z-10">
@@ -110,54 +119,68 @@ const PropertiesSection = () => {
             </div>
           ) : properties.length > 0 ? (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {properties.map((property) => (
-                  <Card key={property.id} className="bg-luxury-dark/90 backdrop-blur-sm border-luxury-gold/10 hover:border-luxury-gold/20 transition-all duration-300 hover:shadow-lg group">
-                    <div className="relative h-48 overflow-hidden">
-                      {property.image_url ? (
-                        <img 
-                          src={property.image_url} 
-                          alt={property.title} 
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-luxury-dark flex items-center justify-center">
-                          <Building className="h-12 w-12 text-luxury-gold/20" />
-                        </div>
-                      )}
-                      <div className="absolute top-4 right-4 bg-luxury-gold text-luxury-black py-1 px-3 rounded-sm text-sm font-medium">
-                        {property.type}
-                      </div>
-                    </div>
-                    <CardContent className="p-5">
-                      <h3 className="text-lg font-bold mb-2 text-white group-hover:text-luxury-gold transition-colors">{property.title}</h3>
-                      {property.address && (
-                        <div className="flex items-center text-luxury-khaki mb-4">
-                          <MapPin className="h-4 w-4 mr-1 group-hover:text-luxury-gold transition-colors" />
-                          <span className="text-sm">{property.address}</span>
-                        </div>
-                      )}
-                      <div className="grid grid-cols-2 gap-4 mb-4">
-                        {property.size && (
-                          <div>
-                            <p className="text-sm text-luxury-khaki/70">Size</p>
-                            <p className="font-medium text-white">{property.size}</p>
+              <Carousel
+                opts={{
+                  align: "start",
+                  loop: true,
+                }}
+                className="w-full"
+              >
+                <CarouselContent className="-ml-2 md:-ml-4">
+                  {properties.map((property) => (
+                    <CarouselItem key={property.id} className="pl-2 md:pl-4 md:basis-1/3 lg:basis-1/3">
+                      <Card className="bg-luxury-dark/90 backdrop-blur-sm border-luxury-gold/10 hover:border-luxury-gold/20 transition-all duration-300 hover:shadow-lg group">
+                        <div className="relative h-48 overflow-hidden">
+                          {property.image_url ? (
+                            <img 
+                              src={property.image_url} 
+                              alt={property.title} 
+                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-luxury-dark flex items-center justify-center">
+                              <Building className="h-12 w-12 text-luxury-gold/20" />
+                            </div>
+                          )}
+                          <div className="absolute top-4 right-4 bg-luxury-gold text-luxury-black py-1 px-3 rounded-sm text-sm font-medium">
+                            {property.type}
                           </div>
-                        )}
-                        {property.price && (
-                          <div>
-                            <p className="text-sm text-luxury-khaki/70">Price</p>
-                            <p className="font-medium text-white">{property.price}</p>
+                        </div>
+                        <CardContent className="p-5">
+                          <h3 className="text-lg font-bold mb-2 text-white group-hover:text-luxury-gold transition-colors">{property.title}</h3>
+                          {property.address && (
+                            <div className="flex items-center text-luxury-khaki mb-4">
+                              <MapPin className="h-4 w-4 mr-1 group-hover:text-luxury-gold transition-colors" />
+                              <span className="text-sm">{property.address}</span>
+                            </div>
+                          )}
+                          <div className="grid grid-cols-2 gap-4 mb-4">
+                            {property.size && (
+                              <div>
+                                <p className="text-sm text-luxury-khaki/70">Size</p>
+                                <p className="font-medium text-white">{property.size}</p>
+                              </div>
+                            )}
+                            {property.price && (
+                              <div>
+                                <p className="text-sm text-luxury-khaki/70">Price</p>
+                                <p className="font-medium text-white">{property.price}</p>
+                              </div>
+                            )}
                           </div>
-                        )}
-                      </div>
-                      <Button variant="outline" className="w-full border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm group-hover:bg-luxury-gold/10 transition-all">
-                        View Details
-                      </Button>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+                          <Button variant="outline" className="w-full border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm group-hover:bg-luxury-gold/10 transition-all">
+                            View Details
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <div className="flex justify-center mt-8 gap-4">
+                  <CarouselPrevious className="static translate-y-0 border-luxury-gold text-luxury-gold hover:text-luxury-black hover:bg-luxury-gold" />
+                  <CarouselNext className="static translate-y-0 border-luxury-gold text-luxury-gold hover:text-luxury-black hover:bg-luxury-gold" />
+                </div>
+              </Carousel>
               
               {/* Show All Properties Button */}
               <div className="mt-10 text-center">
@@ -190,7 +213,8 @@ const PropertiesSection = () => {
           )}
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
 
 export default PropertiesSection;
