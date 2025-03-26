@@ -36,32 +36,8 @@ const PropertiesSection = () => {
           </p>
         </div>
         
-        <div className="w-full bg-luxury-dark/90 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg border border-luxury-gold/10 hover:border-luxury-gold/20 transition-all duration-300">
-          <iframe 
-            src="https://www.immobel.com/Josh" 
-            width="100%" 
-            height="900px" 
-            className="border-0"
-            title="Josh Rader IDX Property Listings"
-            loading="lazy"
-          ></iframe>
-          
-          <style>
-            {`
-            iframe {
-              width: 100%;
-              height: 900px;
-              border: none;
-            }
-            
-            iframe body .header, 
-            iframe body .menu, 
-            iframe body .footer, 
-            iframe body .sidebar {
-              display: none !important;
-            }
-            `}
-          </style>
+        <div className="w-full bg-luxury-dark/90 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg border border-luxury-gold/10 hover:border-luxury-gold/20 transition-all duration-300 min-h-[300px] flex items-center justify-center">
+          {/* Empty container where the iframe used to be */}
         </div>
       </div>
     </section>;
