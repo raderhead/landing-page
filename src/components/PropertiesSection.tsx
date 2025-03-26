@@ -1,27 +1,8 @@
 
 import { useRef, useEffect, useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Building, MapPin } from "lucide-react";
-
-type Property = {
-  id: string;
-  title: string;
-  address: string;
-  type: string;
-  size: string;
-  price: string;
-  image_url: string | null;
-  description: string | null;
-  featured: boolean;
-  received_at: string;
-};
 
 const PropertiesSection = () => {
   const [scrollY, setScrollY] = useState(0);
-  const [properties, setProperties] = useState<Property[]>([]);
-  const [loading, setLoading] = useState(true);
   const sectionRef = useRef<HTMLElement>(null);
   
   useEffect(() => {
@@ -35,53 +16,6 @@ const PropertiesSection = () => {
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-  
-  useEffect(() => {
-    const fetchProperties = async () => {
-      try {
-        // Fetch featured properties from Supabase
-        const { data, error } = await supabase
-          .from('properties')
-          .select('*')
-          .eq('featured', true)
-          .order('received_at', { ascending: false });
-        
-        if (error) {
-          console.error('Error fetching properties:', error);
-          setProperties([]);
-        } else {
-          console.log('Properties loaded:', data?.length || 0);
-          console.log('Sample property:', data && data.length > 0 ? data[0] : 'No properties');
-          setProperties(data || []);
-        }
-      } catch (error) {
-        console.error('Error in properties fetch:', error);
-        setProperties([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    fetchProperties();
-    
-    // Set up a realtime subscription to update properties when new ones are added
-    const channel = supabase
-      .channel('public:properties')
-      .on('postgres_changes', 
-        { event: 'INSERT', schema: 'public', table: 'properties' }, 
-        (payload) => {
-          console.log('New property received:', payload.new);
-          // Add the new property to the list if it's featured
-          if (payload.new && payload.new.featured) {
-            setProperties(current => [payload.new as Property, ...current]);
-          }
-        })
-      .subscribe();
-      
-    return () => {
-      supabase.removeChannel(channel);
-    };
   }, []);
   
   return <section id="properties" ref={sectionRef} className="section bg-black relative overflow-hidden py-[45px]">
@@ -102,84 +36,8 @@ const PropertiesSection = () => {
           </p>
         </div>
         
-        <div className="w-full rounded-lg overflow-hidden">
-          {loading ? (
-            <div className="bg-luxury-dark/90 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg border border-luxury-gold/10 min-h-[300px] flex items-center justify-center">
-              <div className="text-luxury-gold animate-pulse">Loading properties...</div>
-            </div>
-          ) : properties.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {properties.map((property) => (
-                <Card key={property.id} className="bg-luxury-dark/90 backdrop-blur-sm border-luxury-gold/10 hover:border-luxury-gold/20 transition-all duration-300 hover:shadow-lg group">
-                  <div className="relative h-48 overflow-hidden">
-                    {property.image_url ? (
-                      <img 
-                        src={property.image_url} 
-                        alt={property.title} 
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                        onError={(e) => {
-                          // If image fails to load, show fallback
-                          (e.target as HTMLImageElement).style.display = 'none';
-                          (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
-                        }}
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-luxury-dark flex items-center justify-center">
-                        <Building className="h-12 w-12 text-luxury-gold/20" />
-                      </div>
-                    )}
-                    <div className="hidden absolute inset-0 w-full h-full bg-luxury-dark flex items-center justify-center">
-                      <Building className="h-12 w-12 text-luxury-gold/20" />
-                    </div>
-                    <div className="absolute top-4 right-4 bg-luxury-gold text-luxury-black py-1 px-3 rounded-sm text-sm font-medium">
-                      {property.type}
-                    </div>
-                  </div>
-                  <CardContent className="p-5">
-                    <h3 className="text-lg font-bold mb-2 text-white group-hover:text-luxury-gold transition-colors">{property.title}</h3>
-                    {property.address && (
-                      <div className="flex items-center text-luxury-khaki mb-4">
-                        <MapPin className="h-4 w-4 mr-1 group-hover:text-luxury-gold transition-colors" />
-                        <span className="text-sm">{property.address}</span>
-                      </div>
-                    )}
-                    <div className="grid grid-cols-2 gap-4 mb-4">
-                      {property.size && (
-                        <div>
-                          <p className="text-sm text-luxury-khaki/70">Size</p>
-                          <p className="font-medium text-white">{property.size}</p>
-                        </div>
-                      )}
-                      {property.price && (
-                        <div>
-                          <p className="text-sm text-luxury-khaki/70">Price</p>
-                          <p className="font-medium text-white">{property.price}</p>
-                        </div>
-                      )}
-                    </div>
-                    <Button variant="outline" className="w-full border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm group-hover:bg-luxury-gold/10 transition-all">
-                      View Details
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          ) : (
-            <div className="bg-luxury-dark/90 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg border border-luxury-gold/10 min-h-[300px] flex flex-col items-center justify-center p-6 text-center">
-              <Building className="h-16 w-16 text-luxury-gold/30 mb-4" />
-              <h3 className="text-xl font-bold text-luxury-gold mb-2">No Properties Found</h3>
-              <p className="text-luxury-khaki mb-4">
-                Use the Webhook Tester to send property data to populate this section.
-              </p>
-              <Button 
-                variant="outline" 
-                className="border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black"
-                onClick={() => window.location.href = '/webhooks'}
-              >
-                Go to Webhook Tester
-              </Button>
-            </div>
-          )}
+        <div className="w-full bg-luxury-dark/90 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg border border-luxury-gold/10 hover:border-luxury-gold/20 transition-all duration-300 min-h-[300px] flex items-center justify-center">
+          {/* Empty container where the iframe used to be */}
         </div>
       </div>
     </section>;
