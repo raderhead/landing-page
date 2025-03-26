@@ -66,8 +66,24 @@ const WebhookTester = () => {
       featured: true
     }
   ];
+  
+  // Sample for MLS data format
+  const sampleMLSPayload = [
+    {
+      "address": "2600 Ivanhoe Lane, Abilene Texas, 79605 USA",
+      "mls": "20835911",
+      "price": "4,000,000",
+      "image": "https://ntreis.immobel.com/img/369026/04/06/189811201_1.jpg"
+    },
+    {
+      "address": "5265 Willow Wood Drive, Abilene Texas, 79606 USA",
+      "mls": "20816564",
+      "price": "2,760,000",
+      "image": "https://ntreis.immobel.com/img/369026/14/0f/189574583_1.jpg"
+    }
+  ];
 
-  const [payloadType, setPayloadType] = useState<'single' | 'multiple'>('single');
+  const [payloadType, setPayloadType] = useState<'single' | 'multiple' | 'mls'>('single');
 
   const generateTestWebhook = async () => {
     try {
@@ -85,7 +101,13 @@ const WebhookTester = () => {
           return;
         }
       } else {
-        payloadToSend = payloadType === 'single' ? samplePropertyPayload : sampleMultiplePayload;
+        if (payloadType === 'single') {
+          payloadToSend = samplePropertyPayload;
+        } else if (payloadType === 'multiple') {
+          payloadToSend = sampleMultiplePayload;
+        } else {
+          payloadToSend = sampleMLSPayload;
+        }
       }
       
       // This is just for testing - sending a webhook to our own endpoint
@@ -112,7 +134,7 @@ const WebhookTester = () => {
       toast({
         title: result.success ? "Success" : "Error",
         description: result.success 
-          ? "Property data sent successfully! Check the Featured Properties section." 
+          ? `Property data sent successfully! ${result.processed || ''} properties processed.` 
           : `Error sending webhook: ${result.error}`,
         variant: result.success ? "default" : "destructive",
       });
@@ -178,6 +200,13 @@ const WebhookTester = () => {
                   >
                     Multiple Properties
                   </Button>
+                  <Button 
+                    variant={payloadType === 'mls' ? "secondary" : "outline"}
+                    size="sm" 
+                    onClick={() => setPayloadType('mls')}
+                  >
+                    MLS Format
+                  </Button>
                 </div>
               )}
             </div>
@@ -195,7 +224,7 @@ const WebhookTester = () => {
                 placeholder="Enter custom JSON payload"
               />
               <p className="text-sm text-muted-foreground mt-2">
-                Enter a valid JSON with property data. Must include at least a "title" field.
+                Enter a valid JSON with property data. Must include at least a "title" field or address and MLS number.
               </p>
             </div>
           )}
@@ -206,7 +235,14 @@ const WebhookTester = () => {
                 <AccordionTrigger>View Sample Payload</AccordionTrigger>
                 <AccordionContent>
                   <pre className="p-3 bg-muted rounded-md text-xs overflow-auto">
-                    {JSON.stringify(payloadType === 'single' ? samplePropertyPayload : sampleMultiplePayload, null, 2)}
+                    {JSON.stringify(
+                      payloadType === 'single' 
+                        ? samplePropertyPayload 
+                        : payloadType === 'multiple'
+                          ? sampleMultiplePayload
+                          : sampleMLSPayload, 
+                      null, 2
+                    )}
                   </pre>
                 </AccordionContent>
               </AccordionItem>
@@ -234,8 +270,13 @@ const WebhookTester = () => {
             <TableBody>
               <TableRow>
                 <TableCell className="font-medium">title</TableCell>
-                <TableCell>Yes</TableCell>
+                <TableCell>One of these is required</TableCell>
                 <TableCell>The name of the property</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className="font-medium">mls</TableCell>
+                <TableCell>One of these is required</TableCell>
+                <TableCell>MLS number (if title is missing, "MLS #123" will be used)</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell className="font-medium">address</TableCell>
@@ -258,7 +299,7 @@ const WebhookTester = () => {
                 <TableCell>Asking price or rent</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell className="font-medium">image_url</TableCell>
+                <TableCell className="font-medium">image_url or image</TableCell>
                 <TableCell>No</TableCell>
                 <TableCell>URL to the property image</TableCell>
               </TableRow>

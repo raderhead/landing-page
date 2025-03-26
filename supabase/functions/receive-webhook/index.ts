@@ -42,63 +42,65 @@ serve(async (req: Request): Promise<Response> => {
       };
     }
 
-    console.log("Webhook payload:", JSON.stringify(payload));
+    console.log("Webhook payload received:", JSON.stringify(payload).substring(0, 200) + "...");
     
-    // Check if payload contains property listings
-    // This handles both arrays of properties and single property objects
-    if (payload) {
-      let properties = [];
+    // Process properties - handle multiple formats
+    let properties = [];
+    
+    // Case 1: Array of properties
+    if (Array.isArray(payload)) {
+      console.log("Processing array of properties");
+      properties = payload;
+    } 
+    // Case 2: Object with properties array
+    else if (payload && Array.isArray(payload.properties)) {
+      console.log("Processing object with properties array");
+      properties = payload.properties;
+    }
+    // Case 3: Single property object
+    else if (payload && typeof payload === 'object') {
+      console.log("Processing single property object");
+      properties = [payload];
+    }
+    
+    console.log(`Processing ${properties.length} properties`);
+    
+    // Store each property in the database
+    for (const property of properties) {
+      // For your specific format (MLS data)
+      const propertyData = {
+        title: property.title || `MLS #${property.mls || "Unknown"}`,
+        address: property.address || '',
+        type: property.type || 'Residential',
+        size: property.size || '',
+        price: property.price || '',
+        image_url: property.image || property.image_url || null,
+        description: property.description || `MLS #${property.mls || ""}`,
+        featured: property.featured !== undefined ? property.featured : true,
+        received_at: new Date().toISOString()
+      };
+
+      console.log("Storing property:", JSON.stringify(propertyData).substring(0, 200));
       
-      // Handle array of properties
-      if (Array.isArray(payload.properties)) {
-        properties = payload.properties;
+      // Store in properties table
+      const { data: insertedProperty, error } = await supabase
+        .from('properties')
+        .insert(propertyData);
+        
+      if (error) {
+        console.error("Error storing property:", error);
+      } else {
+        console.log("Property stored successfully:", propertyData.title);
       }
-      // Handle single property as root object
-      else if (payload.title) {
-        properties = [payload];
-      }
-      // Handle array at root level
-      else if (Array.isArray(payload)) {
-        properties = payload;
-      }
-      
-      console.log(`Processing ${properties.length} properties`);
-      
-      // Store each property in the database
-      for (const property of properties) {
-        // Ensure the property has the minimum required fields
-        if (property && property.title) {
-          // Store in properties table
-          const { data: insertedProperty, error } = await supabase
-            .from('properties')
-            .insert({
-              title: property.title,
-              address: property.address || '',
-              type: property.type || 'Other',
-              size: property.size || '',
-              price: property.price || '',
-              image_url: property.image_url || null,
-              description: property.description || null,
-              featured: property.featured !== undefined ? property.featured : true,
-              received_at: new Date().toISOString()
-            });
-            
-          if (error) {
-            console.error("Error storing property:", error);
-          } else {
-            console.log("Property stored successfully:", property.title);
-          }
-        } else {
-          console.warn("Skipped invalid property without title:", property);
-        }
-      }
-    } else {
-      console.warn("No valid property data found in payload");
     }
     
     // Return a successful response
     return new Response(
-      JSON.stringify({ success: true, message: "Webhook received successfully" }),
+      JSON.stringify({ 
+        success: true, 
+        message: "Webhook received successfully", 
+        processed: properties.length 
+      }),
       {
         status: 200,
         headers: { 
