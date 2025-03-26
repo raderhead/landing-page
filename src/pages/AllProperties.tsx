@@ -265,11 +265,20 @@ const AllProperties = () => {
                       
                       <div className="p-4 flex flex-col justify-between h-[calc(400px-256px)]">
                         <div className="space-y-2">
-                          {property.price && (
-                            <p className="font-bold text-luxury-gold text-3xl mb-1 leading-tight">
-                              {property.price.startsWith('$') ? property.price : `$${property.price}`}
-                            </p>
-                          )}
+                          <div className="flex items-center justify-between">
+                            {property.price && (
+                              <p className="font-bold text-luxury-gold text-3xl mb-1 leading-tight">
+                                {property.price.startsWith('$') ? property.price : `$${property.price}`}
+                              </p>
+                            )}
+                            
+                            {property.mls && (
+                              <div>
+                                <p className="text-xs text-luxury-khaki/70">MLS</p>
+                                <p className="font-medium text-white text-sm">{property.mls}</p>
+                              </div>
+                            )}
+                          </div>
                           
                           {property.address && (
                             <p className="text-base md:text-lg font-medium text-white">
@@ -277,13 +286,6 @@ const AllProperties = () => {
                             </p>
                           )}
                         </div>
-                        
-                        {property.mls && (
-                          <div className="mt-2">
-                            <p className="text-xs text-luxury-khaki/70">MLS</p>
-                            <p className="font-medium text-white text-sm">{property.mls}</p>
-                          </div>
-                        )}
                       </div>
                     </div>
                   ))}
@@ -322,11 +324,20 @@ const AllProperties = () => {
                       
                       <div className="p-4 md:col-span-3 flex flex-col justify-between">
                         <div>
-                          {property.price && (
-                            <p className="font-bold text-luxury-gold text-3xl mb-2 leading-tight">
-                              {property.price.startsWith('$') ? property.price : `$${property.price}`}
-                            </p>
-                          )}
+                          <div className="flex items-center justify-between mb-2">
+                            {property.price && (
+                              <p className="font-bold text-luxury-gold text-3xl leading-tight">
+                                {property.price.startsWith('$') ? property.price : `$${property.price}`}
+                              </p>
+                            )}
+                            
+                            {property.mls && (
+                              <div>
+                                <p className="text-xs text-luxury-khaki/70">MLS</p>
+                                <p className="font-medium text-white text-sm">{property.mls}</p>
+                              </div>
+                            )}
+                          </div>
                           
                           {property.address && (
                             <p className="text-lg md:text-xl font-medium text-white mb-3">
@@ -341,13 +352,6 @@ const AllProperties = () => {
                               <div>
                                 <p className="text-xs text-luxury-khaki/70">Size</p>
                                 <p className="font-medium text-white text-sm">{property.size}</p>
-                              </div>
-                            )}
-                            
-                            {property.mls && (
-                              <div>
-                                <p className="text-xs text-luxury-khaki/70">MLS</p>
-                                <p className="font-medium text-white text-sm">{property.mls}</p>
                               </div>
                             )}
                           </div>
