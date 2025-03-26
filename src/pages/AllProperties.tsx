@@ -234,17 +234,17 @@ const AllProperties = () => {
           <>
             {viewMode === "grid" ? (
               <div className="container">
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">
                   {currentProperties.map((property, index) => (
                     <div 
                       key={property.id} 
-                      className="bg-luxury-dark rounded-md overflow-hidden shadow-md hover:shadow-lg transition-all duration-500 hover:shadow-luxury-gold/20 hover:-translate-y-1 hover:scale-[1.01] border border-luxury-khaki/10 group h-[290px]"
+                      className="bg-luxury-dark rounded-md overflow-hidden shadow-md hover:shadow-lg transition-all duration-500 hover:shadow-luxury-gold/20 hover:-translate-y-1 hover:scale-[1.01] border border-luxury-khaki/10 group h-[360px]"
                       style={{ 
                         transitionDelay: `${index * 50}ms`,
                         transform: `translateY(${Math.min(10, Math.max(-10, (scrollY - 1200) * 0.02 * (index % 3 - 1)))}px)`
                       }}
                     >
-                      <div className="relative h-28 overflow-hidden">
+                      <div className="relative h-48 overflow-hidden">
                         {property.image_url ? (
                           <img 
                             src={property.image_url} 
@@ -253,48 +253,43 @@ const AllProperties = () => {
                           />
                         ) : (
                           <div className="w-full h-full bg-luxury-dark/50 flex items-center justify-center">
-                            <Building className="h-10 w-10 text-luxury-gold/20" />
+                            <Building className="h-12 w-12 text-luxury-gold/20" />
                           </div>
                         )}
                         {property.type && (
-                          <div className="absolute top-2 right-2 bg-luxury-gold text-luxury-black py-0.5 px-2 rounded-sm text-xs font-medium group-hover:scale-110 transition-transform">
+                          <div className="absolute top-2 right-2 bg-luxury-gold text-luxury-black py-1 px-2 rounded-sm text-xs font-medium">
                             {property.type}
                           </div>
                         )}
                       </div>
                       
-                      <div className="p-3">
-                        <h3 className="text-sm font-bold mb-1 text-white group-hover:text-luxury-gold transition-colors truncate">{property.title}</h3>
+                      <div className="p-4 flex flex-col h-[172px]">
+                        <h3 className="text-lg font-bold mb-1 text-white group-hover:text-luxury-gold transition-colors truncate">{property.title}</h3>
                         
                         {property.address && (
-                          <div className="flex items-center text-luxury-khaki mb-2">
+                          <div className="flex items-center text-luxury-khaki mb-3">
                             <MapPin className="h-3 w-3 mr-1 flex-shrink-0 group-hover:text-luxury-gold transition-colors" />
-                            <span className="text-xs truncate">{property.address}</span>
+                            <span className="text-sm truncate">{property.address}</span>
                           </div>
                         )}
                         
-                        <div className="grid grid-cols-2 gap-2 mb-3">
-                          {property.size && property.size !== 'Unknown' && (
+                        <div className="grid grid-cols-2 gap-4 mb-3 mt-auto">
+                          {property.price && (
                             <div>
-                              <p className="text-xs text-luxury-khaki/70">Size</p>
-                              <p className="font-medium text-white text-xs">{property.size}</p>
+                              <p className="text-xs text-luxury-khaki/70">Price</p>
+                              <p className="font-medium text-white text-base">{property.price}</p>
                             </div>
                           )}
-                          
-                          <div>
-                            <p className="text-xs text-luxury-khaki/70">Price</p>
-                            <p className="font-medium text-white text-xs">{property.price}</p>
-                          </div>
                           
                           {property.mls && (
                             <div>
                               <p className="text-xs text-luxury-khaki/70">MLS</p>
-                              <p className="font-medium text-white text-xs">{property.mls}</p>
+                              <p className="font-medium text-white text-base">{property.mls}</p>
                             </div>
                           )}
                         </div>
                         
-                        <Button variant="outline" size="sm" className="w-full text-xs py-0 h-7 border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm group-hover:bg-luxury-gold/10 transition-all">
+                        <Button variant="outline" className="w-full text-sm py-1 mt-2 border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm group-hover:bg-luxury-gold/10 transition-all">
                           View Details
                         </Button>
                       </div>
@@ -313,7 +308,7 @@ const AllProperties = () => {
                     }}
                   >
                     <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
-                      <div className="relative md:col-span-1 h-32 md:h-full overflow-hidden">
+                      <div className="relative md:col-span-2 h-48 md:h-auto overflow-hidden">
                         {property.image_url ? (
                           <img 
                             src={property.image_url} 
@@ -322,55 +317,50 @@ const AllProperties = () => {
                           />
                         ) : (
                           <div className="w-full h-full bg-luxury-dark/50 flex items-center justify-center">
-                            <Building className="h-10 w-10 text-luxury-gold/20" />
+                            <Building className="h-12 w-12 text-luxury-gold/20" />
                           </div>
                         )}
                         
                         {property.type && (
-                          <div className="absolute top-2 right-2 bg-luxury-gold text-luxury-black py-0.5 px-2 rounded-sm text-xs font-medium group-hover:scale-110 transition-transform">
+                          <div className="absolute top-2 right-2 bg-luxury-gold text-luxury-black py-1 px-2 rounded-sm text-xs font-medium">
                             {property.type}
                           </div>
                         )}
                       </div>
                       
-                      <div className="p-4 md:col-span-4 flex flex-col justify-between">
+                      <div className="p-4 md:col-span-3 flex flex-col justify-between">
                         <div>
-                          <h3 className="text-base font-bold mb-1 text-white group-hover:text-luxury-gold transition-colors">{property.title}</h3>
+                          <h3 className="text-xl font-bold mb-1 text-white group-hover:text-luxury-gold transition-colors">{property.title}</h3>
                           {property.address && (
-                            <div className="flex items-center text-luxury-khaki mb-2">
+                            <div className="flex items-center text-luxury-khaki mb-3">
                               <MapPin className="h-3 w-3 mr-1 group-hover:text-luxury-gold transition-colors" />
-                              <span className="text-xs">{property.address}</span>
+                              <span className="text-sm">{property.address}</span>
                             </div>
                           )}
                         </div>
                         
-                        <div className="grid grid-cols-4 gap-3 mb-3">
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-3 mt-3">
                           {property.size && property.size !== 'Unknown' && (
                             <div>
                               <p className="text-xs text-luxury-khaki/70">Size</p>
-                              <p className="font-medium text-white text-sm">{property.size}</p>
+                              <p className="font-medium text-white text-base">{property.size}</p>
                             </div>
                           )}
                           
                           <div>
                             <p className="text-xs text-luxury-khaki/70">Price</p>
-                            <p className="font-medium text-white text-sm">{property.price}</p>
-                          </div>
-                          
-                          <div>
-                            <p className="text-xs text-luxury-khaki/70">Type</p>
-                            <p className="font-medium text-white text-sm">{property.type}</p>
+                            <p className="font-medium text-white text-base">{property.price}</p>
                           </div>
                           
                           {property.mls && (
                             <div>
                               <p className="text-xs text-luxury-khaki/70">MLS</p>
-                              <p className="font-medium text-white text-sm">{property.mls}</p>
+                              <p className="font-medium text-white text-base">{property.mls}</p>
                             </div>
                           )}
                         </div>
                         
-                        <Button variant="outline" size="sm" className="w-fit text-sm h-8 border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm group-hover:bg-luxury-gold/10 transition-all">
+                        <Button variant="outline" className="w-fit text-sm px-6 h-9 mt-2 border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm group-hover:bg-luxury-gold/10 transition-all">
                           View Details
                         </Button>
                       </div>
