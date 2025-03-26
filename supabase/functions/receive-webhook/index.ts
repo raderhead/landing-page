@@ -44,21 +44,38 @@ serve(async (req: Request): Promise<Response> => {
 
     console.log("Webhook payload:", JSON.stringify(payload));
     
-    // Store the webhook data in Supabase (if you want persistence)
-    // Uncomment and modify this code when you have a webhooks table
-    /*
-    const { data, error } = await supabase
-      .from('webhooks')
-      .insert({
-        source: url.pathname.split('/').pop() || 'unknown',
-        payload: payload,
-        received_at: new Date(),
-      });
+    // Check if payload contains property listings
+    // This assumes the webhook sends an array of properties or a single property object
+    if (payload && (Array.isArray(payload.properties) || payload.title)) {
+      const properties = Array.isArray(payload.properties) ? payload.properties : [payload];
       
-    if (error) {
-      console.error("Error storing webhook:", error);
+      // Store each property in the database
+      for (const property of properties) {
+        // Ensure the property has the minimum required fields
+        if (property.title) {
+          // Store in properties table
+          const { data: insertedProperty, error } = await supabase
+            .from('properties')
+            .insert({
+              title: property.title,
+              address: property.address || '',
+              type: property.type || 'Other',
+              size: property.size || '',
+              price: property.price || '',
+              image_url: property.image_url || '',
+              description: property.description || '',
+              featured: property.featured || true,
+              received_at: new Date().toISOString()
+            });
+            
+          if (error) {
+            console.error("Error storing property:", error);
+          } else {
+            console.log("Property stored successfully:", property.title);
+          }
+        }
+      }
     }
-    */
     
     // Return a successful response
     return new Response(
