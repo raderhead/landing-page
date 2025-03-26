@@ -146,7 +146,9 @@ const PropertiesSection = () => {
                         <CardContent className="p-4 flex flex-col justify-between h-[calc(400px-256px)]">
                           <div className="space-y-1">
                             {property.price && (
-                              <p className="font-bold text-luxury-gold text-3xl mb-1 leading-tight">{property.price}</p>
+                              <p className="font-bold text-luxury-gold text-3xl mb-1 leading-tight">
+                                {property.price.startsWith('$') ? property.price : `$${property.price}`}
+                              </p>
                             )}
                             <h3 className="text-sm font-medium text-white mb-1 truncate">{property.title}</h3>
                             {property.address && (
