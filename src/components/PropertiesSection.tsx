@@ -51,6 +51,8 @@ const PropertiesSection = () => {
           console.error('Error fetching properties:', error);
           setProperties([]);
         } else {
+          console.log('Properties loaded:', data?.length || 0);
+          console.log('Sample property:', data && data.length > 0 ? data[0] : 'No properties');
           setProperties(data || []);
         }
       } catch (error) {
@@ -69,6 +71,7 @@ const PropertiesSection = () => {
       .on('postgres_changes', 
         { event: 'INSERT', schema: 'public', table: 'properties' }, 
         (payload) => {
+          console.log('New property received:', payload.new);
           // Add the new property to the list if it's featured
           if (payload.new && payload.new.featured) {
             setProperties(current => [payload.new as Property, ...current]);
@@ -114,12 +117,20 @@ const PropertiesSection = () => {
                         src={property.image_url} 
                         alt={property.title} 
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        onError={(e) => {
+                          // If image fails to load, show fallback
+                          (e.target as HTMLImageElement).style.display = 'none';
+                          (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+                        }}
                       />
                     ) : (
                       <div className="w-full h-full bg-luxury-dark flex items-center justify-center">
                         <Building className="h-12 w-12 text-luxury-gold/20" />
                       </div>
                     )}
+                    <div className="hidden absolute inset-0 w-full h-full bg-luxury-dark flex items-center justify-center">
+                      <Building className="h-12 w-12 text-luxury-gold/20" />
+                    </div>
                     <div className="absolute top-4 right-4 bg-luxury-gold text-luxury-black py-1 px-3 rounded-sm text-sm font-medium">
                       {property.type}
                     </div>

@@ -67,20 +67,40 @@ serve(async (req: Request): Promise<Response> => {
     
     // Store each property in the database
     for (const property of properties) {
-      // For your specific format (MLS data)
+      // Debug log to see what's in each property
+      console.log("Processing property:", JSON.stringify(property).substring(0, 200));
+
+      // Handle MLS format more specifically
+      let title, imageUrl, description, address;
+      
+      // Format specific mapping for MLS format (as seen in the payload example)
+      if (property.mls && property.address) {
+        title = `MLS #${property.mls}`;
+        address = property.address;
+        imageUrl = property.image || null;
+        description = `MLS #${property.mls}: ${property.address}`;
+      } 
+      // Standard format
+      else {
+        title = property.title || (property.mls ? `MLS #${property.mls}` : "Unknown Property");
+        address = property.address || '';
+        imageUrl = property.image_url || property.image || null;
+        description = property.description || (property.mls ? `MLS #${property.mls}` : "Property listing");
+      }
+
       const propertyData = {
-        title: property.title || `MLS #${property.mls || "Unknown"}`,
-        address: property.address || '',
+        title: title,
+        address: address,
         type: property.type || 'Residential',
         size: property.size || '',
         price: property.price || '',
-        image_url: property.image || property.image_url || null,
-        description: property.description || `MLS #${property.mls || ""}`,
+        image_url: imageUrl,
+        description: description,
         featured: property.featured !== undefined ? property.featured : true,
         received_at: new Date().toISOString()
       };
 
-      console.log("Storing property:", JSON.stringify(propertyData).substring(0, 200));
+      console.log("Storing property data:", JSON.stringify(propertyData));
       
       // Store in properties table
       const { data: insertedProperty, error } = await supabase
