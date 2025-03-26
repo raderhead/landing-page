@@ -1,9 +1,8 @@
-
 import { useRef, useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Building, MapPin, ArrowRight } from "lucide-react";
+import { Building, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { 
   Carousel, 
@@ -144,18 +143,17 @@ const PropertiesSection = () => {
                           </div>
                         </div>
                         <CardContent className="p-4 flex flex-col justify-between h-[calc(400px-256px)]">
-                          <div className="space-y-1">
+                          <div className="space-y-2">
                             {property.price && (
                               <p className="font-bold text-luxury-gold text-3xl mb-1 leading-tight">
                                 {property.price.startsWith('$') ? property.price : `$${property.price}`}
                               </p>
                             )}
-                            <h3 className="text-sm font-medium text-white mb-1 truncate">{property.title}</h3>
+                            
                             {property.address && (
-                              <div className="flex items-center text-luxury-khaki">
-                                <MapPin className="h-3 w-3 mr-1 flex-shrink-0 group-hover:text-luxury-gold transition-colors" />
-                                <span className="text-xs truncate">{property.address}</span>
-                              </div>
+                              <p className="text-sm font-medium text-white mb-1">
+                                {property.address}
+                              </p>
                             )}
                           </div>
                           
