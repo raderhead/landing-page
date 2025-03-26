@@ -51,6 +51,45 @@ export type Database = {
         }
         Relationships: []
       }
+      properties: {
+        Row: {
+          address: string
+          description: string | null
+          featured: boolean
+          id: string
+          image_url: string | null
+          price: string
+          received_at: string
+          size: string
+          title: string
+          type: string
+        }
+        Insert: {
+          address?: string
+          description?: string | null
+          featured?: boolean
+          id?: string
+          image_url?: string | null
+          price?: string
+          received_at?: string
+          size?: string
+          title: string
+          type?: string
+        }
+        Update: {
+          address?: string
+          description?: string | null
+          featured?: boolean
+          id?: string
+          image_url?: string | null
+          price?: string
+          received_at?: string
+          size?: string
+          title?: string
+          type?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

@@ -12,9 +12,10 @@ type Property = {
   type: string;
   size: string;
   price: string;
-  image_url: string;
-  description: string;
+  image_url: string | null;
+  description: string | null;
   featured: boolean;
+  received_at: string;
 };
 
 const PropertiesSection = () => {

@@ -9,6 +9,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Copy, Plus, Minus } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 const WebhookTester = () => {
   const { toast } = useToast();
@@ -42,6 +43,32 @@ const WebhookTester = () => {
     featured: true
   };
 
+  // Sample for multiple properties
+  const sampleMultiplePayload = [
+    {
+      title: "Retail Space on Main",
+      address: "456 Main St, Abilene, TX",
+      type: "Retail",
+      size: "2,200 sq ft",
+      price: "$550,000",
+      image_url: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      description: "Prime retail space in a high-traffic area",
+      featured: true
+    },
+    {
+      title: "Industrial Warehouse",
+      address: "789 Industry Blvd, Abilene, TX",
+      type: "Industrial",
+      size: "15,000 sq ft",
+      price: "$1,200,000",
+      image_url: "https://images.unsplash.com/photo-1553335760-325a8d9e9c6d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      description: "Spacious warehouse with loading docks",
+      featured: true
+    }
+  ];
+
+  const [payloadType, setPayloadType] = useState<'single' | 'multiple'>('single');
+
   const generateTestWebhook = async () => {
     try {
       let payloadToSend;
@@ -58,7 +85,7 @@ const WebhookTester = () => {
           return;
         }
       } else {
-        payloadToSend = samplePropertyPayload;
+        payloadToSend = payloadType === 'single' ? samplePropertyPayload : sampleMultiplePayload;
       }
       
       // This is just for testing - sending a webhook to our own endpoint
@@ -127,13 +154,33 @@ const WebhookTester = () => {
         </CardContent>
         <CardFooter className="flex flex-col items-start space-y-4">
           <div className="flex items-center justify-between w-full">
-            <Button 
-              variant="outline" 
-              onClick={() => setUseCustomPayload(!useCustomPayload)}
-              className="mr-2"
-            >
-              {useCustomPayload ? "Use Sample Payload" : "Use Custom Payload"}
-            </Button>
+            <div className="flex items-center space-x-2">
+              <Button 
+                variant="outline" 
+                onClick={() => setUseCustomPayload(!useCustomPayload)}
+              >
+                {useCustomPayload ? "Use Sample Payload" : "Use Custom Payload"}
+              </Button>
+              
+              {!useCustomPayload && (
+                <div className="flex items-center space-x-2 border-l pl-2 ml-2">
+                  <Button 
+                    variant={payloadType === 'single' ? "secondary" : "outline"} 
+                    size="sm"
+                    onClick={() => setPayloadType('single')}
+                  >
+                    Single Property
+                  </Button>
+                  <Button 
+                    variant={payloadType === 'multiple' ? "secondary" : "outline"}
+                    size="sm" 
+                    onClick={() => setPayloadType('multiple')}
+                  >
+                    Multiple Properties
+                  </Button>
+                </div>
+              )}
+            </div>
             <Button onClick={generateTestWebhook}>
               Send Test Property Listing
             </Button>
@@ -159,13 +206,75 @@ const WebhookTester = () => {
                 <AccordionTrigger>View Sample Payload</AccordionTrigger>
                 <AccordionContent>
                   <pre className="p-3 bg-muted rounded-md text-xs overflow-auto">
-                    {JSON.stringify(samplePropertyPayload, null, 2)}
+                    {JSON.stringify(payloadType === 'single' ? samplePropertyPayload : sampleMultiplePayload, null, 2)}
                   </pre>
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
           )}
         </CardFooter>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Property Formatting Guide</CardTitle>
+          <CardDescription>
+            Required and optional fields for property listings
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Field</TableHead>
+                <TableHead>Required</TableHead>
+                <TableHead>Description</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell className="font-medium">title</TableCell>
+                <TableCell>Yes</TableCell>
+                <TableCell>The name of the property</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className="font-medium">address</TableCell>
+                <TableCell>No</TableCell>
+                <TableCell>Full address including city and state</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className="font-medium">type</TableCell>
+                <TableCell>No</TableCell>
+                <TableCell>Property type (Office, Retail, Industrial, etc.)</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className="font-medium">size</TableCell>
+                <TableCell>No</TableCell>
+                <TableCell>Size of the property (sq ft)</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className="font-medium">price</TableCell>
+                <TableCell>No</TableCell>
+                <TableCell>Asking price or rent</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className="font-medium">image_url</TableCell>
+                <TableCell>No</TableCell>
+                <TableCell>URL to the property image</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className="font-medium">description</TableCell>
+                <TableCell>No</TableCell>
+                <TableCell>Detailed description of the property</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className="font-medium">featured</TableCell>
+                <TableCell>No</TableCell>
+                <TableCell>Whether to show in featured listings (default: true)</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </CardContent>
       </Card>
 
       <Card>

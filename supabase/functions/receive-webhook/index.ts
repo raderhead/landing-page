@@ -45,14 +45,29 @@ serve(async (req: Request): Promise<Response> => {
     console.log("Webhook payload:", JSON.stringify(payload));
     
     // Check if payload contains property listings
-    // This assumes the webhook sends an array of properties or a single property object
-    if (payload && (Array.isArray(payload.properties) || payload.title)) {
-      const properties = Array.isArray(payload.properties) ? payload.properties : [payload];
+    // This handles both arrays of properties and single property objects
+    if (payload) {
+      let properties = [];
+      
+      // Handle array of properties
+      if (Array.isArray(payload.properties)) {
+        properties = payload.properties;
+      }
+      // Handle single property as root object
+      else if (payload.title) {
+        properties = [payload];
+      }
+      // Handle array at root level
+      else if (Array.isArray(payload)) {
+        properties = payload;
+      }
+      
+      console.log(`Processing ${properties.length} properties`);
       
       // Store each property in the database
       for (const property of properties) {
         // Ensure the property has the minimum required fields
-        if (property.title) {
+        if (property && property.title) {
           // Store in properties table
           const { data: insertedProperty, error } = await supabase
             .from('properties')
@@ -62,9 +77,9 @@ serve(async (req: Request): Promise<Response> => {
               type: property.type || 'Other',
               size: property.size || '',
               price: property.price || '',
-              image_url: property.image_url || '',
-              description: property.description || '',
-              featured: property.featured || true,
+              image_url: property.image_url || null,
+              description: property.description || null,
+              featured: property.featured !== undefined ? property.featured : true,
               received_at: new Date().toISOString()
             });
             
@@ -73,8 +88,12 @@ serve(async (req: Request): Promise<Response> => {
           } else {
             console.log("Property stored successfully:", property.title);
           }
+        } else {
+          console.warn("Skipped invalid property without title:", property);
         }
       }
+    } else {
+      console.warn("No valid property data found in payload");
     }
     
     // Return a successful response
