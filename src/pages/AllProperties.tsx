@@ -1,76 +1,43 @@
+
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { MapPin, Building, Search, Grid, List, ArrowLeft } from "lucide-react";
+import { MapPin, Building, Search, Grid, List, ArrowLeft, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { 
+  Pagination, 
+  PaginationContent, 
+  PaginationItem, 
+  PaginationLink, 
+  PaginationNext, 
+  PaginationPrevious 
+} from "@/components/ui/pagination";
 
-// Placeholder data until IDX integration
-const placeholderProperties = [
-  {
-    id: 1,
-    image: "https://images.unsplash.com/photo-1497366858526-0766cadbe8fa?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-    title: "Downtown Office Building",
-    address: "123 Pine Street, Abilene, TX",
-    type: "Office",
-    size: "5,000 sq ft",
-    price: "$1,200,000"
-  },
-  {
-    id: 2,
-    image: "https://images.unsplash.com/photo-1613310023042-ad79320c00ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-    title: "Retail Space on Main",
-    address: "456 Main Street, Abilene, TX",
-    type: "Retail",
-    size: "2,500 sq ft",
-    price: "$3,500/month"
-  },
-  {
-    id: 3,
-    image: "https://images.unsplash.com/photo-1623298460174-371443cc454c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-    title: "Industrial Warehouse",
-    address: "789 Industry Blvd, Abilene, TX",
-    type: "Industrial",
-    size: "12,000 sq ft",
-    price: "$850,000"
-  },
-  {
-    id: 4,
-    image: "https://images.unsplash.com/photo-1542889601-399c4f3a8402?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-    title: "Modern Office Complex",
-    address: "101 Business Park, Abilene, TX",
-    type: "Office",
-    size: "8,200 sq ft",
-    price: "$2,100,000"
-  },
-  {
-    id: 5,
-    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-    title: "Prime Retail Location",
-    address: "202 Commercial Avenue, Abilene, TX",
-    type: "Retail",
-    size: "3,800 sq ft",
-    price: "$4,200/month"
-  },
-  {
-    id: 6,
-    image: "https://images.unsplash.com/photo-1577979749830-f1d742b96791?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-    title: "Warehouse with Office",
-    address: "303 Distribution Way, Abilene, TX",
-    type: "Industrial",
-    size: "15,500 sq ft",
-    price: "$1,250,000"
-  }
-];
+type Property = {
+  id: string;
+  title: string;
+  address: string;
+  type: string;
+  size: string;
+  price: string;
+  image_url: string;
+  mls?: string;
+};
 
-type PropertyType = "All" | "Office" | "Retail" | "Industrial";
+type PropertyType = "All" | "Office" | "Retail" | "Industrial" | "Other";
 
 const AllProperties = () => {
   const [scrollY, setScrollY] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [propertyType, setPropertyType] = useState<PropertyType>("All");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [properties, setProperties] = useState(placeholderProperties);
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [filteredProperties, setFilteredProperties] = useState<Property[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const propertiesPerPage = 6;
   
   useEffect(() => {
     const handleScroll = () => {
@@ -81,9 +48,49 @@ const AllProperties = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   
+  // Fetch properties from Supabase
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        setLoading(true);
+        
+        const { data, error } = await supabase
+          .from('properties')
+          .select('*')
+          .order('received_at', { ascending: false });
+        
+        if (error) {
+          console.error('Error fetching properties:', error);
+          setProperties([]);
+        } else {
+          // Map the data to match our Property type
+          const formattedProperties = data.map((property: any): Property => ({
+            id: property.id,
+            title: property.title || 'Untitled Property',
+            address: property.address || 'No Address Provided',
+            type: property.type || 'Other',
+            size: property.size || 'Unknown',
+            price: property.price || 'Contact for Price',
+            image_url: property.image_url || '',
+            mls: property.mls
+          }));
+          
+          setProperties(formattedProperties);
+        }
+      } catch (error) {
+        console.error('Error in properties fetch:', error);
+        setProperties([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchProperties();
+  }, []);
+  
   // Filter properties based on search term and property type
   useEffect(() => {
-    let filtered = placeholderProperties;
+    let filtered = properties;
     
     if (searchTerm) {
       filtered = filtered.filter(property => 
@@ -96,8 +103,24 @@ const AllProperties = () => {
       filtered = filtered.filter(property => property.type === propertyType);
     }
     
-    setProperties(filtered);
-  }, [searchTerm, propertyType]);
+    setFilteredProperties(filtered);
+    setCurrentPage(1); // Reset to first page when filters change
+  }, [searchTerm, propertyType, properties]);
+  
+  // Calculate pagination
+  const indexOfLastProperty = currentPage * propertiesPerPage;
+  const indexOfFirstProperty = indexOfLastProperty - propertiesPerPage;
+  const currentProperties = filteredProperties.slice(indexOfFirstProperty, indexOfLastProperty);
+  const totalPages = Math.ceil(filteredProperties.length / propertiesPerPage);
+  
+  const paginate = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+    // Scroll to top when changing pages
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
   
   return (
     <div className="min-h-screen bg-black">
@@ -172,6 +195,13 @@ const AllProperties = () => {
               >
                 Industrial
               </Button>
+              <Button 
+                variant="outline" 
+                className={`rounded-full px-4 border-luxury-khaki/30 ${propertyType === 'Other' ? 'bg-luxury-gold text-luxury-black border-luxury-gold' : 'text-luxury-khaki hover:border-luxury-gold hover:text-luxury-gold'}`}
+                onClick={() => setPropertyType("Other")}
+              >
+                Other
+              </Button>
             </div>
             
             <div className="flex gap-1 border-l border-luxury-khaki/20 pl-4 items-center">
@@ -197,11 +227,16 @@ const AllProperties = () => {
       {/* Properties Grid */}
       <section className="py-12 bg-black">
         <div className="container">
-          {properties.length > 0 ? (
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-20">
+              <Loader2 className="h-12 w-12 text-luxury-gold animate-spin mb-4" />
+              <p className="text-luxury-khaki">Loading properties...</p>
+            </div>
+          ) : currentProperties.length > 0 ? (
             <>
               {viewMode === "grid" ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {properties.map((property, index) => (
+                  {currentProperties.map((property, index) => (
                     <div 
                       key={property.id} 
                       className="bg-luxury-dark rounded-md overflow-hidden shadow-md hover:shadow-lg transition-all duration-500 hover:shadow-luxury-gold/20 hover:-translate-y-2 hover:scale-[1.02] border border-luxury-khaki/10 group"
@@ -211,32 +246,53 @@ const AllProperties = () => {
                       }}
                     >
                       <div className="relative h-64 overflow-hidden">
-                        <img 
-                          src={property.image} 
-                          alt={property.title} 
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                        />
-                        <div className="absolute top-4 right-4 bg-luxury-gold text-luxury-black py-1 px-3 rounded-sm text-sm font-medium group-hover:scale-110 transition-transform">
-                          {property.type}
-                        </div>
+                        {property.image_url ? (
+                          <img 
+                            src={property.image_url} 
+                            alt={property.title} 
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-luxury-dark/50 flex items-center justify-center">
+                            <Building className="h-16 w-16 text-luxury-gold/20" />
+                          </div>
+                        )}
+                        {property.type && (
+                          <div className="absolute top-4 right-4 bg-luxury-gold text-luxury-black py-1 px-3 rounded-sm text-sm font-medium group-hover:scale-110 transition-transform">
+                            {property.type}
+                          </div>
+                        )}
                       </div>
                       
                       <div className="p-6">
                         <h3 className="text-xl font-bold mb-2 text-white group-hover:text-luxury-gold transition-colors">{property.title}</h3>
-                        <div className="flex items-center text-luxury-khaki mb-4">
-                          <MapPin className="h-4 w-4 mr-1 group-hover:text-luxury-gold transition-colors" />
-                          <span className="text-sm">{property.address}</span>
-                        </div>
+                        
+                        {property.address && (
+                          <div className="flex items-center text-luxury-khaki mb-4">
+                            <MapPin className="h-4 w-4 mr-1 group-hover:text-luxury-gold transition-colors" />
+                            <span className="text-sm">{property.address}</span>
+                          </div>
+                        )}
                         
                         <div className="grid grid-cols-2 gap-4 mb-6">
-                          <div>
-                            <p className="text-sm text-luxury-khaki/70">Size</p>
-                            <p className="font-medium text-white">{property.size}</p>
-                          </div>
+                          {property.size && property.size !== 'Unknown' && (
+                            <div>
+                              <p className="text-sm text-luxury-khaki/70">Size</p>
+                              <p className="font-medium text-white">{property.size}</p>
+                            </div>
+                          )}
+                          
                           <div>
                             <p className="text-sm text-luxury-khaki/70">Price</p>
                             <p className="font-medium text-white">{property.price}</p>
                           </div>
+                          
+                          {property.mls && (
+                            <div>
+                              <p className="text-sm text-luxury-khaki/70">MLS</p>
+                              <p className="font-medium text-white">{property.mls}</p>
+                            </div>
+                          )}
                         </div>
                         
                         <Button variant="outline" className="w-full border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm group-hover:bg-luxury-gold/10 transition-all">
@@ -248,7 +304,7 @@ const AllProperties = () => {
                 </div>
               ) : (
                 <div className="space-y-6">
-                  {properties.map((property, index) => (
+                  {currentProperties.map((property, index) => (
                     <div 
                       key={property.id} 
                       className="bg-luxury-dark rounded-md overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 hover:shadow-luxury-gold/20 border border-luxury-khaki/10 group"
@@ -258,38 +314,60 @@ const AllProperties = () => {
                     >
                       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                         <div className="relative md:col-span-1 h-48 md:h-full overflow-hidden">
-                          <img 
-                            src={property.image} 
-                            alt={property.title} 
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                          />
-                          <div className="absolute top-4 right-4 bg-luxury-gold text-luxury-black py-1 px-3 rounded-sm text-sm font-medium group-hover:scale-110 transition-transform">
-                            {property.type}
-                          </div>
+                          {property.image_url ? (
+                            <img 
+                              src={property.image_url} 
+                              alt={property.title} 
+                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-luxury-dark/50 flex items-center justify-center">
+                              <Building className="h-16 w-16 text-luxury-gold/20" />
+                            </div>
+                          )}
+                          
+                          {property.type && (
+                            <div className="absolute top-4 right-4 bg-luxury-gold text-luxury-black py-1 px-3 rounded-sm text-sm font-medium group-hover:scale-110 transition-transform">
+                              {property.type}
+                            </div>
+                          )}
                         </div>
                         
                         <div className="p-6 md:col-span-3 flex flex-col justify-between">
                           <div>
                             <h3 className="text-xl font-bold mb-2 text-white group-hover:text-luxury-gold transition-colors">{property.title}</h3>
-                            <div className="flex items-center text-luxury-khaki mb-4">
-                              <MapPin className="h-4 w-4 mr-1 group-hover:text-luxury-gold transition-colors" />
-                              <span className="text-sm">{property.address}</span>
-                            </div>
+                            {property.address && (
+                              <div className="flex items-center text-luxury-khaki mb-4">
+                                <MapPin className="h-4 w-4 mr-1 group-hover:text-luxury-gold transition-colors" />
+                                <span className="text-sm">{property.address}</span>
+                              </div>
+                            )}
                           </div>
                           
                           <div className="grid grid-cols-3 gap-4 mb-6">
-                            <div>
-                              <p className="text-sm text-luxury-khaki/70">Size</p>
-                              <p className="font-medium text-white">{property.size}</p>
-                            </div>
+                            {property.size && property.size !== 'Unknown' && (
+                              <div>
+                                <p className="text-sm text-luxury-khaki/70">Size</p>
+                                <p className="font-medium text-white">{property.size}</p>
+                              </div>
+                            )}
+                            
                             <div>
                               <p className="text-sm text-luxury-khaki/70">Price</p>
                               <p className="font-medium text-white">{property.price}</p>
                             </div>
+                            
                             <div>
                               <p className="text-sm text-luxury-khaki/70">Type</p>
                               <p className="font-medium text-white">{property.type}</p>
                             </div>
+                            
+                            {property.mls && (
+                              <div>
+                                <p className="text-sm text-luxury-khaki/70">MLS</p>
+                                <p className="font-medium text-white">{property.mls}</p>
+                              </div>
+                            )}
                           </div>
                           
                           <Button variant="outline" className="w-fit border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm group-hover:bg-luxury-gold/10 transition-all">
@@ -302,21 +380,40 @@ const AllProperties = () => {
                 </div>
               )}
               
-              {/* IDX integration note - this will be replaced with actual pagination from IDX */}
-              <div className="mt-12 text-center">
-                <p className="text-luxury-khaki mb-4">Showing {properties.length} of {properties.length} properties</p>
-                <div className="flex justify-center gap-2">
-                  <Button variant="outline" className="border-luxury-khaki/30 text-luxury-khaki hover:border-luxury-gold hover:text-luxury-gold" disabled>
-                    Previous
-                  </Button>
-                  <Button variant="outline" className="border-luxury-gold bg-luxury-gold/10 text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black">
-                    1
-                  </Button>
-                  <Button variant="outline" className="border-luxury-khaki/30 text-luxury-khaki hover:border-luxury-gold hover:text-luxury-gold" disabled>
-                    Next
-                  </Button>
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="mt-12">
+                  <Pagination>
+                    <PaginationContent>
+                      <PaginationItem>
+                        <PaginationPrevious 
+                          className={`border-luxury-khaki/30 text-luxury-khaki hover:border-luxury-gold hover:text-luxury-gold ${currentPage === 1 ? 'pointer-events-none opacity-50' : ''}`}
+                          onClick={() => currentPage > 1 && paginate(currentPage - 1)}
+                        />
+                      </PaginationItem>
+                      
+                      {Array.from({ length: totalPages }, (_, i) => (
+                        <PaginationItem key={i + 1}>
+                          <PaginationLink
+                            className={`${currentPage === i + 1 ? 'border-luxury-gold bg-luxury-gold/10 text-luxury-gold' : 'border-luxury-khaki/30 text-luxury-khaki hover:border-luxury-gold hover:text-luxury-gold'}`}
+                            onClick={() => paginate(i + 1)}
+                            isActive={currentPage === i + 1}
+                          >
+                            {i + 1}
+                          </PaginationLink>
+                        </PaginationItem>
+                      ))}
+                      
+                      <PaginationItem>
+                        <PaginationNext 
+                          className={`border-luxury-khaki/30 text-luxury-khaki hover:border-luxury-gold hover:text-luxury-gold ${currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}`}
+                          onClick={() => currentPage < totalPages && paginate(currentPage + 1)}
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
                 </div>
-              </div>
+              )}
             </>
           ) : (
             <div className="text-center py-12">
@@ -335,27 +432,6 @@ const AllProperties = () => {
               </Button>
             </div>
           )}
-        </div>
-      </section>
-      
-      {/* IDX Integration Note - This section will be hidden in production */}
-      <section className="py-10 bg-luxury-black border-t border-luxury-khaki/10">
-        <div className="container">
-          <div className="bg-luxury-dark p-6 rounded-md border border-luxury-gold/20">
-            <h3 className="text-xl font-bold text-luxury-gold mb-4">Integration Note</h3>
-            <p className="text-luxury-khaki mb-4">
-              This page is designed to be integrated with your IDX provider. The placeholder data shown here will be replaced with live listings from your MLS feed once the IDX integration is complete.
-            </p>
-            <div className="text-luxury-khaki/70 text-sm">
-              <p>Considerations for IDX integration:</p>
-              <ul className="list-disc pl-5 mt-2 space-y-1">
-                <li>Property search and filtering will be powered by the IDX API</li>
-                <li>Pagination will display real property counts from your MLS</li>
-                <li>Property details pages will be dynamically created for each listing</li>
-                <li>Property images will be sourced from the MLS</li>
-              </ul>
-            </div>
-          </div>
         </div>
       </section>
       
