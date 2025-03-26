@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -238,13 +237,13 @@ const AllProperties = () => {
                   {currentProperties.map((property, index) => (
                     <div 
                       key={property.id} 
-                      className="bg-luxury-dark rounded-md overflow-hidden shadow-md hover:shadow-lg transition-all duration-500 hover:shadow-luxury-gold/20 hover:-translate-y-1 hover:scale-[1.01] border border-luxury-khaki/10 group h-[360px]"
+                      className="bg-luxury-dark rounded-md overflow-hidden shadow-md hover:shadow-lg transition-all duration-500 hover:shadow-luxury-gold/20 hover:-translate-y-1 hover:scale-[1.01] border border-luxury-khaki/10 group h-[340px]"
                       style={{ 
                         transitionDelay: `${index * 50}ms`,
                         transform: `translateY(${Math.min(10, Math.max(-10, (scrollY - 1200) * 0.02 * (index % 3 - 1)))}px)`
                       }}
                     >
-                      <div className="relative h-48 overflow-hidden">
+                      <div className="relative h-52 overflow-hidden">
                         {property.image_url ? (
                           <img 
                             src={property.image_url} 
@@ -263,35 +262,33 @@ const AllProperties = () => {
                         )}
                       </div>
                       
-                      <div className="p-4 flex flex-col h-[172px]">
-                        <h3 className="text-lg font-bold mb-1 text-white group-hover:text-luxury-gold transition-colors truncate">{property.title}</h3>
+                      <div className="p-4 flex flex-col h-[calc(340px-208px)]">
+                        {property.price && (
+                          <div className="mb-1">
+                            <p className="font-bold text-luxury-gold text-2xl">{property.price}</p>
+                          </div>
+                        )}
+                        <h3 className="text-sm font-medium text-white mb-1 truncate">{property.title}</h3>
                         
                         {property.address && (
-                          <div className="flex items-center text-luxury-khaki mb-3">
+                          <div className="flex items-center text-luxury-khaki mb-2">
                             <MapPin className="h-3 w-3 mr-1 flex-shrink-0 group-hover:text-luxury-gold transition-colors" />
-                            <span className="text-sm truncate">{property.address}</span>
+                            <span className="text-xs truncate">{property.address}</span>
                           </div>
                         )}
                         
-                        <div className="grid grid-cols-2 gap-4 mb-3 mt-auto">
-                          {property.price && (
-                            <div>
-                              <p className="text-xs text-luxury-khaki/70">Price</p>
-                              <p className="font-medium text-white text-base">{property.price}</p>
+                        <div className="mt-auto">
+                          {property.mls && (
+                            <div className="mb-2">
+                              <p className="text-xs text-luxury-khaki/70">MLS</p>
+                              <p className="font-medium text-white text-sm">{property.mls}</p>
                             </div>
                           )}
                           
-                          {property.mls && (
-                            <div>
-                              <p className="text-xs text-luxury-khaki/70">MLS</p>
-                              <p className="font-medium text-white text-base">{property.mls}</p>
-                            </div>
-                          )}
+                          <Button variant="outline" className="w-full text-xs py-1 border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm group-hover:bg-luxury-gold/10 transition-all">
+                            View Details
+                          </Button>
                         </div>
-                        
-                        <Button variant="outline" className="w-full text-sm py-1 mt-2 border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm group-hover:bg-luxury-gold/10 transition-all">
-                          View Details
-                        </Button>
                       </div>
                     </div>
                   ))}
@@ -330,11 +327,14 @@ const AllProperties = () => {
                       
                       <div className="p-4 md:col-span-3 flex flex-col justify-between">
                         <div>
-                          <h3 className="text-xl font-bold mb-1 text-white group-hover:text-luxury-gold transition-colors">{property.title}</h3>
+                          {property.price && (
+                            <p className="font-bold text-luxury-gold text-2xl mb-2">{property.price}</p>
+                          )}
+                          <h3 className="text-sm font-medium text-white mb-1">{property.title}</h3>
                           {property.address && (
                             <div className="flex items-center text-luxury-khaki mb-3">
                               <MapPin className="h-3 w-3 mr-1 group-hover:text-luxury-gold transition-colors" />
-                              <span className="text-sm">{property.address}</span>
+                              <span className="text-xs">{property.address}</span>
                             </div>
                           )}
                         </div>
@@ -343,19 +343,14 @@ const AllProperties = () => {
                           {property.size && property.size !== 'Unknown' && (
                             <div>
                               <p className="text-xs text-luxury-khaki/70">Size</p>
-                              <p className="font-medium text-white text-base">{property.size}</p>
+                              <p className="font-medium text-white text-sm">{property.size}</p>
                             </div>
                           )}
-                          
-                          <div>
-                            <p className="text-xs text-luxury-khaki/70">Price</p>
-                            <p className="font-medium text-white text-base">{property.price}</p>
-                          </div>
                           
                           {property.mls && (
                             <div>
                               <p className="text-xs text-luxury-khaki/70">MLS</p>
-                              <p className="font-medium text-white text-base">{property.mls}</p>
+                              <p className="font-medium text-white text-sm">{property.mls}</p>
                             </div>
                           )}
                         </div>

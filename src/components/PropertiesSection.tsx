@@ -1,4 +1,3 @@
-
 import { useRef, useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent } from "@/components/ui/card";
@@ -130,8 +129,8 @@ const PropertiesSection = () => {
                 <CarouselContent className="-ml-2 md:-ml-4">
                   {properties.map((property) => (
                     <CarouselItem key={property.id} className="pl-2 md:pl-4 md:basis-1/3 lg:basis-1/3">
-                      <Card className="bg-luxury-dark border-luxury-gold/10 hover:border-luxury-gold/20 transition-all duration-300 hover:shadow-lg group h-[360px] overflow-hidden">
-                        <div className="relative h-48 overflow-hidden">
+                      <Card className="bg-luxury-dark border-luxury-gold/10 hover:border-luxury-gold/20 transition-all duration-300 hover:shadow-lg group h-[340px] overflow-hidden">
+                        <div className="relative h-52 overflow-hidden">
                           {property.image_url ? (
                             <img 
                               src={property.image_url} 
@@ -147,31 +146,31 @@ const PropertiesSection = () => {
                             {property.type}
                           </div>
                         </div>
-                        <CardContent className="p-4 flex flex-col h-[196px]">
-                          <h3 className="text-xl font-bold mb-1 text-white group-hover:text-luxury-gold transition-colors truncate">{property.title}</h3>
+                        <CardContent className="p-4 flex flex-col h-[calc(340px-208px)]">
+                          {property.price && (
+                            <div className="mb-2">
+                              <p className="font-bold text-luxury-gold text-2xl">{property.price}</p>
+                            </div>
+                          )}
+                          <h3 className="text-sm font-medium text-white mb-1 truncate">{property.title}</h3>
                           {property.address && (
                             <div className="flex items-center text-luxury-khaki mb-3">
                               <MapPin className="h-3 w-3 mr-1 flex-shrink-0 group-hover:text-luxury-gold transition-colors" />
-                              <span className="text-sm truncate">{property.address}</span>
+                              <span className="text-xs truncate">{property.address}</span>
                             </div>
                           )}
-                          <div className="grid grid-cols-2 gap-4 mb-3 mt-auto">
-                            {property.price && (
-                              <div>
-                                <p className="text-xs text-luxury-khaki/70">Price</p>
-                                <p className="font-medium text-white text-base">{property.price}</p>
-                              </div>
-                            )}
+                          
+                          <div className="mt-auto">
                             {property.mls && (
-                              <div>
+                              <div className="mb-2">
                                 <p className="text-xs text-luxury-khaki/70">MLS</p>
-                                <p className="font-medium text-white text-base">{property.mls}</p>
+                                <p className="font-medium text-white text-sm">{property.mls}</p>
                               </div>
                             )}
+                            <Button variant="outline" className="w-full text-sm py-1 border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm group-hover:bg-luxury-gold/10 transition-all">
+                              View Details
+                            </Button>
                           </div>
-                          <Button variant="outline" className="w-full text-sm py-1 mt-2 border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm group-hover:bg-luxury-gold/10 transition-all">
-                            View Details
-                          </Button>
                         </CardContent>
                       </Card>
                     </CarouselItem>
