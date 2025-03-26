@@ -70,13 +70,34 @@ serve(async (req: Request): Promise<Response> => {
       // Debug log to see what's in each property
       console.log("Processing property:", JSON.stringify(property).substring(0, 200));
 
-      // Extract data based on our simplified schema
-      // For our new properties table: id, address, mls, price, image_url
+      // Handle MLS format more specifically
+      let title, imageUrl, description, address;
+      
+      // Format specific mapping for MLS format (as seen in the payload example)
+      if (property.mls && property.address) {
+        title = `MLS #${property.mls}`;
+        address = property.address;
+        imageUrl = property.image || null;
+        description = `MLS #${property.mls}: ${property.address}`;
+      } 
+      // Standard format
+      else {
+        title = property.title || (property.mls ? `MLS #${property.mls}` : "Unknown Property");
+        address = property.address || '';
+        imageUrl = property.image_url || property.image || null;
+        description = property.description || (property.mls ? `MLS #${property.mls}` : "Property listing");
+      }
+
       const propertyData = {
-        address: property.address || '',
-        mls: property.mls || '',
+        title: title,
+        address: address,
+        type: property.type || 'Residential',
+        size: property.size || '',
         price: property.price || '',
-        image_url: property.image_url || property.image || '',
+        image_url: imageUrl,
+        description: description,
+        featured: property.featured !== undefined ? property.featured : true,
+        received_at: new Date().toISOString()
       };
 
       console.log("Storing property data:", JSON.stringify(propertyData));
@@ -89,7 +110,7 @@ serve(async (req: Request): Promise<Response> => {
       if (error) {
         console.error("Error storing property:", error);
       } else {
-        console.log("Property stored successfully, MLS:", propertyData.mls);
+        console.log("Property stored successfully:", propertyData.title);
       }
     }
     

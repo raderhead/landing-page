@@ -7,10 +7,15 @@ import { Building, MapPin } from "lucide-react";
 
 type Property = {
   id: string;
+  title: string;
   address: string;
-  mls: string;
+  type: string;
+  size: string;
   price: string;
-  image_url: string;
+  image_url: string | null;
+  description: string | null;
+  featured: boolean;
+  received_at: string;
 };
 
 const PropertiesSection = () => {
@@ -35,11 +40,12 @@ const PropertiesSection = () => {
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        // Fetch properties from Supabase
+        // Fetch featured properties from Supabase
         const { data, error } = await supabase
           .from('properties')
           .select('*')
-          .order('id', { ascending: false });
+          .eq('featured', true)
+          .order('received_at', { ascending: false });
         
         if (error) {
           console.error('Error fetching properties:', error);
@@ -66,8 +72,10 @@ const PropertiesSection = () => {
         { event: 'INSERT', schema: 'public', table: 'properties' }, 
         (payload) => {
           console.log('New property received:', payload.new);
-          // Add the new property to the list
-          setProperties(current => [payload.new as Property, ...current]);
+          // Add the new property to the list if it's featured
+          if (payload.new && payload.new.featured) {
+            setProperties(current => [payload.new as Property, ...current]);
+          }
         })
       .subscribe();
       
@@ -107,7 +115,7 @@ const PropertiesSection = () => {
                     {property.image_url ? (
                       <img 
                         src={property.image_url} 
-                        alt={`MLS #${property.mls}`} 
+                        alt={property.title} 
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                         onError={(e) => {
                           // If image fails to load, show fallback
@@ -124,23 +132,31 @@ const PropertiesSection = () => {
                       <Building className="h-12 w-12 text-luxury-gold/20" />
                     </div>
                     <div className="absolute top-4 right-4 bg-luxury-gold text-luxury-black py-1 px-3 rounded-sm text-sm font-medium">
-                      Commercial
+                      {property.type}
                     </div>
                   </div>
                   <CardContent className="p-5">
-                    <h3 className="text-lg font-bold mb-2 text-white group-hover:text-luxury-gold transition-colors">MLS #{property.mls}</h3>
+                    <h3 className="text-lg font-bold mb-2 text-white group-hover:text-luxury-gold transition-colors">{property.title}</h3>
                     {property.address && (
                       <div className="flex items-center text-luxury-khaki mb-4">
                         <MapPin className="h-4 w-4 mr-1 group-hover:text-luxury-gold transition-colors" />
                         <span className="text-sm">{property.address}</span>
                       </div>
                     )}
-                    {property.price && (
-                      <div className="mb-4">
-                        <p className="text-sm text-luxury-khaki/70">Price</p>
-                        <p className="font-medium text-white">{property.price}</p>
-                      </div>
-                    )}
+                    <div className="grid grid-cols-2 gap-4 mb-4">
+                      {property.size && (
+                        <div>
+                          <p className="text-sm text-luxury-khaki/70">Size</p>
+                          <p className="font-medium text-white">{property.size}</p>
+                        </div>
+                      )}
+                      {property.price && (
+                        <div>
+                          <p className="text-sm text-luxury-khaki/70">Price</p>
+                          <p className="font-medium text-white">{property.price}</p>
+                        </div>
+                      )}
+                    </div>
                     <Button variant="outline" className="w-full border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm group-hover:bg-luxury-gold/10 transition-all">
                       View Details
                     </Button>
