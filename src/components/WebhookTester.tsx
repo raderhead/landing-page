@@ -6,12 +6,16 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/components/ui/use-toast";
-import { Copy } from "lucide-react";
+import { Copy, Plus, Minus } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 const WebhookTester = () => {
   const { toast } = useToast();
   const [webhookUrl, setWebhookUrl] = useState<string>("");
   const [webhookLogs, setWebhookLogs] = useState<any[]>([]);
+  const [useCustomPayload, setUseCustomPayload] = useState(false);
+  const [customPayload, setCustomPayload] = useState('{\n  "title": "Downtown Office Building",\n  "address": "123 Main St, Abilene, TX",\n  "type": "Office",\n  "size": "3,500 sq ft",\n  "price": "$750,000",\n  "image_url": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",\n  "description": "Prime office space in downtown Abilene",\n  "featured": true\n}');
   
   // Generate the full webhook URL for the user to copy
   const baseUrl = window.location.origin;
@@ -26,19 +30,44 @@ const WebhookTester = () => {
     });
   };
 
+  // Sample property listing payload
+  const samplePropertyPayload = {
+    title: "Downtown Office Building",
+    address: "123 Main St, Abilene, TX",
+    type: "Office",
+    size: "3,500 sq ft",
+    price: "$750,000",
+    image_url: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+    description: "Prime office space in downtown Abilene",
+    featured: true
+  };
+
   const generateTestWebhook = async () => {
     try {
+      let payloadToSend;
+      
+      if (useCustomPayload) {
+        try {
+          payloadToSend = JSON.parse(customPayload);
+        } catch (err) {
+          toast({
+            title: "Invalid JSON",
+            description: "Please check your JSON format and try again",
+            variant: "destructive",
+          });
+          return;
+        }
+      } else {
+        payloadToSend = samplePropertyPayload;
+      }
+      
       // This is just for testing - sending a webhook to our own endpoint
       const response = await fetch(fullWebhookUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          test: true,
-          timestamp: new Date().toISOString(),
-          message: "This is a test webhook payload"
-        }),
+        body: JSON.stringify(payloadToSend),
       });
       
       const result = await response.json();
@@ -47,7 +76,8 @@ const WebhookTester = () => {
           id: Date.now(),
           timestamp: new Date().toISOString(),
           success: result.success,
-          data: result
+          data: result,
+          payload: payloadToSend
         },
         ...prev
       ]);
@@ -55,7 +85,7 @@ const WebhookTester = () => {
       toast({
         title: result.success ? "Success" : "Error",
         description: result.success 
-          ? "Test webhook sent successfully" 
+          ? "Property data sent successfully! Check the Featured Properties section." 
           : `Error sending webhook: ${result.error}`,
         variant: result.success ? "default" : "destructive",
       });
@@ -75,7 +105,7 @@ const WebhookTester = () => {
         <CardHeader>
           <CardTitle>Webhook Endpoint</CardTitle>
           <CardDescription>
-            Use this URL to receive webhooks from external services
+            Use this URL to receive property listing webhooks from external services
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -95,10 +125,46 @@ const WebhookTester = () => {
             <code className="text-sm break-all">{fullWebhookUrl}</code>
           </div>
         </CardContent>
-        <CardFooter>
-          <Button onClick={generateTestWebhook}>
-            Send Test Webhook
-          </Button>
+        <CardFooter className="flex flex-col items-start space-y-4">
+          <div className="flex items-center justify-between w-full">
+            <Button 
+              variant="outline" 
+              onClick={() => setUseCustomPayload(!useCustomPayload)}
+              className="mr-2"
+            >
+              {useCustomPayload ? "Use Sample Payload" : "Use Custom Payload"}
+            </Button>
+            <Button onClick={generateTestWebhook}>
+              Send Test Property Listing
+            </Button>
+          </div>
+          
+          {useCustomPayload && (
+            <div className="w-full">
+              <Textarea 
+                value={customPayload}
+                onChange={(e) => setCustomPayload(e.target.value)}
+                className="font-mono text-sm h-[200px]"
+                placeholder="Enter custom JSON payload"
+              />
+              <p className="text-sm text-muted-foreground mt-2">
+                Enter a valid JSON with property data. Must include at least a "title" field.
+              </p>
+            </div>
+          )}
+          
+          {!useCustomPayload && (
+            <Accordion type="single" collapsible className="w-full">
+              <AccordionItem value="sample-payload">
+                <AccordionTrigger>View Sample Payload</AccordionTrigger>
+                <AccordionContent>
+                  <pre className="p-3 bg-muted rounded-md text-xs overflow-auto">
+                    {JSON.stringify(samplePropertyPayload, null, 2)}
+                  </pre>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          )}
         </CardFooter>
       </Card>
 
@@ -127,9 +193,24 @@ const WebhookTester = () => {
                         {log.success ? "Success" : "Failed"}
                       </Badge>
                     </div>
-                    <pre className="text-xs bg-muted p-2 rounded overflow-x-auto">
-                      {JSON.stringify(log.data, null, 2)}
-                    </pre>
+                    <Accordion type="single" collapsible className="w-full">
+                      <AccordionItem value="payload">
+                        <AccordionTrigger>Sent Payload</AccordionTrigger>
+                        <AccordionContent>
+                          <pre className="text-xs bg-muted p-2 rounded overflow-x-auto">
+                            {JSON.stringify(log.payload, null, 2)}
+                          </pre>
+                        </AccordionContent>
+                      </AccordionItem>
+                      <AccordionItem value="response">
+                        <AccordionTrigger>Response</AccordionTrigger>
+                        <AccordionContent>
+                          <pre className="text-xs bg-muted p-2 rounded overflow-x-auto">
+                            {JSON.stringify(log.data, null, 2)}
+                          </pre>
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
                   </div>
                 ))}
               </div>
