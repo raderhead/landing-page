@@ -267,7 +267,7 @@ const AllProperties = () => {
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
                             {property.price && (
-                              <p className="font-bold text-luxury-gold text-3xl mb-1 leading-tight">
+                              <p className="font-serif font-bold text-luxury-gold text-3xl mb-1 leading-tight tracking-tight">
                                 {property.price.startsWith('$') ? property.price : `$${property.price}`}
                               </p>
                             )}
@@ -281,7 +281,7 @@ const AllProperties = () => {
                           </div>
                           
                           {property.address && (
-                            <p className="text-base md:text-lg font-medium text-white">
+                            <p className="text-xl md:text-2xl font-medium text-white font-serif tracking-wide">
                               {property.address}
                             </p>
                           )}
@@ -326,7 +326,7 @@ const AllProperties = () => {
                         <div>
                           <div className="flex items-center justify-between mb-2">
                             {property.price && (
-                              <p className="font-bold text-luxury-gold text-3xl leading-tight">
+                              <p className="font-serif font-bold text-luxury-gold text-3xl leading-tight tracking-tight">
                                 {property.price.startsWith('$') ? property.price : `$${property.price}`}
                               </p>
                             )}
@@ -340,7 +340,7 @@ const AllProperties = () => {
                           </div>
                           
                           {property.address && (
-                            <p className="text-lg md:text-xl font-medium text-white mb-3">
+                            <p className="text-xl md:text-2xl font-medium text-white mb-3 font-serif tracking-wide">
                               {property.address}
                             </p>
                           )}

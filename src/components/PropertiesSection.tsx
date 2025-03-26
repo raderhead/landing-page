@@ -1,3 +1,4 @@
+
 import { useRef, useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent } from "@/components/ui/card";
@@ -146,7 +147,7 @@ const PropertiesSection = () => {
                           <div className="space-y-2">
                             <div className="flex items-center justify-between">
                               {property.price && (
-                                <p className="font-bold text-luxury-gold text-3xl mb-1 leading-tight">
+                                <p className="font-serif font-bold text-luxury-gold text-3xl mb-1 leading-tight tracking-tight">
                                   {property.price.startsWith('$') ? property.price : `$${property.price}`}
                                 </p>
                               )}
@@ -160,7 +161,7 @@ const PropertiesSection = () => {
                             </div>
                             
                             {property.address && (
-                              <p className="text-base md:text-lg font-medium text-white mb-1">
+                              <p className="text-xl md:text-2xl font-medium text-white mb-1 font-serif tracking-wide">
                                 {property.address}
                               </p>
                             )}
