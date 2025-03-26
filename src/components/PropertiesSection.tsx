@@ -1,17 +1,9 @@
-
 import { useRef, useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-
-interface Property {
-  id: string;
-  address: string;
-  mls: string;
-  price: string;
-  image_url: string;
-}
+import { Property } from "@/types/property";
 
 const fetchProperties = async (): Promise<Property[]> => {
   const { data, error } = await supabase

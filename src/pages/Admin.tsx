@@ -9,10 +9,13 @@ import BlogList from "@/components/admin/BlogList";
 import BlogEditor from "@/components/admin/BlogEditor";
 import WebhookTester from "@/components/admin/WebhookTester";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { toast } from "@/hooks/use-toast";
 
 const Admin = () => {
   const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [currentBlog, setCurrentBlog] = useState<any>(null);
+  const [blogs, setBlogs] = useState<any[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,6 +41,116 @@ const Admin = () => {
     
     return () => subscription.unsubscribe();
   }, [navigate]);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      if (session) {
+        const { data, error } = await supabase
+          .from('blog_posts')
+          .select('*')
+          .order('created_at', { ascending: false });
+        
+        if (error) {
+          console.error("Error fetching blogs:", error);
+          toast({
+            title: "Error",
+            description: "Failed to load blog posts",
+            variant: "destructive"
+          });
+        } else {
+          setBlogs(data || []);
+        }
+      }
+    };
+    
+    fetchBlogs();
+  }, [session]);
+  
+  const handleEditBlog = (blog: any) => {
+    setCurrentBlog(blog);
+  };
+  
+  const handleDeleteBlog = async (blogId: string) => {
+    try {
+      const { error } = await supabase
+        .from('blog_posts')
+        .delete()
+        .eq('id', blogId);
+      
+      if (error) throw error;
+      
+      setBlogs(prevBlogs => prevBlogs.filter(blog => blog.id !== blogId));
+      
+      if (currentBlog && currentBlog.id === blogId) {
+        setCurrentBlog(null);
+      }
+      
+      toast({
+        title: "Success",
+        description: "Blog post deleted successfully",
+      });
+    } catch (error) {
+      console.error("Error deleting blog:", error);
+      toast({
+        title: "Error",
+        description: "Failed to delete blog post",
+        variant: "destructive"
+      });
+    }
+  };
+  
+  const handleSaveBlog = async (blogData: any) => {
+    try {
+      let response;
+      
+      if (blogData.id) {
+        // Update existing blog
+        response = await supabase
+          .from('blog_posts')
+          .update(blogData)
+          .eq('id', blogData.id)
+          .select();
+      } else {
+        // Insert new blog
+        response = await supabase
+          .from('blog_posts')
+          .insert({
+            ...blogData,
+            author_id: session.user.id,
+          })
+          .select();
+      }
+      
+      if (response.error) throw response.error;
+      
+      // Refresh blog list
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      
+      setBlogs(data || []);
+      setCurrentBlog(null);
+      
+      toast({
+        title: "Success",
+        description: blogData.id ? "Blog post updated successfully" : "Blog post created successfully",
+      });
+    } catch (error) {
+      console.error("Error saving blog:", error);
+      toast({
+        title: "Error",
+        description: "Failed to save blog post",
+        variant: "destructive"
+      });
+    }
+  };
+  
+  const handleCancelEdit = () => {
+    setCurrentBlog(null);
+  };
   
   if (loading) {
     return (
@@ -67,8 +180,17 @@ const Admin = () => {
           
           <TabsContent value="blogs">
             <div className="grid grid-cols-1 gap-8">
-              <BlogList />
-              <BlogEditor />
+              <BlogList 
+                blogs={blogs} 
+                onEdit={handleEditBlog} 
+                onDelete={handleDeleteBlog} 
+              />
+              <BlogEditor 
+                currentBlog={currentBlog} 
+                setCurrentBlog={setCurrentBlog} 
+                onSave={handleSaveBlog} 
+                onCancel={handleCancelEdit} 
+              />
             </div>
           </TabsContent>
           
