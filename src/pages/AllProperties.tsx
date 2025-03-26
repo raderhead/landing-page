@@ -281,7 +281,7 @@ const AllProperties = () => {
                           </div>
                           
                           {property.address && (
-                            <p className="text-xl md:text-2xl font-medium text-white font-serif tracking-wide">
+                            <p className="text-base md:text-lg font-medium text-white font-serif tracking-wide">
                               {property.address}
                             </p>
                           )}
@@ -340,7 +340,7 @@ const AllProperties = () => {
                           </div>
                           
                           {property.address && (
-                            <p className="text-xl md:text-2xl font-medium text-white mb-3 font-serif tracking-wide">
+                            <p className="text-base md:text-lg font-medium text-white mb-3 font-serif tracking-wide">
                               {property.address}
                             </p>
                           )}

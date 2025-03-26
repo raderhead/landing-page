@@ -161,7 +161,7 @@ const PropertiesSection = () => {
                             </div>
                             
                             {property.address && (
-                              <p className="text-xl md:text-2xl font-medium text-white mb-1 font-serif tracking-wide">
+                              <p className="text-base md:text-lg font-medium text-white mb-1 font-serif tracking-wide">
                                 {property.address}
                               </p>
                             )}
