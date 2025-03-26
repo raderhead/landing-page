@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,7 +36,7 @@ const AllProperties = () => {
   const [filteredProperties, setFilteredProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const propertiesPerPage = 6;
+  const propertiesPerPage = 9;
   
   useEffect(() => {
     const handleScroll = () => {
@@ -48,7 +47,6 @@ const AllProperties = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   
-  // Fetch properties from Supabase
   useEffect(() => {
     const fetchProperties = async () => {
       try {
@@ -63,7 +61,6 @@ const AllProperties = () => {
           console.error('Error fetching properties:', error);
           setProperties([]);
         } else {
-          // Map the data to match our Property type
           const formattedProperties = data.map((property: any): Property => ({
             id: property.id,
             title: property.title || 'Untitled Property',
@@ -88,7 +85,6 @@ const AllProperties = () => {
     fetchProperties();
   }, []);
   
-  // Filter properties based on search term and property type
   useEffect(() => {
     let filtered = properties;
     
@@ -104,10 +100,9 @@ const AllProperties = () => {
     }
     
     setFilteredProperties(filtered);
-    setCurrentPage(1); // Reset to first page when filters change
+    setCurrentPage(1);
   }, [searchTerm, propertyType, properties]);
   
-  // Calculate pagination
   const indexOfLastProperty = currentPage * propertiesPerPage;
   const indexOfFirstProperty = indexOfLastProperty - propertiesPerPage;
   const currentProperties = filteredProperties.slice(indexOfFirstProperty, indexOfLastProperty);
@@ -115,7 +110,6 @@ const AllProperties = () => {
   
   const paginate = (pageNumber: number) => {
     setCurrentPage(pageNumber);
-    // Scroll to top when changing pages
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
@@ -126,7 +120,6 @@ const AllProperties = () => {
     <div className="min-h-screen bg-black">
       <Navbar />
       
-      {/* Hero Banner */}
       <section className="relative pt-32 pb-16 bg-luxury-black overflow-hidden">
         <div className="absolute inset-0 opacity-20 z-0">
           <div className="absolute inset-0 bg-gradient-to-b from-luxury-black via-transparent to-luxury-black z-10"></div>
@@ -154,7 +147,6 @@ const AllProperties = () => {
             </p>
           </div>
           
-          {/* Search & Filter Bar */}
           <div className="bg-luxury-dark p-4 border border-luxury-khaki/20 rounded-md shadow-lg flex flex-col md:flex-row gap-4 animate-fade-in-delay-1">
             <div className="relative flex-grow">
               <Search className="absolute left-3 top-3 h-4 w-4 text-luxury-khaki" />
@@ -224,28 +216,94 @@ const AllProperties = () => {
         </div>
       </section>
       
-      {/* Properties Grid */}
       <section className="py-12 bg-black">
-        <div className="container">
-          {loading ? (
-            <div className="flex flex-col items-center justify-center py-20">
-              <Loader2 className="h-12 w-12 text-luxury-gold animate-spin mb-4" />
-              <p className="text-luxury-khaki">Loading properties...</p>
-            </div>
-          ) : currentProperties.length > 0 ? (
-            <>
-              {viewMode === "grid" ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {currentProperties.map((property, index) => (
-                    <div 
-                      key={property.id} 
-                      className="bg-luxury-dark rounded-md overflow-hidden shadow-md hover:shadow-lg transition-all duration-500 hover:shadow-luxury-gold/20 hover:-translate-y-2 hover:scale-[1.02] border border-luxury-khaki/10 group"
-                      style={{ 
-                        transitionDelay: `${index * 50}ms`,
-                        transform: `translateY(${Math.min(20, Math.max(-20, (scrollY - 1200) * 0.03 * (index % 3 - 1)))}px)`
-                      }}
-                    >
-                      <div className="relative h-64 overflow-hidden">
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-20">
+            <Loader2 className="h-12 w-12 text-luxury-gold animate-spin mb-4" />
+            <p className="text-luxury-khaki">Loading properties...</p>
+          </div>
+        ) : currentProperties.length > 0 ? (
+          <>
+            {viewMode === "grid" ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {currentProperties.map((property, index) => (
+                  <div 
+                    key={property.id} 
+                    className="bg-luxury-dark rounded-md overflow-hidden shadow-md hover:shadow-lg transition-all duration-500 hover:shadow-luxury-gold/20 hover:-translate-y-2 hover:scale-[1.02] border border-luxury-khaki/10 group"
+                    style={{ 
+                      transitionDelay: `${index * 50}ms`,
+                      transform: `translateY(${Math.min(20, Math.max(-20, (scrollY - 1200) * 0.03 * (index % 3 - 1)))}px)`
+                    }}
+                  >
+                    <div className="relative h-64 overflow-hidden">
+                      {property.image_url ? (
+                        <img 
+                          src={property.image_url} 
+                          alt={property.title} 
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-luxury-dark/50 flex items-center justify-center">
+                          <Building className="h-16 w-16 text-luxury-gold/20" />
+                        </div>
+                      )}
+                      {property.type && (
+                        <div className="absolute top-4 right-4 bg-luxury-gold text-luxury-black py-1 px-3 rounded-sm text-sm font-medium group-hover:scale-110 transition-transform">
+                          {property.type}
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="p-6">
+                      <h3 className="text-xl font-bold mb-2 text-white group-hover:text-luxury-gold transition-colors">{property.title}</h3>
+                      
+                      {property.address && (
+                        <div className="flex items-center text-luxury-khaki mb-4">
+                          <MapPin className="h-4 w-4 mr-1 group-hover:text-luxury-gold transition-colors" />
+                          <span className="text-sm">{property.address}</span>
+                        </div>
+                      )}
+                      
+                      <div className="grid grid-cols-2 gap-4 mb-6">
+                        {property.size && property.size !== 'Unknown' && (
+                          <div>
+                            <p className="text-sm text-luxury-khaki/70">Size</p>
+                            <p className="font-medium text-white">{property.size}</p>
+                          </div>
+                        )}
+                        
+                        <div>
+                          <p className="text-sm text-luxury-khaki/70">Price</p>
+                          <p className="font-medium text-white">{property.price}</p>
+                        </div>
+                        
+                        {property.mls && (
+                          <div>
+                            <p className="text-sm text-luxury-khaki/70">MLS</p>
+                            <p className="font-medium text-white">{property.mls}</p>
+                          </div>
+                        )}
+                      </div>
+                      
+                      <Button variant="outline" className="w-full border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm group-hover:bg-luxury-gold/10 transition-all">
+                        View Details
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-6">
+                {currentProperties.map((property, index) => (
+                  <div 
+                    key={property.id} 
+                    className="bg-luxury-dark rounded-md overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 hover:shadow-luxury-gold/20 border border-luxury-khaki/10 group"
+                    style={{ 
+                      transitionDelay: `${index * 50}ms`
+                    }}
+                  >
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                      <div className="relative md:col-span-1 h-48 md:h-full overflow-hidden">
                         {property.image_url ? (
                           <img 
                             src={property.image_url} 
@@ -257,6 +315,7 @@ const AllProperties = () => {
                             <Building className="h-16 w-16 text-luxury-gold/20" />
                           </div>
                         )}
+                        
                         {property.type && (
                           <div className="absolute top-4 right-4 bg-luxury-gold text-luxury-black py-1 px-3 rounded-sm text-sm font-medium group-hover:scale-110 transition-transform">
                             {property.type}
@@ -264,17 +323,18 @@ const AllProperties = () => {
                         )}
                       </div>
                       
-                      <div className="p-6">
-                        <h3 className="text-xl font-bold mb-2 text-white group-hover:text-luxury-gold transition-colors">{property.title}</h3>
+                      <div className="p-6 md:col-span-3 flex flex-col justify-between">
+                        <div>
+                          <h3 className="text-xl font-bold mb-2 text-white group-hover:text-luxury-gold transition-colors">{property.title}</h3>
+                          {property.address && (
+                            <div className="flex items-center text-luxury-khaki mb-4">
+                              <MapPin className="h-4 w-4 mr-1 group-hover:text-luxury-gold transition-colors" />
+                              <span className="text-sm">{property.address}</span>
+                            </div>
+                          )}
+                        </div>
                         
-                        {property.address && (
-                          <div className="flex items-center text-luxury-khaki mb-4">
-                            <MapPin className="h-4 w-4 mr-1 group-hover:text-luxury-gold transition-colors" />
-                            <span className="text-sm">{property.address}</span>
-                          </div>
-                        )}
-                        
-                        <div className="grid grid-cols-2 gap-4 mb-6">
+                        <div className="grid grid-cols-3 gap-4 mb-6">
                           {property.size && property.size !== 'Unknown' && (
                             <div>
                               <p className="text-sm text-luxury-khaki/70">Size</p>
@@ -287,6 +347,11 @@ const AllProperties = () => {
                             <p className="font-medium text-white">{property.price}</p>
                           </div>
                           
+                          <div>
+                            <p className="text-sm text-luxury-khaki/70">Type</p>
+                            <p className="font-medium text-white">{property.type}</p>
+                          </div>
+                          
                           {property.mls && (
                             <div>
                               <p className="text-sm text-luxury-khaki/70">MLS</p>
@@ -295,144 +360,67 @@ const AllProperties = () => {
                           )}
                         </div>
                         
-                        <Button variant="outline" className="w-full border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm group-hover:bg-luxury-gold/10 transition-all">
+                        <Button variant="outline" className="w-fit border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm group-hover:bg-luxury-gold/10 transition-all">
                           View Details
                         </Button>
                       </div>
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="space-y-6">
-                  {currentProperties.map((property, index) => (
-                    <div 
-                      key={property.id} 
-                      className="bg-luxury-dark rounded-md overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 hover:shadow-luxury-gold/20 border border-luxury-khaki/10 group"
-                      style={{ 
-                        transitionDelay: `${index * 50}ms`
-                      }}
-                    >
-                      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                        <div className="relative md:col-span-1 h-48 md:h-full overflow-hidden">
-                          {property.image_url ? (
-                            <img 
-                              src={property.image_url} 
-                              alt={property.title} 
-                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                            />
-                          ) : (
-                            <div className="w-full h-full bg-luxury-dark/50 flex items-center justify-center">
-                              <Building className="h-16 w-16 text-luxury-gold/20" />
-                            </div>
-                          )}
-                          
-                          {property.type && (
-                            <div className="absolute top-4 right-4 bg-luxury-gold text-luxury-black py-1 px-3 rounded-sm text-sm font-medium group-hover:scale-110 transition-transform">
-                              {property.type}
-                            </div>
-                          )}
-                        </div>
-                        
-                        <div className="p-6 md:col-span-3 flex flex-col justify-between">
-                          <div>
-                            <h3 className="text-xl font-bold mb-2 text-white group-hover:text-luxury-gold transition-colors">{property.title}</h3>
-                            {property.address && (
-                              <div className="flex items-center text-luxury-khaki mb-4">
-                                <MapPin className="h-4 w-4 mr-1 group-hover:text-luxury-gold transition-colors" />
-                                <span className="text-sm">{property.address}</span>
-                              </div>
-                            )}
-                          </div>
-                          
-                          <div className="grid grid-cols-3 gap-4 mb-6">
-                            {property.size && property.size !== 'Unknown' && (
-                              <div>
-                                <p className="text-sm text-luxury-khaki/70">Size</p>
-                                <p className="font-medium text-white">{property.size}</p>
-                              </div>
-                            )}
-                            
-                            <div>
-                              <p className="text-sm text-luxury-khaki/70">Price</p>
-                              <p className="font-medium text-white">{property.price}</p>
-                            </div>
-                            
-                            <div>
-                              <p className="text-sm text-luxury-khaki/70">Type</p>
-                              <p className="font-medium text-white">{property.type}</p>
-                            </div>
-                            
-                            {property.mls && (
-                              <div>
-                                <p className="text-sm text-luxury-khaki/70">MLS</p>
-                                <p className="font-medium text-white">{property.mls}</p>
-                              </div>
-                            )}
-                          </div>
-                          
-                          <Button variant="outline" className="w-fit border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm group-hover:bg-luxury-gold/10 transition-all">
-                            View Details
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-              
-              {/* Pagination */}
-              {totalPages > 1 && (
-                <div className="mt-12">
-                  <Pagination>
-                    <PaginationContent>
-                      <PaginationItem>
-                        <PaginationPrevious 
-                          className={`border-luxury-khaki/30 text-luxury-khaki hover:border-luxury-gold hover:text-luxury-gold ${currentPage === 1 ? 'pointer-events-none opacity-50' : ''}`}
-                          onClick={() => currentPage > 1 && paginate(currentPage - 1)}
-                        />
+                  </div>
+                ))}
+              </div>
+            )}
+            
+            {totalPages > 1 && (
+              <div className="mt-12">
+                <Pagination>
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious 
+                        className={`border-luxury-khaki/30 text-luxury-khaki hover:border-luxury-gold hover:text-luxury-gold ${currentPage === 1 ? 'pointer-events-none opacity-50' : ''}`}
+                        onClick={() => currentPage > 1 && paginate(currentPage - 1)}
+                      />
+                    </PaginationItem>
+                    
+                    {Array.from({ length: totalPages }, (_, i) => (
+                      <PaginationItem key={i + 1}>
+                        <PaginationLink
+                          className={`${currentPage === i + 1 ? 'border-luxury-gold bg-luxury-gold/10 text-luxury-gold' : 'border-luxury-khaki/30 text-luxury-khaki hover:border-luxury-gold hover:text-luxury-gold'}`}
+                          onClick={() => paginate(i + 1)}
+                          isActive={currentPage === i + 1}
+                        >
+                          {i + 1}
+                        </PaginationLink>
                       </PaginationItem>
-                      
-                      {Array.from({ length: totalPages }, (_, i) => (
-                        <PaginationItem key={i + 1}>
-                          <PaginationLink
-                            className={`${currentPage === i + 1 ? 'border-luxury-gold bg-luxury-gold/10 text-luxury-gold' : 'border-luxury-khaki/30 text-luxury-khaki hover:border-luxury-gold hover:text-luxury-gold'}`}
-                            onClick={() => paginate(i + 1)}
-                            isActive={currentPage === i + 1}
-                          >
-                            {i + 1}
-                          </PaginationLink>
-                        </PaginationItem>
-                      ))}
-                      
-                      <PaginationItem>
-                        <PaginationNext 
-                          className={`border-luxury-khaki/30 text-luxury-khaki hover:border-luxury-gold hover:text-luxury-gold ${currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}`}
-                          onClick={() => currentPage < totalPages && paginate(currentPage + 1)}
-                        />
-                      </PaginationItem>
-                    </PaginationContent>
-                  </Pagination>
-                </div>
-              )}
-            </>
-          ) : (
-            <div className="text-center py-12">
-              <Building className="mx-auto h-16 w-16 text-luxury-khaki/30 mb-4" />
-              <h3 className="text-2xl font-bold text-luxury-gold mb-2">No properties found</h3>
-              <p className="text-luxury-khaki mb-6">Try adjusting your search criteria or browse all properties.</p>
-              <Button 
-                variant="outline" 
-                className="border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm"
-                onClick={() => {
-                  setSearchTerm("");
-                  setPropertyType("All");
-                }}
-              >
-                Reset Filters
-              </Button>
-            </div>
-          )}
-        </div>
+                    ))}
+                    
+                    <PaginationItem>
+                      <PaginationNext 
+                        className={`border-luxury-khaki/30 text-luxury-khaki hover:border-luxury-gold hover:text-luxury-gold ${currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}`}
+                        onClick={() => currentPage < totalPages && paginate(currentPage + 1)}
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="text-center py-12">
+            <Building className="mx-auto h-16 w-16 text-luxury-khaki/30 mb-4" />
+            <h3 className="text-2xl font-bold text-luxury-gold mb-2">No properties found</h3>
+            <p className="text-luxury-khaki mb-6">Try adjusting your search criteria or browse all properties.</p>
+            <Button 
+              variant="outline" 
+              className="border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm"
+              onClick={() => {
+                setSearchTerm("");
+                setPropertyType("All");
+              }}
+            >
+              Reset Filters
+            </Button>
+          </div>
+        )}
       </section>
       
       <Footer />
