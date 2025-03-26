@@ -188,7 +188,7 @@ const Admin = () => {
               <BlogEditor 
                 currentBlog={currentBlog} 
                 setCurrentBlog={setCurrentBlog} 
-                onSave={handleSaveBlog} 
+                onSave={(e) => handleSaveBlog(currentBlog)}
                 onCancel={handleCancelEdit} 
               />
             </div>
