@@ -58,6 +58,7 @@ export type Database = {
           featured: boolean | null
           id: string
           image_url: string | null
+          last_sync_id: string | null
           mls: string | null
           price: string | null
           received_at: string | null
@@ -71,6 +72,7 @@ export type Database = {
           featured?: boolean | null
           id?: string
           image_url?: string | null
+          last_sync_id?: string | null
           mls?: string | null
           price?: string | null
           received_at?: string | null
@@ -84,6 +86,7 @@ export type Database = {
           featured?: boolean | null
           id?: string
           image_url?: string | null
+          last_sync_id?: string | null
           mls?: string | null
           price?: string | null
           received_at?: string | null
@@ -91,7 +94,15 @@ export type Database = {
           title?: string | null
           type?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "properties_last_sync_id_fkey"
+            columns: ["last_sync_id"]
+            isOneToOne: false
+            referencedRelation: "sync_operations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       property_details: {
         Row: {
@@ -148,6 +159,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      sync_operations: {
+        Row: {
+          id: string
+          notes: string | null
+          property_count: number
+          source: string
+          timestamp: string
+        }
+        Insert: {
+          id: string
+          notes?: string | null
+          property_count: number
+          source: string
+          timestamp?: string
+        }
+        Update: {
+          id?: string
+          notes?: string | null
+          property_count?: number
+          source?: string
+          timestamp?: string
+        }
+        Relationships: []
       }
       webhook_property_details: {
         Row: {
