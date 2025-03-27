@@ -5,6 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Loader2, Home, Info, DollarSign, MapPin, SquareUser, Table, Ruler } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { Json } from '@/integrations/supabase/types';
 
 interface PropertyDetailsDialogProps {
   isOpen: boolean;
@@ -76,6 +77,24 @@ const PropertyDetailsDialog = ({ isOpen, onClose, propertyId }: PropertyDetailsD
         
         // Transform the data to match our PropertyDetails type
         if (detailsData) {
+          // Safely convert rooms Json to Record<string, any> or null
+          let roomsData: Record<string, any> | null = null;
+          
+          if (detailsData.rooms) {
+            // If it's a string, try to parse it
+            if (typeof detailsData.rooms === 'string') {
+              try {
+                roomsData = JSON.parse(detailsData.rooms);
+              } catch (e) {
+                console.error("Error parsing rooms JSON:", e);
+                roomsData = null;
+              }
+            } else {
+              // If it's already an object, use it directly
+              roomsData = detailsData.rooms as Record<string, any>;
+            }
+          }
+          
           const transformedDetails: PropertyDetails = {
             id: detailsData.id,
             property_id: detailsData.property_id,
@@ -85,7 +104,7 @@ const PropertyDetailsDialog = ({ isOpen, onClose, propertyId }: PropertyDetailsD
             status: detailsData.status,
             propertySize: detailsData.propertysize,
             landSize: detailsData.landsize,
-            rooms: detailsData.rooms,
+            rooms: roomsData,
             remarks: detailsData.remarks,
             listingBy: detailsData.listingby
           };
