@@ -40,6 +40,24 @@ serve(async (req: Request): Promise<Response> => {
 
     console.log("Property details payload:", JSON.stringify(payload));
     
+    // Verify we have an address in the payload
+    if (!payload.address) {
+      console.log("Missing address in property details payload");
+      return new Response(
+        JSON.stringify({ 
+          success: false, 
+          message: "Missing address in property details" 
+        }),
+        {
+          status: 400,
+          headers: { 
+            "Content-Type": "application/json",
+            ...corsHeaders 
+          },
+        }
+      );
+    }
+    
     // Store the raw payload for reference
     const { data: webhookRecord, error: webhookError } = await supabase
       .from('webhook_property_details')
@@ -66,122 +84,117 @@ serve(async (req: Request): Promise<Response> => {
       propertyDetails = payload.data.propertyDetails;
     }
     
-    // Check if we have required address information to identify the property
-    if (propertyDetails.address) {
-      // Try to find the corresponding property by address
-      const { data: existingProperties, error: queryError } = await supabase
-        .from('properties')
+    // Try to find the corresponding property by address
+    const { data: existingProperties, error: queryError } = await supabase
+      .from('properties')
+      .select('id')
+      .eq('address', propertyDetails.address)
+      .limit(1);
+      
+    if (queryError) {
+      console.error("Error finding matching property:", queryError);
+      throw queryError;
+    }
+    
+    if (existingProperties && existingProperties.length > 0) {
+      const propertyId = existingProperties[0].id;
+      
+      // Prepare data for insertion
+      const detailsData = {
+        property_id: propertyId,
+        address: propertyDetails.address || null,
+        listPrice: propertyDetails.listPrice || propertyDetails.price || null,
+        salePricePerSqm: propertyDetails.salePricePerSqm || null,
+        status: propertyDetails.status || null,
+        propertySize: propertyDetails.propertySize || propertyDetails.size || null,
+        landSize: propertyDetails.landSize || null,
+        rooms: propertyDetails.rooms || null,
+        remarks: propertyDetails.remarks || propertyDetails.description || null,
+        listingBy: propertyDetails.listingBy || null
+      };
+      
+      // Check if details for this property already exist
+      const { data: existingDetails, error: detailsQueryError } = await supabase
+        .from('property_details')
         .select('id')
-        .eq('address', propertyDetails.address)
+        .eq('property_id', propertyId)
         .limit(1);
         
-      if (queryError) {
-        console.error("Error finding matching property:", queryError);
-        throw queryError;
+      if (detailsQueryError) {
+        console.error("Error checking existing property details:", detailsQueryError);
+        throw detailsQueryError;
       }
       
-      if (existingProperties && existingProperties.length > 0) {
-        const propertyId = existingProperties[0].id;
-        
-        // Prepare data for insertion
-        const detailsData = {
-          property_id: propertyId,
-          address: propertyDetails.address || null,
-          listPrice: propertyDetails.listPrice || propertyDetails.price || null,
-          salePricePerSqm: propertyDetails.salePricePerSqm || null,
-          status: propertyDetails.status || null,
-          propertySize: propertyDetails.propertySize || propertyDetails.size || null,
-          landSize: propertyDetails.landSize || null,
-          rooms: propertyDetails.rooms || null,
-          remarks: propertyDetails.remarks || propertyDetails.description || null,
-          listingBy: propertyDetails.listingBy || null
-        };
-        
-        // Check if details for this property already exist
-        const { data: existingDetails, error: detailsQueryError } = await supabase
+      let upsertResult;
+      
+      if (existingDetails && existingDetails.length > 0) {
+        // Update existing record
+        const { data, error } = await supabase
           .from('property_details')
-          .select('id')
-          .eq('property_id', propertyId)
-          .limit(1);
+          .update(detailsData)
+          .eq('id', existingDetails[0].id)
+          .select();
           
-        if (detailsQueryError) {
-          console.error("Error checking existing property details:", detailsQueryError);
-          throw detailsQueryError;
-        }
-        
-        let upsertResult;
-        
-        if (existingDetails && existingDetails.length > 0) {
-          // Update existing record
-          const { data, error } = await supabase
-            .from('property_details')
-            .update(detailsData)
-            .eq('id', existingDetails[0].id)
-            .select();
-            
-          upsertResult = { data, error, action: 'updated' };
-        } else {
-          // Insert new record
-          const { data, error } = await supabase
-            .from('property_details')
-            .insert(detailsData)
-            .select();
-            
-          upsertResult = { data, error, action: 'inserted' };
-        }
-        
-        if (upsertResult.error) {
-          console.error(`Error ${upsertResult.action} property details:`, upsertResult.error);
-          throw upsertResult.error;
-        }
-        
-        console.log(`Successfully ${upsertResult.action} property details for property ID ${propertyId}`);
-        
-        // Mark webhook record as processed
-        await supabase
-          .from('webhook_property_details')
-          .update({ processed: true })
-          .eq('id', webhookRecord.id);
-          
-        return new Response(
-          JSON.stringify({ 
-            success: true, 
-            message: `Property details ${upsertResult.action} successfully`,
-            property_id: propertyId
-          }),
-          {
-            status: 200,
-            headers: { 
-              "Content-Type": "application/json",
-              ...corsHeaders 
-            },
-          }
-        );
+        upsertResult = { data, error, action: 'updated' };
       } else {
-        console.log("No matching property found for address:", propertyDetails.address);
-        return new Response(
-          JSON.stringify({ 
-            success: false, 
-            message: "No matching property found with provided address" 
-          }),
-          {
-            status: 404,
-            headers: { 
-              "Content-Type": "application/json",
-              ...corsHeaders 
-            },
-          }
-        );
+        // Insert new record
+        const { data, error } = await supabase
+          .from('property_details')
+          .insert(detailsData)
+          .select();
+          
+        upsertResult = { data, error, action: 'inserted' };
       }
+      
+      if (upsertResult.error) {
+        console.error(`Error ${upsertResult.action} property details:`, upsertResult.error);
+        throw upsertResult.error;
+      }
+      
+      console.log(`Successfully ${upsertResult.action} property details for property ID ${propertyId}`);
+      
+      // Mark webhook record as processed
+      await supabase
+        .from('webhook_property_details')
+        .update({ processed: true })
+        .eq('id', webhookRecord.id);
+        
+      return new Response(
+        JSON.stringify({ 
+          success: true, 
+          message: `Property details ${upsertResult.action} successfully`,
+          property_id: propertyId
+        }),
+        {
+          status: 200,
+          headers: { 
+            "Content-Type": "application/json",
+            ...corsHeaders 
+          },
+        }
+      );
     } else {
-      console.log("Missing address in property details payload");
+      console.log("No matching property found for address:", propertyDetails.address);
+      
+      // List available property addresses to help debugging
+      const { data: availableProperties, error: listError } = await supabase
+        .from('properties')
+        .select('address')
+        .limit(10);
+        
+      const availableAddresses = availableProperties?.map(p => p.address).filter(Boolean) || [];
+      
       return new Response(
         JSON.stringify({ 
           success: false, 
-          message: "Missing address in property details" 
+          message: "No matching property found with provided address",
+          debug: {
+            provided_address: propertyDetails.address,
+            sample_available_addresses: availableAddresses
+          }
         }),
         {
-          status: 400,
+          status: 404,
           headers: { 
             "Content-Type": "application/json",
             ...corsHeaders 

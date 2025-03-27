@@ -6,10 +6,11 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/components/ui/use-toast";
-import { Copy, Plus, Minus } from "lucide-react";
+import { Copy, Plus, Minus, AlertCircle } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const WebhookTester = () => {
   const { toast } = useToast();
@@ -18,6 +19,7 @@ const WebhookTester = () => {
   const [useCustomPayload, setUseCustomPayload] = useState(false);
   const [webhookType, setWebhookType] = useState<string>("receive-webhook");
   const [customPayload, setCustomPayload] = useState('{\n  "title": "Downtown Office Building",\n  "address": "123 Main St, Abilene, TX",\n  "type": "Office",\n  "size": "3,500 sq ft",\n  "price": "$750,000",\n  "image_url": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",\n  "description": "Prime office space in downtown Abilene",\n  "featured": true\n}');
+  const [isPostmanMode, setIsPostmanMode] = useState(false);
   
   // Generate the full webhook URL for the user to copy
   const baseUrl = window.location.origin;
@@ -32,7 +34,7 @@ const WebhookTester = () => {
     });
   };
 
-  // Sample property payload
+  // Create sample payloads with valid address field
   const samplePropertyPayload = {
     title: "Downtown Office Building",
     address: "123 Main St, Abilene, TX",
@@ -91,16 +93,29 @@ const WebhookTester = () => {
           : samplePropertyPayload;
       }
       
+      // Check if address is present
+      if (!payloadToSend.address) {
+        toast({
+          title: "Missing Address",
+          description: "The payload must include an 'address' field",
+          variant: "destructive",
+        });
+        return;
+      }
+      
       // Log the payload to help debugging
       console.log("Sending webhook to:", fullWebhookUrl);
       console.log("With payload:", payloadToSend);
       
+      // Set the proper headers for the request
+      const headers = {
+        "Content-Type": "application/json"
+      };
+      
       // This is just for testing - sending a webhook to our own endpoint
       const response = await fetch(fullWebhookUrl, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers,
         body: JSON.stringify(payloadToSend),
       });
       
@@ -131,6 +146,30 @@ const WebhookTester = () => {
         variant: "destructive",
       });
     }
+  };
+
+  const getPostmanInstructions = () => {
+    return (
+      <div className="text-sm space-y-2">
+        <p>1. Set the request method to <strong>POST</strong></p>
+        <p>2. Use this URL:
+          <code className="block p-2 mt-1 bg-muted rounded-md">{fullWebhookUrl}</code>
+        </p>
+        <p>3. In Headers, add:
+          <code className="block p-2 mt-1 bg-muted rounded-md">Content-Type: application/json</code>
+        </p>
+        <p>4. In the Body tab, select "raw" and choose "JSON", then paste:</p>
+        <pre className="p-2 mt-1 bg-muted rounded-md overflow-auto text-xs">{
+          JSON.stringify(webhookType === "receive-property-details" 
+            ? samplePropertyDetailsPayload 
+            : samplePropertyPayload, null, 2)
+        }</pre>
+        <div className="text-amber-500 flex items-center mt-3">
+          <AlertCircle className="h-4 w-4 mr-2" />
+          <span>Make sure the <strong>address</strong> field matches a property in your database!</span>
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -172,22 +211,53 @@ const WebhookTester = () => {
               <code className="text-sm break-all">{fullWebhookUrl}</code>
             </div>
           </div>
+          
+          <Alert className="bg-amber-500/10 border-amber-500/30">
+            <AlertCircle className="h-4 w-4 text-amber-500" />
+            <AlertTitle className="text-amber-500">Important</AlertTitle>
+            <AlertDescription className="text-amber-500/90">
+              {webhookType === "receive-property-details" ? (
+                <span>Property Details webhooks require an <code className="bg-amber-500/10 p-1 rounded-sm">address</code> field that matches an existing property.</span>
+              ) : (
+                <span>Property Listing webhooks require at least an <code className="bg-amber-500/10 p-1 rounded-sm">address</code> field.</span>
+              )}
+            </AlertDescription>
+          </Alert>
         </CardContent>
         <CardFooter className="flex flex-col items-start space-y-4">
           <div className="flex items-center justify-between w-full">
-            <Button 
-              variant="outline" 
-              onClick={() => setUseCustomPayload(!useCustomPayload)}
-              className="mr-2"
-            >
-              {useCustomPayload ? "Use Sample Payload" : "Use Custom Payload"}
-            </Button>
+            <div className="space-x-2">
+              <Button 
+                variant="outline" 
+                onClick={() => setUseCustomPayload(!useCustomPayload)}
+              >
+                {useCustomPayload ? "Use Sample Payload" : "Use Custom Payload"}
+              </Button>
+              <Button 
+                variant="outline" 
+                onClick={() => setIsPostmanMode(!isPostmanMode)}
+              >
+                {isPostmanMode ? "Hide Postman Guide" : "Postman Guide"}
+              </Button>
+            </div>
             <Button onClick={generateTestWebhook}>
               Send Test {webhookType === "receive-property-details" ? "Property Details" : "Property Listing"}
             </Button>
           </div>
           
-          {useCustomPayload && (
+          {isPostmanMode && (
+            <Card className="w-full bg-muted/40 border-muted">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base">Postman Guide</CardTitle>
+                <CardDescription>How to test with Postman</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {getPostmanInstructions()}
+              </CardContent>
+            </Card>
+          )}
+          
+          {useCustomPayload && !isPostmanMode && (
             <div className="w-full">
               <Textarea 
                 value={customPayload}
@@ -196,12 +266,12 @@ const WebhookTester = () => {
                 placeholder="Enter custom JSON payload"
               />
               <p className="text-sm text-muted-foreground mt-2">
-                Enter a valid JSON with property data. Must include at least an "address" field.
+                Enter a valid JSON with property data. Must include an "address" field.
               </p>
             </div>
           )}
           
-          {!useCustomPayload && (
+          {!useCustomPayload && !isPostmanMode && (
             <Accordion type="single" collapsible className="w-full">
               <AccordionItem value="sample-payload">
                 <AccordionTrigger>View Sample Payload</AccordionTrigger>
