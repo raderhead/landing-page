@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -5,11 +6,13 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/components/ui/use-toast";
-import { Copy, Plus, Minus, AlertCircle } from "lucide-react";
+import { Copy, Plus, Minus, AlertCircle, RefreshCw } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 const WebhookTester = () => {
   const { toast } = useToast();
@@ -19,11 +22,13 @@ const WebhookTester = () => {
   const [webhookType, setWebhookType] = useState<string>("receive-webhook");
   const [customPayload, setCustomPayload] = useState('{\n  "title": "Downtown Office Building",\n  "address": "123 Main St, Abilene, TX",\n  "type": "Office",\n  "size": "3,500 sq ft",\n  "price": "$750,000",\n  "image_url": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",\n  "description": "Prime office space in downtown Abilene",\n  "featured": true\n}');
   const [isPostmanMode, setIsPostmanMode] = useState(false);
+  const [syncMode, setSyncMode] = useState(false);
   
   // Generate the full webhook URL for the user to copy
   const baseUrl = window.location.origin;
   const supabaseProjectId = "xfmguaamogzirnnqktwz";
-  const fullWebhookUrl = `https://${supabaseProjectId}.supabase.co/functions/v1/${webhookType}${webhookUrl ? `/${webhookUrl}` : ''}`;
+  const effectiveWebhookType = syncMode ? "sync-properties" : webhookType;
+  const fullWebhookUrl = `https://${supabaseProjectId}.supabase.co/functions/v1/${effectiveWebhookType}${webhookUrl ? `/${webhookUrl}` : ''}`;
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(fullWebhookUrl);
@@ -45,6 +50,36 @@ const WebhookTester = () => {
     featured: true
   };
 
+  // Sample properties array for sync mode
+  const samplePropertiesArrayPayload = {
+    properties: [
+      {
+        title: "Downtown Office Building",
+        address: "123 Main St, Abilene, TX",
+        type: "Office",
+        size: "3,500 sq ft",
+        price: "$750,000",
+        image_url: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab"
+      },
+      {
+        title: "Retail Space on Pine",
+        address: "456 Pine Ave, Abilene, TX",
+        type: "Retail",
+        size: "2,200 sq ft",
+        price: "$450,000",
+        image_url: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7"
+      },
+      {
+        title: "Industrial Warehouse",
+        address: "789 Industrial Pkwy, Abilene, TX",
+        type: "Industrial",
+        size: "12,000 sq ft",
+        price: "$1,200,000",
+        image_url: "https://images.unsplash.com/photo-1553413077-190dd305871c"
+      }
+    ]
+  };
+
   // Sample property details payload
   const samplePropertyDetailsPayload = {
     address: "123 Main St, Abilene, TX",
@@ -64,13 +99,15 @@ const WebhookTester = () => {
   };
 
   useEffect(() => {
-    // Update the custom payload when the webhook type changes
-    if (webhookType === "receive-property-details") {
+    // Update the custom payload when the webhook type or sync mode changes
+    if (syncMode) {
+      setCustomPayload(JSON.stringify(samplePropertiesArrayPayload, null, 2));
+    } else if (webhookType === "receive-property-details") {
       setCustomPayload(JSON.stringify(samplePropertyDetailsPayload, null, 2));
     } else {
       setCustomPayload(JSON.stringify(samplePropertyPayload, null, 2));
     }
-  }, [webhookType]);
+  }, [webhookType, syncMode]);
 
   const generateTestWebhook = async () => {
     try {
@@ -88,13 +125,17 @@ const WebhookTester = () => {
           return;
         }
       } else {
-        payloadToSend = webhookType === "receive-property-details" 
-          ? samplePropertyDetailsPayload 
-          : samplePropertyPayload;
+        if (syncMode) {
+          payloadToSend = samplePropertiesArrayPayload;
+        } else {
+          payloadToSend = webhookType === "receive-property-details" 
+            ? samplePropertyDetailsPayload 
+            : samplePropertyPayload;
+        }
       }
       
       // Check if address is present
-      if (!payloadToSend.address) {
+      if (!syncMode && !payloadToSend.address) {
         toast({
           title: "Missing Address",
           description: "The payload must include an 'address' field",
@@ -134,7 +175,9 @@ const WebhookTester = () => {
       toast({
         title: result.success ? "Success" : "Error",
         description: result.success 
-          ? "Property data sent successfully! Check the Featured Properties section." 
+          ? syncMode 
+            ? `Sync completed: Processed ${result.processedCount} properties, deleted ${result.deletedCount} stale properties.` 
+            : "Property data sent successfully! Check the Featured Properties section."
           : `Error sending webhook: ${result.message || result.error}`,
         variant: result.success ? "default" : "destructive",
       });
@@ -160,9 +203,13 @@ const WebhookTester = () => {
         </p>
         <p>4. In the Body tab, select "raw" and choose "JSON", then paste:</p>
         <pre className="p-2 mt-1 bg-muted rounded-md overflow-auto text-xs">{
-          JSON.stringify(webhookType === "receive-property-details" 
-            ? samplePropertyDetailsPayload 
-            : samplePropertyPayload, null, 2)
+          JSON.stringify(
+            syncMode
+              ? samplePropertiesArrayPayload
+              : webhookType === "receive-property-details" 
+                ? samplePropertyDetailsPayload 
+                : samplePropertyPayload, 
+            null, 2)
         }</pre>
         <div className="text-amber-500 flex items-center mt-3">
           <AlertCircle className="h-4 w-4 mr-2" />
@@ -182,20 +229,38 @@ const WebhookTester = () => {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          <div className="flex items-center space-x-2 mb-4">
+            <Switch
+              id="sync-mode"
+              checked={syncMode}
+              onCheckedChange={setSyncMode}
+            />
+            <Label htmlFor="sync-mode" className="cursor-pointer">
+              Enable Sync Mode
+            </Label>
+            {syncMode && (
+              <Badge variant="outline" className="ml-2 bg-amber-500/10 text-amber-500 hover:bg-amber-500/20">
+                Properties not included in payload will be deleted
+              </Badge>
+            )}
+          </div>
+          
           <div className="flex flex-col space-y-4">
             <div className="flex items-center space-x-2">
-              <Select
-                value={webhookType}
-                onValueChange={setWebhookType}
-              >
-                <SelectTrigger className="w-[250px]">
-                  <SelectValue placeholder="Select webhook type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="receive-webhook">Property Listing</SelectItem>
-                  <SelectItem value="receive-property-details">Property Details</SelectItem>
-                </SelectContent>
-              </Select>
+              {!syncMode && (
+                <Select
+                  value={webhookType}
+                  onValueChange={setWebhookType}
+                >
+                  <SelectTrigger className="w-[250px]">
+                    <SelectValue placeholder="Select webhook type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="receive-webhook">Property Listing</SelectItem>
+                    <SelectItem value="receive-property-details">Property Details</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
               <Input
                 value={webhookUrl}
                 onChange={(e) => setWebhookUrl(e.target.value)}
@@ -216,7 +281,9 @@ const WebhookTester = () => {
             <AlertCircle className="h-4 w-4 text-amber-500" />
             <AlertTitle className="text-amber-500">Important</AlertTitle>
             <AlertDescription className="text-amber-500/90">
-              {webhookType === "receive-property-details" ? (
+              {syncMode ? (
+                <span>Sync Mode will delete properties that are not included in the current webhook payload.</span>
+              ) : webhookType === "receive-property-details" ? (
                 <span>Property Details webhooks require an <code className="bg-amber-500/10 p-1 rounded-sm">address</code> field that matches an existing property.</span>
               ) : (
                 <span>Property Listing webhooks require at least an <code className="bg-amber-500/10 p-1 rounded-sm">address</code> field.</span>
@@ -241,7 +308,14 @@ const WebhookTester = () => {
               </Button>
             </div>
             <Button onClick={generateTestWebhook}>
-              Send Test {webhookType === "receive-property-details" ? "Property Details" : "Property Listing"}
+              {syncMode ? (
+                <span className="flex items-center">
+                  <RefreshCw className="mr-2 h-4 w-4" />
+                  Sync Properties
+                </span>
+              ) : (
+                `Send Test ${webhookType === "receive-property-details" ? "Property Details" : "Property Listing"}`
+              )}
             </Button>
           </div>
           
@@ -266,7 +340,9 @@ const WebhookTester = () => {
                 placeholder="Enter custom JSON payload"
               />
               <p className="text-sm text-muted-foreground mt-2">
-                Enter a valid JSON with property data. Must include an "address" field.
+                {syncMode 
+                  ? "Enter a valid JSON with an array of properties in the 'properties' field." 
+                  : "Enter a valid JSON with property data. Must include an \"address\" field."}
               </p>
             </div>
           )}
@@ -278,9 +354,11 @@ const WebhookTester = () => {
                 <AccordionContent>
                   <pre className="p-3 bg-muted rounded-md text-xs overflow-auto">
                     {JSON.stringify(
-                      webhookType === "receive-property-details" 
-                        ? samplePropertyDetailsPayload 
-                        : samplePropertyPayload, 
+                      syncMode
+                        ? samplePropertiesArrayPayload
+                        : webhookType === "receive-property-details" 
+                          ? samplePropertyDetailsPayload 
+                          : samplePropertyPayload, 
                       null, 
                       2
                     )}
