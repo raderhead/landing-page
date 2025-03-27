@@ -9,6 +9,18 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
+// Helper function to normalize addresses for comparison
+function normalizeAddress(address: string): string {
+  if (!address) return '';
+  
+  // Remove common punctuation and extra spaces, convert to lowercase
+  return address
+    .toLowerCase()
+    .replace(/,/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 serve(async (req: Request): Promise<Response> => {
   console.log("Received property details webhook request");
   
@@ -84,33 +96,41 @@ serve(async (req: Request): Promise<Response> => {
       propertyDetails = payload.data.propertyDetails;
     }
     
-    // Try to find the corresponding property by address
-    const { data: existingProperties, error: queryError } = await supabase
+    // Normalize the incoming address
+    const normalizedIncomingAddress = normalizeAddress(propertyDetails.address);
+    console.log("Normalized incoming address:", normalizedIncomingAddress);
+    
+    // Get all properties to compare normalized addresses
+    const { data: allProperties, error: queryError } = await supabase
       .from('properties')
-      .select('id')
-      .eq('address', propertyDetails.address)
-      .limit(1);
+      .select('id, address');
       
     if (queryError) {
       console.error("Error finding matching property:", queryError);
       throw queryError;
     }
     
-    if (existingProperties && existingProperties.length > 0) {
-      const propertyId = existingProperties[0].id;
+    // Find matching property by comparing normalized addresses
+    const matchingProperty = allProperties?.find(property => 
+      normalizeAddress(property.address) === normalizedIncomingAddress
+    );
+    
+    if (matchingProperty) {
+      const propertyId = matchingProperty.id;
+      console.log("Found matching property with ID:", propertyId);
       
       // Prepare data for insertion
       const detailsData = {
         property_id: propertyId,
         address: propertyDetails.address || null,
-        listPrice: propertyDetails.listPrice || propertyDetails.price || null,
-        salePricePerSqm: propertyDetails.salePricePerSqm || null,
+        listprice: propertyDetails.listPrice || propertyDetails.price || null,
+        salepricepersqm: propertyDetails.salePricePerSqm || null,
         status: propertyDetails.status || null,
-        propertySize: propertyDetails.propertySize || propertyDetails.size || null,
-        landSize: propertyDetails.landSize || null,
+        propertysize: propertyDetails.propertySize || propertyDetails.size || null,
+        landsize: propertyDetails.landSize || propertyDetails.landsize || null,
         rooms: propertyDetails.rooms || null,
         remarks: propertyDetails.remarks || propertyDetails.description || null,
-        listingBy: propertyDetails.listingBy || null
+        listingby: propertyDetails.listingBy || propertyDetails.listingby || null
       };
       
       // Check if details for this property already exist
@@ -176,13 +196,16 @@ serve(async (req: Request): Promise<Response> => {
     } else {
       console.log("No matching property found for address:", propertyDetails.address);
       
+      // Create a debug map to show what we tried to match against
+      const debugAddressMap = {};
+      allProperties?.forEach(property => {
+        if (property.address) {
+          debugAddressMap[property.address] = normalizeAddress(property.address);
+        }
+      });
+      
       // List available property addresses to help debugging
-      const { data: availableProperties, error: listError } = await supabase
-        .from('properties')
-        .select('address')
-        .limit(10);
-        
-      const availableAddresses = availableProperties?.map(p => p.address).filter(Boolean) || [];
+      const availableAddresses = allProperties?.map(p => p.address).filter(Boolean) || [];
       
       return new Response(
         JSON.stringify({ 
@@ -190,7 +213,9 @@ serve(async (req: Request): Promise<Response> => {
           message: "No matching property found with provided address",
           debug: {
             provided_address: propertyDetails.address,
-            sample_available_addresses: availableAddresses
+            normalized_provided: normalizedIncomingAddress,
+            sample_available_addresses: availableAddresses,
+            sample_normalized_addresses: debugAddressMap
           }
         }),
         {
