@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -60,7 +59,8 @@ const WebhookTester = () => {
       conferenceRooms: 1 
     },
     remarks: "Prime office space in downtown Abilene with excellent visibility",
-    listingBy: "Abilene Commercial Real Estate"
+    listingBy: "Abilene Commercial Real Estate",
+    virtualtour: ["https://my.matterport.com/show/?m=example", "https://www.youtube.com/watch?v=example"]
   };
 
   useEffect(() => {

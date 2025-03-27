@@ -107,6 +107,7 @@ export type Database = {
           rooms: Json | null
           salepricepersqm: string | null
           status: string | null
+          virtualtour: string | null
         }
         Insert: {
           address?: string | null
@@ -121,6 +122,7 @@ export type Database = {
           rooms?: Json | null
           salepricepersqm?: string | null
           status?: string | null
+          virtualtour?: string | null
         }
         Update: {
           address?: string | null
@@ -135,6 +137,7 @@ export type Database = {
           rooms?: Json | null
           salepricepersqm?: string | null
           status?: string | null
+          virtualtour?: string | null
         }
         Relationships: [
           {

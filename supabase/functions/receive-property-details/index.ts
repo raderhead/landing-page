@@ -130,7 +130,8 @@ serve(async (req: Request): Promise<Response> => {
         landsize: propertyDetails.landSize || propertyDetails.landsize || null,
         rooms: propertyDetails.rooms || null,
         remarks: propertyDetails.remarks || propertyDetails.description || null,
-        listingby: propertyDetails.listingBy || propertyDetails.listingby || null
+        listingby: propertyDetails.listingBy || propertyDetails.listingby || null,
+        virtualtour: propertyDetails.virtualtour || null
       };
       
       // Check if details for this property already exist

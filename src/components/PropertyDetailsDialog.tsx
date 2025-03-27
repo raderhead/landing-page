@@ -4,10 +4,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Card, CardContent } from "@/components/ui/card";
 import { supabase } from '@/integrations/supabase/client';
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Home, Info, DollarSign, MapPin, SquareUser, Table, Ruler, Clock, Tag } from "lucide-react";
+import { Loader2, Home, Info, DollarSign, MapPin, SquareUser, Table, Ruler, Clock, Tag, Link as LinkIcon } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
 
 interface PropertyDetailsDialogProps {
   isOpen: boolean;
@@ -27,6 +28,7 @@ type PropertyDetails = {
   rooms: Record<string, any> | null;
   remarks: string | null;
   listingBy: string | null;
+  virtualtour: string[] | null;
 };
 
 type Property = {
@@ -96,6 +98,24 @@ const PropertyDetailsDialog = ({ isOpen, onClose, propertyId }: PropertyDetailsD
               roomsData = detailsData.rooms as Record<string, any>;
             }
           }
+
+          // Handle virtualtour data which could be an array of urls or a single url string
+          let virtualTourData: string[] | null = null;
+          
+          if (detailsData.virtualtour) {
+            if (typeof detailsData.virtualtour === 'string') {
+              try {
+                // Try to parse if it's a JSON string
+                virtualTourData = JSON.parse(detailsData.virtualtour);
+              } catch (e) {
+                // If not a valid JSON, assume it's a single URL
+                virtualTourData = [detailsData.virtualtour];
+              }
+            } else if (Array.isArray(detailsData.virtualtour)) {
+              // If it's already an array, use it directly
+              virtualTourData = detailsData.virtualtour;
+            }
+          }
           
           const transformedDetails: PropertyDetails = {
             id: detailsData.id,
@@ -108,7 +128,8 @@ const PropertyDetailsDialog = ({ isOpen, onClose, propertyId }: PropertyDetailsD
             landSize: detailsData.landsize,
             rooms: roomsData,
             remarks: detailsData.remarks,
-            listingBy: detailsData.listingby
+            listingBy: detailsData.listingby,
+            virtualtour: virtualTourData
           };
           
           setPropertyDetails(transformedDetails);
@@ -275,6 +296,34 @@ const PropertyDetailsDialog = ({ isOpen, onClose, propertyId }: PropertyDetailsD
                         </div>
                       </CardContent>
                     </Card>
+                    
+                    {/* Virtual Tour Section */}
+                    {propertyDetails?.virtualtour && propertyDetails.virtualtour.length > 0 && (
+                      <Card className="bg-luxury-dark border-luxury-gold/10">
+                        <CardContent className="p-5">
+                          <h3 className="text-lg font-medium text-luxury-gold mb-4 flex items-center">
+                            <LinkIcon className="h-5 w-5 mr-2 text-luxury-gold/70" />
+                            Virtual Tour
+                          </h3>
+                          
+                          <div className="space-y-3">
+                            {propertyDetails.virtualtour.map((url, index) => (
+                              <div key={index} className="flex items-center">
+                                <Button 
+                                  variant="outline" 
+                                  size="sm"
+                                  className="border-luxury-gold/20 text-luxury-gold hover:bg-luxury-gold/10 hover:text-white"
+                                  onClick={() => window.open(url, '_blank')}
+                                >
+                                  <LinkIcon className="h-4 w-4 mr-2" />
+                                  Open Virtual Tour {propertyDetails.virtualtour && propertyDetails.virtualtour.length > 1 ? `#${index + 1}` : ''}
+                                </Button>
+                              </div>
+                            ))}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    )}
                     
                     {/* Remarks/Description */}
                     {propertyDetails?.remarks && (
