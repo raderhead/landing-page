@@ -9,18 +9,20 @@ import { useToast } from "@/components/ui/use-toast";
 import { Copy, Plus, Minus } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const WebhookTester = () => {
   const { toast } = useToast();
   const [webhookUrl, setWebhookUrl] = useState<string>("");
   const [webhookLogs, setWebhookLogs] = useState<any[]>([]);
   const [useCustomPayload, setUseCustomPayload] = useState(false);
+  const [webhookType, setWebhookType] = useState<string>("receive-webhook");
   const [customPayload, setCustomPayload] = useState('{\n  "title": "Downtown Office Building",\n  "address": "123 Main St, Abilene, TX",\n  "type": "Office",\n  "size": "3,500 sq ft",\n  "price": "$750,000",\n  "image_url": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",\n  "description": "Prime office space in downtown Abilene",\n  "featured": true\n}');
   
   // Generate the full webhook URL for the user to copy
   const baseUrl = window.location.origin;
   const supabaseProjectId = "xfmguaamogzirnnqktwz";
-  const fullWebhookUrl = `https://${supabaseProjectId}.supabase.co/functions/v1/receive-webhook${webhookUrl ? `/${webhookUrl}` : ''}`;
+  const fullWebhookUrl = `https://${supabaseProjectId}.supabase.co/functions/v1/${webhookType}${webhookUrl ? `/${webhookUrl}` : ''}`;
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(fullWebhookUrl);
@@ -30,7 +32,7 @@ const WebhookTester = () => {
     });
   };
 
-  // Sample property listing payload
+  // Sample property payload
   const samplePropertyPayload = {
     title: "Downtown Office Building",
     address: "123 Main St, Abilene, TX",
@@ -41,6 +43,32 @@ const WebhookTester = () => {
     description: "Prime office space in downtown Abilene",
     featured: true
   };
+
+  // Sample property details payload
+  const samplePropertyDetailsPayload = {
+    address: "123 Main St, Abilene, TX",
+    listPrice: "$750,000",
+    salePricePerSqm: "$214.29",
+    status: "Active",
+    propertySize: "3,500 sq ft",
+    landSize: "0.5 acres",
+    rooms: { 
+      offices: 4, 
+      bathrooms: 2, 
+      conferenceRooms: 1 
+    },
+    remarks: "Prime office space in downtown Abilene with excellent visibility",
+    listingBy: "Abilene Commercial Real Estate"
+  };
+
+  useEffect(() => {
+    // Update the custom payload when the webhook type changes
+    if (webhookType === "receive-property-details") {
+      setCustomPayload(JSON.stringify(samplePropertyDetailsPayload, null, 2));
+    } else {
+      setCustomPayload(JSON.stringify(samplePropertyPayload, null, 2));
+    }
+  }, [webhookType]);
 
   const generateTestWebhook = async () => {
     try {
@@ -58,7 +86,9 @@ const WebhookTester = () => {
           return;
         }
       } else {
-        payloadToSend = samplePropertyPayload;
+        payloadToSend = webhookType === "receive-property-details" 
+          ? samplePropertyDetailsPayload 
+          : samplePropertyPayload;
       }
       
       // Log the payload to help debugging
@@ -90,7 +120,7 @@ const WebhookTester = () => {
         title: result.success ? "Success" : "Error",
         description: result.success 
           ? "Property data sent successfully! Check the Featured Properties section." 
-          : `Error sending webhook: ${result.error}`,
+          : `Error sending webhook: ${result.message || result.error}`,
         variant: result.success ? "default" : "destructive",
       });
     } catch (error) {
@@ -113,20 +143,34 @@ const WebhookTester = () => {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-center space-x-2">
-            <Input
-              value={webhookUrl}
-              onChange={(e) => setWebhookUrl(e.target.value)}
-              placeholder="Optional custom endpoint suffix"
-              className="flex-1"
-            />
-            <Button variant="outline" size="icon" onClick={copyToClipboard}>
-              <Copy className="h-4 w-4" />
-            </Button>
-          </div>
-          
-          <div className="p-3 bg-muted rounded-md flex items-center justify-between">
-            <code className="text-sm break-all">{fullWebhookUrl}</code>
+          <div className="flex flex-col space-y-4">
+            <div className="flex items-center space-x-2">
+              <Select
+                value={webhookType}
+                onValueChange={setWebhookType}
+              >
+                <SelectTrigger className="w-[250px]">
+                  <SelectValue placeholder="Select webhook type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="receive-webhook">Property Listing</SelectItem>
+                  <SelectItem value="receive-property-details">Property Details</SelectItem>
+                </SelectContent>
+              </Select>
+              <Input
+                value={webhookUrl}
+                onChange={(e) => setWebhookUrl(e.target.value)}
+                placeholder="Optional custom endpoint suffix"
+                className="flex-1"
+              />
+              <Button variant="outline" size="icon" onClick={copyToClipboard}>
+                <Copy className="h-4 w-4" />
+              </Button>
+            </div>
+            
+            <div className="p-3 bg-muted rounded-md flex items-center justify-between">
+              <code className="text-sm break-all">{fullWebhookUrl}</code>
+            </div>
           </div>
         </CardContent>
         <CardFooter className="flex flex-col items-start space-y-4">
@@ -139,7 +183,7 @@ const WebhookTester = () => {
               {useCustomPayload ? "Use Sample Payload" : "Use Custom Payload"}
             </Button>
             <Button onClick={generateTestWebhook}>
-              Send Test Property Listing
+              Send Test {webhookType === "receive-property-details" ? "Property Details" : "Property Listing"}
             </Button>
           </div>
           
@@ -152,7 +196,7 @@ const WebhookTester = () => {
                 placeholder="Enter custom JSON payload"
               />
               <p className="text-sm text-muted-foreground mt-2">
-                Enter a valid JSON with property data. Must include at least a "title" field.
+                Enter a valid JSON with property data. Must include at least an "address" field.
               </p>
             </div>
           )}
@@ -163,7 +207,13 @@ const WebhookTester = () => {
                 <AccordionTrigger>View Sample Payload</AccordionTrigger>
                 <AccordionContent>
                   <pre className="p-3 bg-muted rounded-md text-xs overflow-auto">
-                    {JSON.stringify(samplePropertyPayload, null, 2)}
+                    {JSON.stringify(
+                      webhookType === "receive-property-details" 
+                        ? samplePropertyDetailsPayload 
+                        : samplePropertyPayload, 
+                      null, 
+                      2
+                    )}
                   </pre>
                 </AccordionContent>
               </AccordionItem>
