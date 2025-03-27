@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import PropertyDetailsDialog from "@/components/PropertyDetailsDialog";
 import { Building, Search, Grid, List, ArrowLeft, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { 
@@ -37,6 +38,8 @@ const AllProperties = () => {
   const [filteredProperties, setFilteredProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const propertiesPerPage = 9;
   
   useEffect(() => {
@@ -115,6 +118,16 @@ const AllProperties = () => {
       top: 0,
       behavior: 'smooth'
     });
+  };
+
+  const handlePropertyClick = (propertyId: string) => {
+    setSelectedPropertyId(propertyId);
+    setIsDialogOpen(true);
+  };
+  
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
+    setSelectedPropertyId(null);
   };
   
   return (
@@ -238,11 +251,12 @@ const AllProperties = () => {
                   {currentProperties.map((property, index) => (
                     <div 
                       key={property.id} 
-                      className="bg-luxury-dark rounded-md overflow-hidden shadow-md hover:shadow-lg transition-all duration-500 hover:shadow-luxury-gold/20 hover:-translate-y-1 hover:scale-[1.01] border border-luxury-khaki/10 group h-[400px]"
+                      className="bg-luxury-dark rounded-md overflow-hidden shadow-md hover:shadow-lg transition-all duration-500 hover:shadow-luxury-gold/20 hover:-translate-y-1 hover:scale-[1.01] border border-luxury-khaki/10 group h-[400px] cursor-pointer"
                       style={{ 
                         transitionDelay: `${index * 50}ms`,
                         transform: `translateY(${Math.min(10, Math.max(-10, (scrollY - 1200) * 0.02 * (index % 3 - 1)))}px)`
                       }}
+                      onClick={() => handlePropertyClick(property.id)}
                     >
                       <div className="relative h-64 overflow-hidden">
                         {property.image_url ? (
@@ -296,10 +310,11 @@ const AllProperties = () => {
                 {currentProperties.map((property, index) => (
                   <div 
                     key={property.id} 
-                    className="bg-luxury-dark rounded-md overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 hover:shadow-luxury-gold/20 border border-luxury-khaki/10 group"
+                    className="bg-luxury-dark rounded-md overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 hover:shadow-luxury-gold/20 border border-luxury-khaki/10 group cursor-pointer"
                     style={{ 
                       transitionDelay: `${index * 50}ms`
                     }}
+                    onClick={() => handlePropertyClick(property.id)}
                   >
                     <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
                       <div className="relative md:col-span-2 h-48 md:h-auto overflow-hidden">
@@ -415,6 +430,13 @@ const AllProperties = () => {
           </div>
         )}
       </section>
+      
+      {/* Property Details Dialog */}
+      <PropertyDetailsDialog 
+        isOpen={isDialogOpen} 
+        onClose={handleCloseDialog} 
+        propertyId={selectedPropertyId} 
+      />
       
       <Footer />
     </div>

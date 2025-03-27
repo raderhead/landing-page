@@ -12,6 +12,7 @@ import {
   CarouselNext, 
   CarouselPrevious 
 } from "@/components/ui/carousel";
+import PropertyDetailsDialog from '@/components/PropertyDetailsDialog';
 
 type Property = {
   id: string;
@@ -30,6 +31,8 @@ const PropertiesSection = () => {
   const [scrollY, setScrollY] = useState(0);
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   
   useEffect(() => {
@@ -89,6 +92,16 @@ const PropertiesSection = () => {
       supabase.removeChannel(channel);
     };
   }, []);
+
+  const handlePropertyClick = (propertyId: string) => {
+    setSelectedPropertyId(propertyId);
+    setIsDialogOpen(true);
+  };
+  
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
+    setSelectedPropertyId(null);
+  };
   
   return (
     <section id="properties" ref={sectionRef} className="section bg-black relative overflow-hidden py-[45px]">
@@ -126,7 +139,10 @@ const PropertiesSection = () => {
                 <CarouselContent className="-ml-2 md:-ml-4">
                   {properties.map((property) => (
                     <CarouselItem key={property.id} className="pl-2 md:pl-4 md:basis-1/3 lg:basis-1/3">
-                      <Card className="bg-luxury-dark border-luxury-gold/10 hover:border-luxury-gold/20 transition-all duration-300 hover:shadow-lg group h-[400px] overflow-hidden">
+                      <Card 
+                        className="bg-luxury-dark border-luxury-gold/10 hover:border-luxury-gold/20 transition-all duration-300 hover:shadow-lg group h-[400px] overflow-hidden cursor-pointer"
+                        onClick={() => handlePropertyClick(property.id)}
+                      >
                         <div className="relative h-64 overflow-hidden">
                           {property.image_url ? (
                             <img 
@@ -207,6 +223,13 @@ const PropertiesSection = () => {
           )}
         </div>
       </div>
+      
+      {/* Property Details Dialog */}
+      <PropertyDetailsDialog 
+        isOpen={isDialogOpen} 
+        onClose={handleCloseDialog} 
+        propertyId={selectedPropertyId} 
+      />
     </section>
   );
 };

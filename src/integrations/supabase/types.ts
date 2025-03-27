@@ -93,6 +93,80 @@ export type Database = {
         }
         Relationships: []
       }
+      property_details: {
+        Row: {
+          address: string | null
+          id: string
+          landsize: string | null
+          listingby: string | null
+          listprice: string | null
+          property_id: string | null
+          propertysize: string | null
+          received_at: string | null
+          remarks: string | null
+          rooms: Json | null
+          salepricepersqm: string | null
+          status: string | null
+        }
+        Insert: {
+          address?: string | null
+          id?: string
+          landsize?: string | null
+          listingby?: string | null
+          listprice?: string | null
+          property_id?: string | null
+          propertysize?: string | null
+          received_at?: string | null
+          remarks?: string | null
+          rooms?: Json | null
+          salepricepersqm?: string | null
+          status?: string | null
+        }
+        Update: {
+          address?: string | null
+          id?: string
+          landsize?: string | null
+          listingby?: string | null
+          listprice?: string | null
+          property_id?: string | null
+          propertysize?: string | null
+          received_at?: string | null
+          remarks?: string | null
+          rooms?: Json | null
+          salepricepersqm?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_details_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      webhook_property_details: {
+        Row: {
+          created_at: string | null
+          id: string
+          payload: Json
+          processed: boolean | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          payload: Json
+          processed?: boolean | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          payload?: Json
+          processed?: boolean | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

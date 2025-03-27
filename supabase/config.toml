@@ -6,3 +6,6 @@ verify_jwt = false
 
 [functions.cleanup-duplicates]
 verify_jwt = false
+
+[functions.receive-property-details]
+verify_jwt = false
