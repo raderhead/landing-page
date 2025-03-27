@@ -1,11 +1,13 @@
+
 import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Card, CardContent } from "@/components/ui/card";
 import { supabase } from '@/integrations/supabase/client';
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Home, Info, DollarSign, MapPin, SquareUser, Table, Ruler } from "lucide-react";
+import { Loader2, Home, Info, DollarSign, MapPin, SquareUser, Table, Ruler, Clock, Tag } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import { Json } from '@/integrations/supabase/types';
+import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface PropertyDetailsDialogProps {
   isOpen: boolean;
@@ -159,7 +161,7 @@ const PropertyDetailsDialog = ({ isOpen, onClose, propertyId }: PropertyDetailsD
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-4xl h-[90vh] p-0 bg-luxury-black border-luxury-gold/20">
+      <DialogContent className="max-w-4xl max-h-[90vh] p-0 bg-luxury-black border-luxury-gold/20">
         {loading ? (
           <div className="flex items-center justify-center h-full">
             <Loader2 className="h-8 w-8 text-luxury-gold animate-spin" />
@@ -171,182 +173,195 @@ const PropertyDetailsDialog = ({ isOpen, onClose, propertyId }: PropertyDetailsD
             <p className="text-luxury-khaki">{error}</p>
           </div>
         ) : (
-          <>
-            <div className="relative w-full h-[40vh] overflow-hidden">
-              {property?.image_url ? (
-                <img 
-                  src={property.image_url} 
-                  alt={property.title || 'Property'} 
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full bg-luxury-dark/50 flex items-center justify-center">
-                  <Home className="h-16 w-16 text-luxury-gold/20" />
-                </div>
-              )}
-              <div className="absolute inset-0 bg-gradient-to-t from-luxury-black to-transparent"></div>
-            </div>
-            
-            <DialogHeader className="px-6 pt-4 pb-2">
+          <div className="flex flex-col h-full">
+            {/* Header with main information */}
+            <div className="p-6 border-b border-luxury-gold/10">
               <div className="flex justify-between items-start">
-                <div>
-                  <DialogTitle className="text-3xl font-serif text-luxury-gold mb-1">
+                <div className="flex-1">
+                  <DialogTitle className="text-3xl font-serif text-luxury-gold mb-2">
                     {property?.price && (
-                      <span className="block">
-                        {property.price.startsWith('$') ? property.price : `$${property.price}`}
-                      </span>
+                      <span>{property.price.startsWith('$') ? property.price : `$${property.price}`}</span>
                     )}
                   </DialogTitle>
-                  <DialogDescription className="text-xl font-medium text-white">
+                  <DialogDescription className="text-xl font-medium text-white mb-2">
                     {property?.address || 'Address not available'}
                   </DialogDescription>
                   
-                  {property?.type && (
-                    <div className="mt-2 inline-block bg-luxury-gold/10 border border-luxury-gold/20 text-luxury-gold px-2 py-1 text-xs rounded">
-                      {property.type}
-                    </div>
-                  )}
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {property?.type && (
+                      <Badge variant="outline" className="bg-luxury-gold/10 text-luxury-gold border-luxury-gold/20">
+                        {property.type}
+                      </Badge>
+                    )}
+                    
+                    {propertyDetails?.status && (
+                      <Badge variant="outline" className="bg-luxury-gold/10 text-luxury-gold border-luxury-gold/20">
+                        {propertyDetails.status}
+                      </Badge>
+                    )}
+                  </div>
                 </div>
                 
                 {property?.mls && (
-                  <div className="bg-luxury-dark/80 p-2 rounded border border-luxury-gold/10 text-right">
+                  <div className="bg-luxury-dark/80 p-3 rounded border border-luxury-gold/10 text-right shrink-0">
                     <p className="text-xs text-luxury-khaki/70">MLS</p>
                     <p className="font-medium text-white">{property.mls}</p>
                   </div>
                 )}
               </div>
-            </DialogHeader>
+            </div>
             
-            <ScrollArea className="px-6 py-4 h-[calc(90vh-40vh-88px)]">
-              <div className="space-y-6">
-                {/* Basic Property Information */}
-                <Card className="bg-luxury-dark border-luxury-gold/10">
-                  <CardContent className="p-4">
-                    <h3 className="text-lg font-medium text-luxury-gold mb-4 flex items-center">
-                      <Info className="h-5 w-5 mr-2 text-luxury-gold/70" />
-                      Property Overview
-                    </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-0 h-[calc(90vh-150px)]">
+              {/* Left side - Property details */}
+              <div className="col-span-2 overflow-auto">
+                <ScrollArea className="h-full">
+                  <div className="p-6 space-y-6">
+                    {/* Key Details */}
+                    <Card className="bg-luxury-dark border-luxury-gold/10">
+                      <CardContent className="p-5">
+                        <h3 className="text-lg font-medium text-luxury-gold mb-4 flex items-center">
+                          <Info className="h-5 w-5 mr-2 text-luxury-gold/70" />
+                          Property Overview
+                        </h3>
+                        
+                        <div className="grid grid-cols-2 gap-5">
+                          {propertyDetails?.propertySize && (
+                            <div className="flex items-start">
+                              <div className="h-10 w-10 rounded-full bg-luxury-gold/10 flex items-center justify-center mr-3">
+                                <Table className="h-5 w-5 text-luxury-gold" />
+                              </div>
+                              <div>
+                                <p className="text-xs text-luxury-khaki/70">Property Size</p>
+                                <p className="font-medium text-white">{propertyDetails.propertySize}</p>
+                              </div>
+                            </div>
+                          )}
+                          
+                          {propertyDetails?.landSize && (
+                            <div className="flex items-start">
+                              <div className="h-10 w-10 rounded-full bg-luxury-gold/10 flex items-center justify-center mr-3">
+                                <Ruler className="h-5 w-5 text-luxury-gold" />
+                              </div>
+                              <div>
+                                <p className="text-xs text-luxury-khaki/70">Land Size</p>
+                                <p className="font-medium text-white">{propertyDetails.landSize}</p>
+                              </div>
+                            </div>
+                          )}
+                          
+                          {propertyDetails?.listPrice && (
+                            <div className="flex items-start">
+                              <div className="h-10 w-10 rounded-full bg-luxury-gold/10 flex items-center justify-center mr-3">
+                                <DollarSign className="h-5 w-5 text-luxury-gold" />
+                              </div>
+                              <div>
+                                <p className="text-xs text-luxury-khaki/70">List Price</p>
+                                <p className="font-medium text-white">{propertyDetails.listPrice}</p>
+                              </div>
+                            </div>
+                          )}
+                          
+                          {propertyDetails?.salePricePerSqm && (
+                            <div className="flex items-start">
+                              <div className="h-10 w-10 rounded-full bg-luxury-gold/10 flex items-center justify-center mr-3">
+                                <Tag className="h-5 w-5 text-luxury-gold" />
+                              </div>
+                              <div>
+                                <p className="text-xs text-luxury-khaki/70">Price Per SqM</p>
+                                <p className="font-medium text-white">{propertyDetails.salePricePerSqm}</p>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </CardContent>
+                    </Card>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {propertyDetails?.status && (
-                        <div className="flex items-start">
-                          <div className="h-8 w-8 rounded-full bg-luxury-gold/10 flex items-center justify-center mr-3">
-                            <Info className="h-4 w-4 text-luxury-gold" />
-                          </div>
-                          <div>
-                            <p className="text-xs text-luxury-khaki/70">Status</p>
-                            <p className="font-medium text-white">{propertyDetails.status}</p>
-                          </div>
-                        </div>
-                      )}
-                      
-                      {propertyDetails?.propertySize && (
-                        <div className="flex items-start">
-                          <div className="h-8 w-8 rounded-full bg-luxury-gold/10 flex items-center justify-center mr-3">
-                            <Table className="h-4 w-4 text-luxury-gold" />
-                          </div>
-                          <div>
-                            <p className="text-xs text-luxury-khaki/70">Property Size</p>
-                            <p className="font-medium text-white">{propertyDetails.propertySize}</p>
-                          </div>
-                        </div>
-                      )}
-                      
-                      {propertyDetails?.landSize && (
-                        <div className="flex items-start">
-                          <div className="h-8 w-8 rounded-full bg-luxury-gold/10 flex items-center justify-center mr-3">
-                            <Ruler className="h-4 w-4 text-luxury-gold" />
-                          </div>
-                          <div>
-                            <p className="text-xs text-luxury-khaki/70">Land Size</p>
-                            <p className="font-medium text-white">{propertyDetails.landSize}</p>
-                          </div>
-                        </div>
-                      )}
-                      
-                      {propertyDetails?.listPrice && (
-                        <div className="flex items-start">
-                          <div className="h-8 w-8 rounded-full bg-luxury-gold/10 flex items-center justify-center mr-3">
-                            <DollarSign className="h-4 w-4 text-luxury-gold" />
-                          </div>
-                          <div>
-                            <p className="text-xs text-luxury-khaki/70">List Price</p>
-                            <p className="font-medium text-white">{propertyDetails.listPrice}</p>
-                          </div>
-                        </div>
-                      )}
-                      
-                      {propertyDetails?.salePricePerSqm && (
-                        <div className="flex items-start">
-                          <div className="h-8 w-8 rounded-full bg-luxury-gold/10 flex items-center justify-center mr-3">
-                            <DollarSign className="h-4 w-4 text-luxury-gold" />
-                          </div>
-                          <div>
-                            <p className="text-xs text-luxury-khaki/70">Price Per SqM</p>
-                            <p className="font-medium text-white">{propertyDetails.salePricePerSqm}</p>
-                          </div>
-                        </div>
-                      )}
-                      
-                      {propertyDetails?.listingBy && (
-                        <div className="flex items-start">
-                          <div className="h-8 w-8 rounded-full bg-luxury-gold/10 flex items-center justify-center mr-3">
-                            <SquareUser className="h-4 w-4 text-luxury-gold" />
-                          </div>
-                          <div>
-                            <p className="text-xs text-luxury-khaki/70">Listed By</p>
-                            <p className="font-medium text-white">{propertyDetails.listingBy}</p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                {/* Rooms Information */}
-                {propertyDetails?.rooms && Object.keys(propertyDetails.rooms).length > 0 && (
-                  <Card className="bg-luxury-dark border-luxury-gold/10">
-                    <CardContent className="p-4">
-                      <h3 className="text-lg font-medium text-luxury-gold mb-4 flex items-center">
-                        <Home className="h-5 w-5 mr-2 text-luxury-gold/70" />
-                        Room Information
-                      </h3>
-                      
-                      {formatRooms(propertyDetails.rooms)}
-                    </CardContent>
-                  </Card>
-                )}
-                
-                {/* Remarks/Description */}
-                {propertyDetails?.remarks && (
-                  <Card className="bg-luxury-dark border-luxury-gold/10">
-                    <CardContent className="p-4">
-                      <h3 className="text-lg font-medium text-luxury-gold mb-4 flex items-center">
-                        <Info className="h-5 w-5 mr-2 text-luxury-gold/70" />
-                        Description
-                      </h3>
-                      
-                      <p className="text-luxury-khaki whitespace-pre-line">{propertyDetails.remarks}</p>
-                    </CardContent>
-                  </Card>
-                )}
-                
-                {/* Additional Information */}
-                <Card className="bg-luxury-dark border-luxury-gold/10">
-                  <CardContent className="p-4">
-                    <h3 className="text-lg font-medium text-luxury-gold mb-4 flex items-center">
-                      <MapPin className="h-5 w-5 mr-2 text-luxury-gold/70" />
-                      Location
-                    </h3>
+                    {/* Remarks/Description */}
+                    {propertyDetails?.remarks && (
+                      <Card className="bg-luxury-dark border-luxury-gold/10">
+                        <CardContent className="p-5">
+                          <h3 className="text-lg font-medium text-luxury-gold mb-4 flex items-center">
+                            <Info className="h-5 w-5 mr-2 text-luxury-gold/70" />
+                            Description
+                          </h3>
+                          
+                          <p className="text-luxury-khaki whitespace-pre-line">{propertyDetails.remarks}</p>
+                        </CardContent>
+                      </Card>
+                    )}
                     
-                    <p className="text-luxury-khaki">{propertyDetails?.address || property?.address || 'Address not available'}</p>
+                    {/* Rooms Information */}
+                    {propertyDetails?.rooms && Object.keys(propertyDetails.rooms).length > 0 && (
+                      <Card className="bg-luxury-dark border-luxury-gold/10">
+                        <CardContent className="p-5">
+                          <h3 className="text-lg font-medium text-luxury-gold mb-4 flex items-center">
+                            <Home className="h-5 w-5 mr-2 text-luxury-gold/70" />
+                            Room Information
+                          </h3>
+                          
+                          {formatRooms(propertyDetails.rooms)}
+                        </CardContent>
+                      </Card>
+                    )}
                     
-                    {/* We could add a map here in the future */}
-                  </CardContent>
-                </Card>
+                    {/* Additional Information */}
+                    <Card className="bg-luxury-dark border-luxury-gold/10">
+                      <CardContent className="p-5">
+                        <h3 className="text-lg font-medium text-luxury-gold mb-4 flex items-center">
+                          <MapPin className="h-5 w-5 mr-2 text-luxury-gold/70" />
+                          Location
+                        </h3>
+                        
+                        <p className="text-luxury-khaki">{propertyDetails?.address || property?.address || 'Address not available'}</p>
+                      </CardContent>
+                    </Card>
+                    
+                    {/* Listing Information */}
+                    {propertyDetails?.listingBy && (
+                      <Card className="bg-luxury-dark border-luxury-gold/10 mb-6">
+                        <CardContent className="p-5">
+                          <h3 className="text-lg font-medium text-luxury-gold mb-4 flex items-center">
+                            <SquareUser className="h-5 w-5 mr-2 text-luxury-gold/70" />
+                            Listing Information
+                          </h3>
+                          
+                          <div className="flex items-center">
+                            <div className="h-10 w-10 rounded-full bg-luxury-gold/10 flex items-center justify-center mr-3">
+                              <SquareUser className="h-5 w-5 text-luxury-gold" />
+                            </div>
+                            <div>
+                              <p className="text-xs text-luxury-khaki/70">Listed By</p>
+                              <p className="font-medium text-white">{propertyDetails.listingBy}</p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    )}
+                  </div>
+                </ScrollArea>
               </div>
-            </ScrollArea>
-          </>
+              
+              {/* Right side - Image */}
+              <div className="col-span-1 border-l border-luxury-gold/10">
+                <div className="h-full overflow-hidden bg-luxury-dark/50 flex items-center justify-center p-0">
+                  {property?.image_url ? (
+                    <div className="h-full w-full relative">
+                      <img 
+                        src={property.image_url} 
+                        alt={property.title || 'Property'} 
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-luxury-black/70"></div>
+                    </div>
+                  ) : (
+                    <div className="w-full h-full bg-luxury-dark/50 flex items-center justify-center">
+                      <Home className="h-16 w-16 text-luxury-gold/20" />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
         )}
       </DialogContent>
     </Dialog>
