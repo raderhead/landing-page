@@ -180,6 +180,10 @@ const PropertyDetailsDialog = ({ isOpen, onClose, propertyId }: PropertyDetailsD
     }
   };
 
+  const openVirtualTour = (url: string) => {
+    window.open(url, '_blank');
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="max-w-5xl max-h-[90vh] p-0 bg-luxury-black border-luxury-gold/20">
@@ -240,10 +244,23 @@ const PropertyDetailsDialog = ({ isOpen, onClose, propertyId }: PropertyDetailsD
                     {/* Key Details */}
                     <Card className="bg-luxury-dark border-luxury-gold/10">
                       <CardContent className="p-5">
-                        <h3 className="text-lg font-medium text-luxury-gold mb-4 flex items-center">
-                          <Info className="h-5 w-5 mr-2 text-luxury-gold/70" />
-                          Property Overview
-                        </h3>
+                        <div className="flex items-center justify-between mb-4">
+                          <h3 className="text-lg font-medium text-luxury-gold flex items-center">
+                            <Info className="h-5 w-5 mr-2 text-luxury-gold/70" />
+                            Property Overview
+                          </h3>
+                          
+                          {propertyDetails?.virtualtour && propertyDetails.virtualtour.length > 0 && (
+                            <Button 
+                              className="bg-luxury-gold text-white hover:bg-luxury-gold/90 shadow-[0_0_15px_rgba(212,184,123,0.3)] hover:shadow-[0_0_25px_rgba(212,184,123,0.5)] transition-all duration-300"
+                              size="sm"
+                              onClick={() => openVirtualTour(propertyDetails.virtualtour![0])}
+                            >
+                              <LinkIcon className="h-4 w-4 mr-2" />
+                              Open Virtual Tour
+                            </Button>
+                          )}
+                        </div>
                         
                         <div className="grid grid-cols-2 gap-5">
                           {propertyDetails?.propertySize && (
@@ -297,33 +314,7 @@ const PropertyDetailsDialog = ({ isOpen, onClose, propertyId }: PropertyDetailsD
                       </CardContent>
                     </Card>
                     
-                    {/* Virtual Tour Section */}
-                    {propertyDetails?.virtualtour && propertyDetails.virtualtour.length > 0 && (
-                      <Card className="bg-luxury-dark border-luxury-gold/10">
-                        <CardContent className="p-5">
-                          <h3 className="text-lg font-medium text-luxury-gold mb-4 flex items-center">
-                            <LinkIcon className="h-5 w-5 mr-2 text-luxury-gold/70" />
-                            Virtual Tour
-                          </h3>
-                          
-                          <div className="space-y-3">
-                            {propertyDetails.virtualtour.map((url, index) => (
-                              <div key={index} className="flex items-center">
-                                <Button 
-                                  variant="outline" 
-                                  size="sm"
-                                  className="border-luxury-gold/20 text-luxury-gold hover:bg-luxury-gold/10 hover:text-white"
-                                  onClick={() => window.open(url, '_blank')}
-                                >
-                                  <LinkIcon className="h-4 w-4 mr-2" />
-                                  Open Virtual Tour {propertyDetails.virtualtour && propertyDetails.virtualtour.length > 1 ? `#${index + 1}` : ''}
-                                </Button>
-                              </div>
-                            ))}
-                          </div>
-                        </CardContent>
-                      </Card>
-                    )}
+                    {/* Virtual Tour Section - Removed from here */}
                     
                     {/* Remarks/Description */}
                     {propertyDetails?.remarks && (
