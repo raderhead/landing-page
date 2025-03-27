@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Card, CardContent } from "@/components/ui/card";
@@ -75,7 +74,26 @@ const PropertyDetailsDialog = ({ isOpen, onClose, propertyId }: PropertyDetailsD
           throw detailsError;
         }
         
-        setPropertyDetails(detailsData);
+        // Transform the data to match our PropertyDetails type
+        if (detailsData) {
+          const transformedDetails: PropertyDetails = {
+            id: detailsData.id,
+            property_id: detailsData.property_id,
+            address: detailsData.address,
+            listPrice: detailsData.listprice,
+            salePricePerSqm: detailsData.salepricepersqm,
+            status: detailsData.status,
+            propertySize: detailsData.propertysize,
+            landSize: detailsData.landsize,
+            rooms: detailsData.rooms,
+            remarks: detailsData.remarks,
+            listingBy: detailsData.listingby
+          };
+          
+          setPropertyDetails(transformedDetails);
+        } else {
+          setPropertyDetails(null);
+        }
       } catch (err) {
         console.error("Error fetching property data:", err);
         setError("Error loading property details");
