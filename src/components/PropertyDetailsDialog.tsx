@@ -161,7 +161,7 @@ const PropertyDetailsDialog = ({ isOpen, onClose, propertyId }: PropertyDetailsD
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-4xl max-h-[90vh] p-0 bg-luxury-black border-luxury-gold/20">
+      <DialogContent className="max-w-5xl max-h-[90vh] p-0 bg-luxury-black border-luxury-gold/20">
         {loading ? (
           <div className="flex items-center justify-center h-full">
             <Loader2 className="h-8 w-8 text-luxury-gold animate-spin" />
@@ -211,9 +211,9 @@ const PropertyDetailsDialog = ({ isOpen, onClose, propertyId }: PropertyDetailsD
               </div>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-0 h-[calc(90vh-150px)]">
-              {/* Left side - Property details */}
-              <div className="col-span-2 overflow-auto">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-0 h-[calc(90vh-150px)]">
+              {/* Left side - Property details (now takes 3/4 of the width) */}
+              <div className="col-span-3 overflow-auto">
                 <ScrollArea className="h-full">
                   <div className="p-6 space-y-6">
                     {/* Key Details */}
@@ -341,17 +341,16 @@ const PropertyDetailsDialog = ({ isOpen, onClose, propertyId }: PropertyDetailsD
                 </ScrollArea>
               </div>
               
-              {/* Right side - Image */}
+              {/* Right side - Image (now takes 1/4 of the width) */}
               <div className="col-span-1 border-l border-luxury-gold/10">
-                <div className="h-full overflow-hidden bg-luxury-dark/50 flex items-center justify-center p-0">
+                <div className="h-full w-full flex flex-col overflow-hidden bg-luxury.dark">
                   {property?.image_url ? (
-                    <div className="h-full w-full relative">
+                    <div className="w-full h-full flex items-center justify-center bg-luxury-dark/90 relative">
                       <img 
                         src={property.image_url} 
                         alt={property.title || 'Property'} 
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain max-h-full"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-luxury-black/70"></div>
                     </div>
                   ) : (
                     <div className="w-full h-full bg-luxury-dark/50 flex items-center justify-center">
