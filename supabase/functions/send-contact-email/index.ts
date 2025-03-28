@@ -85,7 +85,7 @@ const handler = async (req: Request): Promise<Response> => {
         to: ["jxwayne890@gmail.com"], // Updated to lowercase
         subject: `New Contact Form Submission from ${name}`,
         html: htmlContent,
-        reply_to: [email] // Using array for reply_to
+        reply_to: email
       });
       
       console.log("Email response:", JSON.stringify(emailResponse));

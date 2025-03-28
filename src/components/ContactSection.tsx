@@ -5,7 +5,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 
 const ContactSection = () => {
   const { toast } = useToast();
@@ -37,11 +36,7 @@ const ContactSection = () => {
         throw new Error("Please fill in all required fields");
       }
 
-      // Get the current session for authorization
-      const { data: sessionData } = await supabase.auth.getSession();
-      const accessToken = sessionData.session?.access_token || "";
-
-      // Directly fetch the edge function to have more control over the request
+      // Direct API call to the edge function without authentication
       const functionUrl = "https://xfmguaamogzirnnqktwz.supabase.co/functions/v1/send-contact-email";
       
       console.log("Sending request to:", functionUrl);
@@ -50,8 +45,7 @@ const ContactSection = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${accessToken}`,
-          // Use the project URL from the supabase client as the anon key is already initialized there
+          // Include apikey directly - this is safe for public functions
           "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhmbWd1YWFtb2d6aXJubnFrdHd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NjMxMzMsImV4cCI6MjA1NzEzOTEzM30.OjoZDtrxo7z2Xa2fQ4_FSKISQehuSNx3UbHKjfFzNxg"
         },
         body: JSON.stringify(formData)
