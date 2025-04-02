@@ -2,9 +2,8 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
 
-// Initialize Resend with API key from environment variables
-const resendApiKey = Deno.env.get("RESEND_API_KEY");
-console.log("RESEND_API_KEY exists:", !!resendApiKey);
+// Initialize Resend with the new API key
+const resendApiKey = "re_aq4bnfeC_4LGZ37WuPrFezKzGan38LryV";
 const resend = new Resend(resendApiKey);
 
 const corsHeaders = {
@@ -82,7 +81,7 @@ const handler = async (req: Request): Promise<Response> => {
     try {
       const emailResponse = await resend.emails.send({
         from: "Landing Page <onboarding@resend.dev>",
-        to: ["brotivater@gmail.com"], // Updated recipient email address
+        to: ["brotivater@gmail.com"],
         subject: `New Contact Form Submission from ${name}`,
         html: htmlContent,
         reply_to: email
