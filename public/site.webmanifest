@@ -4,17 +4,17 @@
   "short_name": "Josh Rader CRE",
   "icons": [
     {
-      "src": "/lovable-uploads/bda42a85-fa69-47e4-b7d2-1900e3411ffb.png",
+      "src": "/favicon-16x16.png",
       "sizes": "16x16",
       "type": "image/png"
     },
     {
-      "src": "/lovable-uploads/bda42a85-fa69-47e4-b7d2-1900e3411ffb.png",
+      "src": "/favicon-32x32.png",
       "sizes": "32x32",
       "type": "image/png"
     },
     {
-      "src": "/lovable-uploads/bda42a85-fa69-47e4-b7d2-1900e3411ffb.png",
+      "src": "/apple-touch-icon.png",
       "sizes": "180x180",
       "type": "image/png"
     }
