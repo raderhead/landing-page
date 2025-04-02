@@ -2,7 +2,7 @@
 import { Helmet } from "react-helmet";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import WebhookTester from "@/components/WebhookTester";
+import { WebhookTester } from "@/components/webhook";
 
 const Webhooks = () => {
   return (
