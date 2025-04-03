@@ -1,3 +1,4 @@
+
 import { useEffect, useState, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, Phone, Search } from "lucide-react";
@@ -79,12 +80,12 @@ const HeroSection = () => {
             <p className="text-sm sm:text-base text-luxury-khaki">Experience in Commercial Real Estate</p>
           </div>
           <div className="text-center hover-lift p-2 sm:p-4">
-            <p className="text-2xl sm:text-3xl font-bold text-luxury-gold font-serif">$50M+</p>
-            <p className="text-sm sm:text-base text-luxury-khaki">In Closed Transactions</p>
+            <p className="text-2xl sm:text-3xl font-bold text-luxury-gold font-serif">Locally Trusted</p>
+            <p className="text-sm sm:text-base text-luxury-khaki">Known for integrity, relationships, and results in the Abilene area</p>
           </div>
           <div className="text-center hover-lift p-2 sm:p-4">
-            <p className="text-2xl sm:text-3xl font-bold text-luxury-gold font-serif">100+</p>
-            <p className="text-sm sm:text-base text-luxury-khaki">Satisfied Clients</p>
+            <p className="text-2xl sm:text-3xl font-bold text-luxury-gold font-serif">Client-First Focus</p>
+            <p className="text-sm sm:text-base text-luxury-khaki">Every transaction guided by clarity, communication, and commitment</p>
           </div>
         </div>
       </div>
