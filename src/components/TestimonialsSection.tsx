@@ -13,9 +13,9 @@ const testimonials = [{
   image: "/lovable-uploads/331f0b08-b598-4594-80fd-793c91cafd82.png"
 }, {
   quote: "When we needed to expand our office space, Josh understood our requirements perfectly and found us a property that exceeded our expectations.",
-  name: "Lisa Thompson",
-  title: "CEO, Thompson Consulting",
-  image: "https://randomuser.me/api/portraits/women/65.jpg"
+  name: "J & Lorraine Wilson",
+  title: "Property Owners",
+  image: "/lovable-uploads/5d165228-18d1-4470-8883-c28d37702b66.png"
 }];
 
 const TestimonialsSection = () => {
