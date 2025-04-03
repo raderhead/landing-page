@@ -24,9 +24,10 @@ const HeroSection = () => {
   }, []);
   
   const scrollToContact = () => {
-    const contactSection = document.getElementById('contact');
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: 'smooth' });
+    // Find the contact form element in the contact section
+    const contactForm = document.querySelector('#contact form');
+    if (contactForm) {
+      contactForm.scrollIntoView({ behavior: 'smooth' });
     }
   };
   
