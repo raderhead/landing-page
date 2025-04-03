@@ -3,9 +3,9 @@ import { Quote } from "lucide-react";
 
 const testimonials = [{
   quote: "Josh helped us find the perfect retail location for our business. His knowledge of the Abilene market was invaluable and saved us countless hours.",
-  name: "Sarah Johnson",
+  name: "Tim Smith",
   title: "Owner, Abilene Boutique",
-  image: "https://randomuser.me/api/portraits/women/32.jpg"
+  image: "/lovable-uploads/44b186ce-f8a4-4d10-b914-71efca66716a.png"
 }, {
   quote: "As an investor new to commercial real estate, Josh provided expert guidance that helped me build a profitable portfolio of properties in Abilene.",
   name: "Michael Rodriguez",
