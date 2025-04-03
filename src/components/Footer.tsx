@@ -104,8 +104,8 @@ const Footer = () => {
             <address className="not-italic text-luxury-khaki space-y-2">
               <p>1500 Industrial Blvd, Suite 300</p>
               <p>Abilene, TX 79601</p>
-              <p>Phone: (325) 555-1234</p>
-              <p>Email: josh.rader@example.com</p>
+              <p>Phone: (325) 665-9244</p>
+              <p>Email: Josh@McCullerProperties.com</p>
             </address>
           </div>
         </div>
