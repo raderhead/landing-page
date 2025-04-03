@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { Link } from "react-router-dom";
 
 const ContactSection = () => {
   const { toast } = useToast();
@@ -168,6 +169,10 @@ const ContactSection = () => {
                 <div>
                   <label htmlFor="message" className="block mb-2 text-sm font-medium text-white">Your Message</label>
                   <Textarea id="message" name="message" value={formData.message} onChange={handleChange} placeholder="I'm interested in commercial property in downtown Abilene..." rows={4} required className="bg-luxury-charcoal border-luxury-khaki/20 text-white focus:border-luxury-gold focus:ring-luxury-gold/50" />
+                </div>
+                
+                <div className="text-sm text-luxury-khaki mt-2 mb-4">
+                  By submitting, you agree to our <Link to="/privacy-policy" className="text-luxury-gold hover:underline">Privacy Policy</Link>.
                 </div>
                 
                 <Button 
