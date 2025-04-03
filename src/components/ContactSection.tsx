@@ -118,7 +118,7 @@ const ContactSection = () => {
                   </div>
                   <div>
                     <p className="font-medium text-white">Email</p>
-                    <p className="text-luxury-khaki">Josh@McCullerProperties.com</p>
+                    <p className="text-luxury-khaki">Josh@McCullarProperties.com</p>
                   </div>
                 </div>
                 

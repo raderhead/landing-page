@@ -105,7 +105,7 @@ const Footer = () => {
               <p>1500 Industrial Blvd, Suite 300</p>
               <p>Abilene, TX 79601</p>
               <p>Phone: (325) 665-9244</p>
-              <p>Email: Josh@McCullerProperties.com</p>
+              <p>Email: Josh@McCullarProperties.com</p>
             </address>
           </div>
         </div>
