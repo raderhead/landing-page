@@ -8,9 +8,9 @@ const testimonials = [{
   image: "/lovable-uploads/44b186ce-f8a4-4d10-b914-71efca66716a.png"
 }, {
   quote: "As an investor new to commercial real estate, Josh provided expert guidance that helped me build a profitable portfolio of properties in Abilene.",
-  name: "Michael Rodriguez",
+  name: "Landon Couch",
   title: "Real Estate Investor",
-  image: "https://randomuser.me/api/portraits/men/46.jpg"
+  image: "/lovable-uploads/331f0b08-b598-4594-80fd-793c91cafd82.png"
 }, {
   quote: "When we needed to expand our office space, Josh understood our requirements perfectly and found us a property that exceeded our expectations.",
   name: "Lisa Thompson",
