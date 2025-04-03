@@ -3,9 +3,11 @@ import { useEffect, useState, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, Phone, Search } from "lucide-react";
 import { Link } from 'react-router-dom';
+
 const HeroSection = () => {
   const [scrollY, setScrollY] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
+  
   useEffect(() => {
     const handleScroll = () => {
       if (sectionRef.current) {
@@ -16,9 +18,18 @@ const HeroSection = () => {
         }
       }
     };
+    
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+  
+  const scrollToContact = () => {
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+  
   return <section ref={sectionRef} className="relative flex items-center overflow-hidden min-h-[calc(100vh-4rem)] md:min-h-screen pt-28 md:pt-32 pb-52">
       {/* Background Image with Parallax Effect */}
       <div className="absolute inset-0 z-0">
@@ -61,10 +72,15 @@ const HeroSection = () => {
                 Browse Prime Listings
               </Link>
             </Button>
-            <Button size="lg" variant="outline" className="border border-white/10 backdrop-blur-lg rounded-sm px-6 sm:px-8 
+            <Button 
+              size="lg" 
+              variant="outline" 
+              onClick={scrollToContact}
+              className="border border-white/10 backdrop-blur-lg rounded-sm px-6 sm:px-8 
                 bg-white/5 text-white hover:bg-white/10 hover:text-luxury-gold 
                 hover:scale-105 transition-all duration-300 group
-                hover:shadow-[0_0_15px_rgba(212,184,123,0.3)]">
+                hover:shadow-[0_0_15px_rgba(212,184,123,0.3)]"
+            >
               <Phone className="mr-2 h-5 w-5 group-hover:rotate-12 transition-transform text-luxury-gold" />
               Book Your Strategy Call
             </Button>
@@ -91,4 +107,5 @@ const HeroSection = () => {
       </div>
     </section>;
 };
+
 export default HeroSection;
