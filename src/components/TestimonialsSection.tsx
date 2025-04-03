@@ -2,17 +2,17 @@
 import { Quote } from "lucide-react";
 
 const testimonials = [{
-  quote: "Josh helped us find the perfect retail location for our business. His knowledge of the Abilene market was invaluable and saved us countless hours.",
+  quote: "Working with this team made selling my commercial property a breeze. The entire process was smooth, efficient, and handled with excellence from start to finish.",
   name: "Tim Smith",
   title: "Owner, Abilene Boutique",
   image: "/lovable-uploads/44b186ce-f8a4-4d10-b914-71efca66716a.png"
 }, {
-  quote: "As an investor new to commercial real estate, Josh provided expert guidance that helped me build a profitable portfolio of properties in Abilene.",
+  quote: "As an investor and builder to commercial real estate, Josh has helped me find tenants for my properties!",
   name: "Landon Couch",
   title: "Real Estate Investor",
   image: "/lovable-uploads/331f0b08-b598-4594-80fd-793c91cafd82.png"
 }, {
-  quote: "When we needed to expand our office space, Josh understood our requirements perfectly and found us a property that exceeded our expectations.",
+  quote: "With Josh's guidance, we were able to successfully transition our business and property, securing the equity we had built over the years. His expertise and integrity made the entire process feel seamless and rewarding.",
   name: "J & Lorraine Wilson",
   title: "Property Owners",
   image: "/lovable-uploads/5d165228-18d1-4470-8883-c28d37702b66.png"
