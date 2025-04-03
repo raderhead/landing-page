@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -84,7 +84,7 @@ const Footer = () => {
               <li><a href="#properties" className="text-luxury-khaki hover:text-luxury-gold transition-colors">Properties</a></li>
               <li><a href="#about" className="text-luxury-khaki hover:text-luxury-gold transition-colors">About Josh</a></li>
               <li><a href="#contact" className="text-luxury-khaki hover:text-luxury-gold transition-colors">Contact</a></li>
-              <li><a href="#" className="text-luxury-khaki hover:text-luxury-gold transition-colors">Privacy Policy</a></li>
+              <li><Link to="/privacy-policy" className="text-luxury-khaki hover:text-luxury-gold transition-colors">Privacy Policy</Link></li>
             </ul>
           </div>
           

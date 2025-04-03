@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -11,6 +12,7 @@ import BlogPost from "./pages/BlogPost";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import Webhooks from "./pages/Webhooks";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -51,6 +53,7 @@ const AppRoutes = () => {
         <Route path="/properties" element={<AllProperties />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:id" element={<BlogPost />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/webhooks" element={<Webhooks />} />
