@@ -105,18 +105,18 @@ const PropertiesSection = () => {
   
   return (
     <section id="properties" ref={sectionRef} className="section bg-black relative overflow-hidden py-[45px]">
-      <div className="absolute top-0 left-0 w-24 h-24 rounded-full bg-luxury-gold/5 -translate-x-1/2 parallax-layer" style={{
+      <div className="absolute top-0 left-0 w-24 h-24 rounded-full bg-[#1E5799]/5 -translate-x-1/2 parallax-layer" style={{
       transform: `translateX(${scrollY * 0.03}px) translateY(${scrollY * 0.02}px)`
       }}>
       </div>
-      <div className="absolute bottom-20 right-0 w-40 h-40 rounded-full bg-luxury-gold/10 translate-x-1/2 parallax-layer" style={{
+      <div className="absolute bottom-20 right-0 w-40 h-40 rounded-full bg-[#1E5799]/10 translate-x-1/2 parallax-layer" style={{
       transform: `translateX(${-scrollY * 0.04}px) translateY(${-scrollY * 0.01}px)`
       }}>
       </div>
       
       <div className="container relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-8">
-          <h2 className="text-white font-sans text-4xl font-bold mb-6">Featured <span className="font-serif text-luxury-gold">Properties</span></h2>
+          <h2 className="text-white font-sans text-4xl font-bold mb-6">Featured <span className="font-serif text-[#1E5799]">Properties</span></h2>
           <p className="text-white font-sans text-xl md:text-2xl font-medium mb-8">
             Explore our selection of premium commercial properties available in Abilene, TX
           </p>
@@ -124,8 +124,8 @@ const PropertiesSection = () => {
         
         <div className="w-full rounded-lg overflow-hidden">
           {loading ? (
-            <div className="bg-luxury-dark/90 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg border border-luxury-gold/10 min-h-[200px] flex items-center justify-center">
-              <div className="text-luxury-gold animate-pulse">Loading properties...</div>
+            <div className="bg-luxury-dark/90 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg border border-[#1E5799]/10 min-h-[200px] flex items-center justify-center">
+              <div className="text-[#1E5799] animate-pulse">Loading properties...</div>
             </div>
           ) : properties.length > 0 ? (
             <>
@@ -140,7 +140,7 @@ const PropertiesSection = () => {
                   {properties.map((property) => (
                     <CarouselItem key={property.id} className="pl-2 md:pl-4 md:basis-1/3 lg:basis-1/3">
                       <Card 
-                        className="bg-luxury-dark border-luxury-gold/10 hover:border-luxury-gold/20 transition-all duration-300 hover:shadow-lg group h-[400px] overflow-hidden cursor-pointer"
+                        className="bg-luxury-dark border-[#1E5799]/10 hover:border-[#1E5799]/20 transition-all duration-300 hover:shadow-lg group h-[400px] overflow-hidden cursor-pointer"
                         onClick={() => handlePropertyClick(property.id)}
                       >
                         <div className="relative h-64 overflow-hidden">
@@ -152,10 +152,10 @@ const PropertiesSection = () => {
                             />
                           ) : (
                             <div className="w-full h-full bg-luxury-dark flex items-center justify-center">
-                              <Building className="h-12 w-12 text-luxury-gold/20" />
+                              <Building className="h-12 w-12 text-[#1E5799]/20" />
                             </div>
                           )}
-                          <div className="absolute top-2 right-2 bg-luxury-gold text-white py-1 px-2 rounded-sm text-xs font-medium">
+                          <div className="absolute top-2 right-2 bg-[#1E5799] text-white py-1 px-2 rounded-sm text-xs font-medium">
                             {property.type}
                           </div>
                         </div>
@@ -163,7 +163,7 @@ const PropertiesSection = () => {
                           <div className="space-y-2">
                             <div className="flex items-center justify-between">
                               {property.price && (
-                                <p className="font-serif font-bold text-luxury-gold text-3xl mb-1 leading-tight tracking-tight">
+                                <p className="font-serif font-bold text-[#1E5799] text-3xl mb-1 leading-tight tracking-tight">
                                   {property.price.startsWith('$') ? property.price : `$${property.price}`}
                                 </p>
                               )}
@@ -188,8 +188,8 @@ const PropertiesSection = () => {
                   ))}
                 </CarouselContent>
                 <div className="flex justify-center mt-6 gap-4">
-                  <CarouselPrevious className="static translate-y-0 border-luxury-gold text-luxury-gold hover:text-white hover:bg-luxury-gold h-8 w-8" />
-                  <CarouselNext className="static translate-y-0 border-luxury-gold text-luxury-gold hover:text-white hover:bg-luxury-gold h-8 w-8" />
+                  <CarouselPrevious className="static translate-y-0 border-[#1E5799] text-[#1E5799] hover:text-white hover:bg-[#1E5799] h-8 w-8" />
+                  <CarouselNext className="static translate-y-0 border-[#1E5799] text-[#1E5799] hover:text-white hover:bg-[#1E5799] h-8 w-8" />
                 </div>
               </Carousel>
               
@@ -197,7 +197,7 @@ const PropertiesSection = () => {
                 <Link to="/properties">
                   <Button 
                     variant="outline" 
-                    className="border-luxury-gold bg-luxury-dark text-luxury-gold hover:bg-luxury-gold hover:text-white transition-all duration-300 group"
+                    className="border-[#1E5799] bg-transparent text-[#1E5799] hover:bg-[#1E5799] hover:text-white transition-all duration-300 group"
                   >
                     <span>View All Properties</span>
                     <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -206,15 +206,15 @@ const PropertiesSection = () => {
               </div>
             </>
           ) : (
-            <div className="bg-luxury-dark/90 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg border border-luxury-gold/10 min-h-[200px] flex flex-col items-center justify-center p-6 text-center">
-              <Building className="h-12 w-12 text-luxury-gold/30 mb-4" />
-              <h3 className="text-lg font-bold text-luxury-gold mb-2">No Properties Found</h3>
+            <div className="bg-luxury-dark/90 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg border border-[#1E5799]/10 min-h-[200px] flex flex-col items-center justify-center p-6 text-center">
+              <Building className="h-12 w-12 text-[#1E5799]/30 mb-4" />
+              <h3 className="text-lg font-bold text-[#1E5799] mb-2">No Properties Found</h3>
               <p className="text-white mb-4">
                 Use the Webhook Tester to send property data to populate this section.
               </p>
               <Button 
                 variant="outline" 
-                className="border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-white"
+                className="border-[#1E5799] text-[#1E5799] hover:bg-[#1E5799] hover:text-white"
                 onClick={() => window.location.href = '/webhooks'}
               >
                 Go to Webhook Tester

@@ -190,24 +190,26 @@ const PropertyDetailsDialog = ({ isOpen, onClose, propertyId }: PropertyDetailsD
   return (
     <>
       <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-        <DialogContent className="max-w-5xl max-h-[90vh] p-0 bg-luxury-black border-luxury-gold/20">
+        <DialogContent className="max-w-5xl max-h-[90vh] p-0 bg-luxury-black border-[#1E5799]/20">
           {loading ? (
             <div className="flex items-center justify-center h-full">
-              <Loader2 className="h-8 w-8 text-luxury-gold animate-spin" />
+              <Loader2 className="h-8 w-8 text-[#1E5799] animate-spin" />
             </div>
           ) : error ? (
             <div className="flex flex-col items-center justify-center h-full p-6 text-center">
-              <Info className="h-12 w-12 text-luxury-gold/30 mb-4" />
-              <h3 className="text-lg font-bold text-luxury-gold mb-2">Error Loading Details</h3>
-              <p className="text-luxury-khaki">{error}</p>
+              <Info className="h-12 w-12 text-[#1E5799]/30 mb-4" />
+              <h3 className="text-lg font-bold text-[#1E5799] mb-2">Error Loading Details</h3>
+              <p className="text-white">
+                {error}
+              </p>
             </div>
           ) : (
             <div className="flex flex-col h-full">
               {/* Header with main information */}
-              <div className="p-6 border-b border-luxury-gold/10">
+              <div className="p-6 border-b border-[#1E5799]/10">
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
-                    <DialogTitle className="text-3xl font-serif text-luxury-gold mb-2">
+                    <DialogTitle className="text-3xl font-serif text-[#1E5799] mb-2">
                       {property?.price && (
                         <span>{property.price.startsWith('$') ? property.price : `$${property.price}`}</span>
                       )}
@@ -218,13 +220,13 @@ const PropertyDetailsDialog = ({ isOpen, onClose, propertyId }: PropertyDetailsD
                     
                     <div className="flex flex-wrap gap-2 mt-2">
                       {property?.type && (
-                        <Badge variant="outline" className="bg-luxury-gold/10 text-luxury-gold border-luxury-gold/20">
+                        <Badge variant="outline" className="bg-[#1E5799]/10 text-white border-[#1E5799]/20">
                           {property.type}
                         </Badge>
                       )}
                       
                       {propertyDetails?.status && (
-                        <Badge variant="outline" className="bg-luxury-gold/10 text-luxury-gold border-luxury-gold/20">
+                        <Badge variant="outline" className="bg-[#1E5799]/10 text-white border-[#1E5799]/20">
                           {propertyDetails.status}
                         </Badge>
                       )}
@@ -232,8 +234,8 @@ const PropertyDetailsDialog = ({ isOpen, onClose, propertyId }: PropertyDetailsD
                   </div>
                   
                   {property?.mls && (
-                    <div className="bg-luxury-dark/80 p-3 rounded border border-luxury-gold/10 text-right shrink-0">
-                      <p className="text-xs text-luxury-khaki/70">MLS</p>
+                    <div className="bg-luxury-dark/80 p-3 rounded border border-[#1E5799]/10 text-right shrink-0">
+                      <p className="text-xs text-white/70">MLS</p>
                       <p className="font-medium text-white">{property.mls}</p>
                     </div>
                   )}
@@ -246,17 +248,17 @@ const PropertyDetailsDialog = ({ isOpen, onClose, propertyId }: PropertyDetailsD
                   <ScrollArea className="h-full">
                     <div className="p-6 space-y-6">
                       {/* Key Details */}
-                      <Card className="bg-luxury-dark border-luxury-gold/10">
+                      <Card className="bg-luxury-dark border-[#1E5799]/10">
                         <CardContent className="p-5">
                           <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-lg font-medium text-luxury-gold flex items-center">
-                              <Info className="h-5 w-5 mr-2 text-luxury-gold/70" />
+                            <h3 className="text-lg font-medium text-[#1E5799] flex items-center">
+                              <Info className="h-5 w-5 mr-2 text-[#1E5799]/70" />
                               Property Overview
                             </h3>
                             
                             {propertyDetails?.virtualtour && propertyDetails.virtualtour.length > 0 && (
                               <Button 
-                                variant="gold"
+                                variant="blue"
                                 size="sm"
                                 onClick={() => openVirtualTourPopup(propertyDetails.virtualtour![0])}
                               >
@@ -269,11 +271,11 @@ const PropertyDetailsDialog = ({ isOpen, onClose, propertyId }: PropertyDetailsD
                           <div className="grid grid-cols-2 gap-5">
                             {propertyDetails?.propertySize && (
                               <div className="flex items-start">
-                                <div className="h-10 w-10 rounded-full bg-luxury-gold/10 flex items-center justify-center mr-3">
-                                  <Table className="h-5 w-5 text-luxury-gold" />
+                                <div className="h-10 w-10 rounded-full bg-[#1E5799]/10 flex items-center justify-center mr-3">
+                                  <Table className="h-5 w-5 text-[#1E5799]" />
                                 </div>
                                 <div>
-                                  <p className="text-xs text-luxury-khaki/70">Property Size</p>
+                                  <p className="text-xs text-white/70">Property Size</p>
                                   <p className="font-medium text-white">{propertyDetails.propertySize}</p>
                                 </div>
                               </div>
@@ -281,11 +283,11 @@ const PropertyDetailsDialog = ({ isOpen, onClose, propertyId }: PropertyDetailsD
                             
                             {propertyDetails?.landSize && (
                               <div className="flex items-start">
-                                <div className="h-10 w-10 rounded-full bg-luxury-gold/10 flex items-center justify-center mr-3">
-                                  <Ruler className="h-5 w-5 text-luxury-gold" />
+                                <div className="h-10 w-10 rounded-full bg-[#1E5799]/10 flex items-center justify-center mr-3">
+                                  <Ruler className="h-5 w-5 text-[#1E5799]" />
                                 </div>
                                 <div>
-                                  <p className="text-xs text-luxury-khaki/70">Land Size</p>
+                                  <p className="text-xs text-white/70">Land Size</p>
                                   <p className="font-medium text-white">{propertyDetails.landSize}</p>
                                 </div>
                               </div>
@@ -293,11 +295,11 @@ const PropertyDetailsDialog = ({ isOpen, onClose, propertyId }: PropertyDetailsD
                             
                             {propertyDetails?.listPrice && (
                               <div className="flex items-start">
-                                <div className="h-10 w-10 rounded-full bg-luxury-gold/10 flex items-center justify-center mr-3">
-                                  <DollarSign className="h-5 w-5 text-luxury-gold" />
+                                <div className="h-10 w-10 rounded-full bg-[#1E5799]/10 flex items-center justify-center mr-3">
+                                  <DollarSign className="h-5 w-5 text-[#1E5799]" />
                                 </div>
                                 <div>
-                                  <p className="text-xs text-luxury-khaki/70">List Price</p>
+                                  <p className="text-xs text-white/70">List Price</p>
                                   <p className="font-medium text-white">{propertyDetails.listPrice}</p>
                                 </div>
                               </div>
@@ -305,11 +307,11 @@ const PropertyDetailsDialog = ({ isOpen, onClose, propertyId }: PropertyDetailsD
                             
                             {propertyDetails?.salePricePerSqm && (
                               <div className="flex items-start">
-                                <div className="h-10 w-10 rounded-full bg-luxury-gold/10 flex items-center justify-center mr-3">
-                                  <Tag className="h-5 w-5 text-luxury-gold" />
+                                <div className="h-10 w-10 rounded-full bg-[#1E5799]/10 flex items-center justify-center mr-3">
+                                  <Tag className="h-5 w-5 text-[#1E5799]" />
                                 </div>
                                 <div>
-                                  <p className="text-xs text-luxury-khaki/70">Price Per SqM</p>
+                                  <p className="text-xs text-white/70">Price Per SqM</p>
                                   <p className="font-medium text-white">{propertyDetails.salePricePerSqm}</p>
                                 </div>
                               </div>
@@ -318,63 +320,63 @@ const PropertyDetailsDialog = ({ isOpen, onClose, propertyId }: PropertyDetailsD
                         </CardContent>
                       </Card>
                       
-                      {/* Virtual Tour Section - Removed from here */}
-                      
                       {/* Remarks/Description */}
                       {propertyDetails?.remarks && (
-                        <Card className="bg-luxury-dark border-luxury-gold/10">
+                        <Card className="bg-luxury-dark border-[#1E5799]/10">
                           <CardContent className="p-5">
-                            <h3 className="text-lg font-medium text-luxury-gold mb-4 flex items-center">
-                              <Info className="h-5 w-5 mr-2 text-luxury-gold/70" />
+                            <h3 className="text-lg font-medium text-[#1E5799] mb-4 flex items-center">
+                              <Info className="h-5 w-5 mr-2 text-[#1E5799]/70" />
                               Description
                             </h3>
                             
-                            <p className="text-luxury-khaki whitespace-pre-line">{propertyDetails.remarks}</p>
+                            <p className="text-white whitespace-pre-line">{propertyDetails.remarks}</p>
                           </CardContent>
                         </Card>
                       )}
                       
                       {/* Rooms Information */}
                       {propertyDetails?.rooms && Object.keys(propertyDetails.rooms).length > 0 && (
-                        <Card className="bg-luxury-dark border-luxury-gold/10">
+                        <Card className="bg-luxury-dark border-[#1E5799]/10">
                           <CardContent className="p-5">
-                            <h3 className="text-lg font-medium text-luxury-gold mb-4 flex items-center">
-                              <Home className="h-5 w-5 mr-2 text-luxury-gold/70" />
+                            <h3 className="text-lg font-medium text-[#1E5799] mb-4 flex items-center">
+                              <Home className="h-5 w-5 mr-2 text-[#1E5799]/70" />
                               Room Information
                             </h3>
                             
-                            {formatRooms(propertyDetails.rooms)}
+                            <div className="text-white">
+                              {formatRooms(propertyDetails.rooms)}
+                            </div>
                           </CardContent>
                         </Card>
                       )}
                       
                       {/* Additional Information */}
-                      <Card className="bg-luxury-dark border-luxury-gold/10">
+                      <Card className="bg-luxury-dark border-[#1E5799]/10">
                         <CardContent className="p-5">
-                          <h3 className="text-lg font-medium text-luxury-gold mb-4 flex items-center">
-                            <MapPin className="h-5 w-5 mr-2 text-luxury-gold/70" />
+                          <h3 className="text-lg font-medium text-[#1E5799] mb-4 flex items-center">
+                            <MapPin className="h-5 w-5 mr-2 text-[#1E5799]/70" />
                             Location
                           </h3>
                           
-                          <p className="text-luxury-khaki">{propertyDetails?.address || property?.address || 'Address not available'}</p>
+                          <p className="text-white">{propertyDetails?.address || property?.address || 'Address not available'}</p>
                         </CardContent>
                       </Card>
                       
                       {/* Listing Information */}
                       {propertyDetails?.listingBy && (
-                        <Card className="bg-luxury-dark border-luxury-gold/10 mb-6">
+                        <Card className="bg-luxury-dark border-[#1E5799]/10 mb-6">
                           <CardContent className="p-5">
-                            <h3 className="text-lg font-medium text-luxury-gold mb-4 flex items-center">
-                              <SquareUser className="h-5 w-5 mr-2 text-luxury-gold/70" />
+                            <h3 className="text-lg font-medium text-[#1E5799] mb-4 flex items-center">
+                              <SquareUser className="h-5 w-5 mr-2 text-[#1E5799]/70" />
                               Listing Information
                             </h3>
                             
                             <div className="flex items-center">
-                              <div className="h-10 w-10 rounded-full bg-luxury-gold/10 flex items-center justify-center mr-3">
-                                <SquareUser className="h-5 w-5 text-luxury-gold" />
+                              <div className="h-10 w-10 rounded-full bg-[#1E5799]/10 flex items-center justify-center mr-3">
+                                <SquareUser className="h-5 w-5 text-[#1E5799]" />
                               </div>
                               <div>
-                                <p className="text-xs text-luxury-khaki/70">Listed By</p>
+                                <p className="text-xs text-white/70">Listed By</p>
                                 <p className="font-medium text-white">{propertyDetails.listingBy}</p>
                               </div>
                             </div>
@@ -386,7 +388,7 @@ const PropertyDetailsDialog = ({ isOpen, onClose, propertyId }: PropertyDetailsD
                 </div>
                 
                 {/* Right side - Image (now takes 1/4 of the width) */}
-                <div className="col-span-1 border-l border-luxury-gold/10">
+                <div className="col-span-1 border-l border-[#1E5799]/10">
                   <div className="h-full w-full flex flex-col overflow-hidden bg-luxury.dark">
                     {property?.image_url ? (
                       <div className="w-full h-full flex items-center justify-center bg-luxury-dark/90 relative">
@@ -398,7 +400,7 @@ const PropertyDetailsDialog = ({ isOpen, onClose, propertyId }: PropertyDetailsD
                       </div>
                     ) : (
                       <div className="w-full h-full bg-luxury-dark/50 flex items-center justify-center">
-                        <Home className="h-16 w-16 text-luxury-gold/20" />
+                        <Home className="h-16 w-16 text-[#1E5799]/20" />
                       </div>
                     )}
                   </div>
@@ -411,7 +413,7 @@ const PropertyDetailsDialog = ({ isOpen, onClose, propertyId }: PropertyDetailsD
       
       {/* Virtual Tour Popup Dialog */}
       <Dialog open={virtualTourOpen} onOpenChange={setVirtualTourOpen}>
-        <DialogContent className="max-w-6xl max-h-[95vh] p-0 bg-luxury-black border-luxury-gold/20">
+        <DialogContent className="max-w-6xl max-h-[95vh] p-0 bg-luxury-black border-[#1E5799]/20">
           <div className="relative w-full h-[95vh] bg-luxury-black/90">
             {currentVirtualTourUrl && (
               <iframe 
@@ -425,7 +427,7 @@ const PropertyDetailsDialog = ({ isOpen, onClose, propertyId }: PropertyDetailsD
             <Button 
               variant="ghost" 
               size="icon" 
-              className="absolute top-2 right-2 rounded-full bg-luxury-black/50 hover:bg-luxury-black/80 text-white border border-luxury-gold/20 z-10"
+              className="absolute top-2 right-2 rounded-full bg-luxury-black/50 hover:bg-luxury-black/80 text-white border border-[#1E5799]/20 z-10"
               onClick={() => setVirtualTourOpen(false)}
             >
               <X className="h-4 w-4" />

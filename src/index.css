@@ -19,14 +19,14 @@
     --primary: 210 34% 13%;
     --primary-foreground: 0 0% 98%;
 
-    --secondary: 40 22% 63%;
-    --secondary-foreground: 0 0% 7%;
+    --secondary: 210 79% 36%;
+    --secondary-foreground: 0 0% 98%;
 
     --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
+    --muted-foreground: 210 79% 36%;
 
-    --accent: 40 42% 65%;
-    --accent-foreground: 0 0% 7%;
+    --accent: 210 79% 36%;
+    --accent-foreground: 0 0% 98%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
@@ -88,7 +88,7 @@
   }
   
   .hover-border-glow {
-    @apply transition-all duration-300 border border-transparent hover:border-luxury-gold/50;
+    @apply transition-all duration-300 border border-transparent hover:border-[#1E5799]/50;
   }
   
   .hover-scale {
@@ -100,7 +100,7 @@
   }
   
   .hover-underline-grow {
-    @apply relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-luxury-gold after:transition-all after:duration-300 hover:after:w-full;
+    @apply relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-[#1E5799] after:transition-all after:duration-300 hover:after:w-full;
   }
   
   .fade-in {
@@ -131,7 +131,7 @@
   }
   
   .admin-title-container {
-    @apply border-b border-luxury-gold/10 shadow-sm;
+    @apply border-b border-[#1E5799]/10 shadow-sm;
   }
   
   .admin-card-enhanced {
