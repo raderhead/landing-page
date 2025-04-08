@@ -66,14 +66,14 @@ const Navbar = () => {
         <div className="flex items-center gap-3">
           <a href="/" className="flex items-center gap-2 text-white group">
             <img 
-              src="/lovable-uploads/1da1f387-6f0c-4754-b87d-6bcb1fb64f67.png" 
+              src="/lovable-uploads/8e0f7a87-fcde-45bb-840a-20ba1452adde.png" 
               alt="Josh Rader" 
               className="h-20 w-auto group-hover:scale-110 transition-transform drop-shadow-md"
             />
           </a>
           
           <a href="https://mccullarproperties.com/" target="_blank" rel="noopener noreferrer" className="hidden md:flex items-center gap-2 border-l border-luxury-gold/30 pl-3 group">
-            <img alt="McCullar Properties Group" className="h-12 w-auto group-hover:scale-105 transition-transform drop-shadow-sm" src="/lovable-uploads/e5530469-9799-49c6-b81e-5ba107cba315.png" />
+            <img alt="McCullar Properties Group" className="h-12 w-auto group-hover:scale-105 transition-transform drop-shadow-sm" src="/lovable-uploads/bda42a85-fa69-47e4-b7d2-1900e3411ffb.png" />
           </a>
         </div>
 
@@ -127,7 +127,7 @@ const Navbar = () => {
           <div className="container flex flex-col gap-3">
             <a href="https://mccullarproperties.com/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 py-2 border-b border-luxury-khaki/10 group">
               <span className="text-luxury-khaki text-xs uppercase tracking-wide group-hover:text-luxury-gold transition-colors">Proudly Brokered By</span>
-              <img alt="McCullar Properties Group" className="h-10 w-auto group-hover:scale-105 transition-transform" src="/lovable-uploads/e5530469-9799-49c6-b81e-5ba107cba315.png" />
+              <img alt="McCullar Properties Group" className="h-10 w-auto group-hover:scale-105 transition-transform" src="/lovable-uploads/6635c4f1-9b1d-4ef5-949a-4b78d5df568e.png" />
             </a>
             <a href="#services" onClick={e => handleScrollToSection(e, 'services')} className="text-white font-medium py-2 border-b border-luxury-khaki/10 uppercase text-xs tracking-wider hover:pl-2 hover:text-luxury-gold transition-all">
               Services
