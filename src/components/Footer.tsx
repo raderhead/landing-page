@@ -53,7 +53,7 @@ const Footer = () => {
               style={{ background: 'transparent', border: 'none', padding: 0, cursor: 'default' }}
             >
               <img 
-                src="/lovable-uploads/8e0f7a87-fcde-45bb-840a-20ba1452adde.png" 
+                src="/lovable-uploads/f2bea096-edde-4d0e-bd7d-0bd81ed4ef48.png" 
                 alt="Josh Rader" 
                 className="h-20 w-auto drop-shadow-md"
               />

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -147,7 +146,7 @@ const AllProperties = () => {
         
         <div className="container relative z-10">
           <div className="max-w-3xl mb-6">
-            <a href="/" className="flex items-center gap-2 text-luxury-khaki mb-6 group hover:text-luxury-gold transition-colors">
+            <a href="/" className="flex items-center gap-2 text-white mb-6 group hover:text-luxury-gold transition-colors">
               <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
               <span>Back to Home</span>
             </a>
@@ -156,17 +155,17 @@ const AllProperties = () => {
               <span className="font-sans">Commercial Properties in</span> <span className="text-luxury-gold font-serif">Abilene</span>
             </h1>
             
-            <p className="text-luxury-khaki text-base font-sans">
+            <p className="text-white text-base font-sans">
               Browse our curated selection of premium commercial real estate opportunities in the Abilene market.
             </p>
           </div>
           
-          <div className="bg-luxury-dark p-3 border border-luxury-khaki/20 rounded-md shadow-lg flex flex-col md:flex-row gap-3 animate-fade-in-delay-1">
+          <div className="bg-luxury-dark p-3 border border-white/20 rounded-md shadow-lg flex flex-col md:flex-row gap-3 animate-fade-in-delay-1">
             <div className="relative flex-grow">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-luxury-khaki" />
+              <Search className="absolute left-3 top-3 h-4 w-4 text-white" />
               <Input 
                 placeholder="Search properties by name or address" 
-                className="pl-10 bg-luxury-black border-luxury-khaki/30 text-white placeholder:text-luxury-khaki/50 hover:border-luxury-gold/50 focus:border-luxury-gold"
+                className="pl-10 bg-luxury-black border-white/30 text-white placeholder:text-white/50 hover:border-luxury-gold/50 focus:border-luxury-gold"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -176,7 +175,7 @@ const AllProperties = () => {
               <Button 
                 variant="outline" 
                 size="sm"
-                className={`rounded-full px-3 py-0 border-luxury-khaki/30 ${propertyType === 'All' ? 'bg-luxury-gold text-luxury-black border-luxury-gold' : 'text-luxury-khaki hover:border-luxury-gold hover:text-luxury-gold'}`}
+                className={`rounded-full px-3 py-0 border-white/30 ${propertyType === 'All' ? 'bg-luxury-gold text-white border-luxury-gold' : 'text-white hover:border-luxury-gold hover:text-luxury-gold'}`}
                 onClick={() => setPropertyType("All")}
               >
                 All
@@ -184,7 +183,7 @@ const AllProperties = () => {
               <Button 
                 variant="outline"
                 size="sm"
-                className={`rounded-full px-3 py-0 border-luxury-khaki/30 ${propertyType === 'Office' ? 'bg-luxury-gold text-luxury-black border-luxury-gold' : 'text-luxury-khaki hover:border-luxury-gold hover:text-luxury-gold'}`}
+                className={`rounded-full px-3 py-0 border-white/30 ${propertyType === 'Office' ? 'bg-luxury-gold text-white border-luxury-gold' : 'text-white hover:border-luxury-gold hover:text-luxury-gold'}`}
                 onClick={() => setPropertyType("Office")}
               >
                 Office
@@ -192,7 +191,7 @@ const AllProperties = () => {
               <Button 
                 variant="outline"
                 size="sm"
-                className={`rounded-full px-3 py-0 border-luxury-khaki/30 ${propertyType === 'Retail' ? 'bg-luxury-gold text-luxury-black border-luxury-gold' : 'text-luxury-khaki hover:border-luxury-gold hover:text-luxury-gold'}`}
+                className={`rounded-full px-3 py-0 border-white/30 ${propertyType === 'Retail' ? 'bg-luxury-gold text-white border-luxury-gold' : 'text-white hover:border-luxury-gold hover:text-luxury-gold'}`}
                 onClick={() => setPropertyType("Retail")}
               >
                 Retail
@@ -200,7 +199,7 @@ const AllProperties = () => {
               <Button 
                 variant="outline"
                 size="sm"
-                className={`rounded-full px-3 py-0 border-luxury-khaki/30 ${propertyType === 'Industrial' ? 'bg-luxury-gold text-luxury-black border-luxury-gold' : 'text-luxury-khaki hover:border-luxury-gold hover:text-luxury-gold'}`}
+                className={`rounded-full px-3 py-0 border-white/30 ${propertyType === 'Industrial' ? 'bg-luxury-gold text-white border-luxury-gold' : 'text-white hover:border-luxury-gold hover:text-luxury-gold'}`}
                 onClick={() => setPropertyType("Industrial")}
               >
                 Industrial
@@ -208,18 +207,18 @@ const AllProperties = () => {
               <Button 
                 variant="outline"
                 size="sm"
-                className={`rounded-full px-3 py-0 border-luxury-khaki/30 ${propertyType === 'Other' ? 'bg-luxury-gold text-luxury-black border-luxury-gold' : 'text-luxury-khaki hover:border-luxury-gold hover:text-luxury-gold'}`}
+                className={`rounded-full px-3 py-0 border-white/30 ${propertyType === 'Other' ? 'bg-luxury-gold text-white border-luxury-gold' : 'text-white hover:border-luxury-gold hover:text-luxury-gold'}`}
                 onClick={() => setPropertyType("Other")}
               >
                 Other
               </Button>
             </div>
             
-            <div className="flex gap-1 border-l border-luxury-khaki/20 pl-3 items-center">
+            <div className="flex gap-1 border-l border-white/20 pl-3 items-center">
               <Button 
                 variant="ghost"
                 size="sm"
-                className={`p-1 ${viewMode === 'grid' ? 'text-luxury-gold' : 'text-luxury-khaki hover:text-luxury-gold'}`}
+                className={`p-1 ${viewMode === 'grid' ? 'text-luxury-gold' : 'text-white hover:text-luxury-gold'}`}
                 onClick={() => setViewMode("grid")}
               >
                 <Grid className="h-4 w-4" />
@@ -227,7 +226,7 @@ const AllProperties = () => {
               <Button 
                 variant="ghost"
                 size="sm"
-                className={`p-1 ${viewMode === 'list' ? 'text-luxury-gold' : 'text-luxury-khaki hover:text-luxury-gold'}`}
+                className={`p-1 ${viewMode === 'list' ? 'text-luxury-gold' : 'text-white hover:text-luxury-gold'}`}
                 onClick={() => setViewMode("list")}
               >
                 <List className="h-4 w-4" />
@@ -241,7 +240,7 @@ const AllProperties = () => {
         {loading ? (
           <div className="flex flex-col items-center justify-center py-16">
             <Loader2 className="h-10 w-10 text-luxury-gold animate-spin mb-3" />
-            <p className="text-luxury-khaki">Loading properties...</p>
+            <p className="text-white">Loading properties...</p>
           </div>
         ) : currentProperties.length > 0 ? (
           <>
@@ -251,7 +250,7 @@ const AllProperties = () => {
                   {currentProperties.map((property, index) => (
                     <div 
                       key={property.id} 
-                      className="bg-luxury-dark rounded-md overflow-hidden shadow-md hover:shadow-lg transition-all duration-500 hover:shadow-luxury-gold/20 hover:-translate-y-1 hover:scale-[1.01] border border-luxury-khaki/10 group h-[400px] cursor-pointer"
+                      className="bg-luxury-dark rounded-md overflow-hidden shadow-md hover:shadow-lg transition-all duration-500 hover:shadow-luxury-gold/20 hover:-translate-y-1 hover:scale-[1.01] border border-white/10 group h-[400px] cursor-pointer"
                       style={{ 
                         transitionDelay: `${index * 50}ms`,
                         transform: `translateY(${Math.min(10, Math.max(-10, (scrollY - 1200) * 0.02 * (index % 3 - 1)))}px)`
@@ -271,7 +270,7 @@ const AllProperties = () => {
                           </div>
                         )}
                         {property.type && (
-                          <div className="absolute top-2 right-2 bg-luxury-gold text-luxury-black py-1 px-2 rounded-sm text-xs font-medium">
+                          <div className="absolute top-2 right-2 bg-luxury-gold text-white py-1 px-2 rounded-sm text-xs font-medium">
                             {property.type}
                           </div>
                         )}
@@ -288,7 +287,7 @@ const AllProperties = () => {
                             
                             {property.mls && (
                               <div>
-                                <p className="text-xs text-luxury-khaki/70">MLS</p>
+                                <p className="text-xs text-white/70">MLS</p>
                                 <p className="font-medium text-white text-sm">{property.mls}</p>
                               </div>
                             )}
@@ -310,7 +309,7 @@ const AllProperties = () => {
                 {currentProperties.map((property, index) => (
                   <div 
                     key={property.id} 
-                    className="bg-luxury-dark rounded-md overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 hover:shadow-luxury-gold/20 border border-luxury-khaki/10 group cursor-pointer"
+                    className="bg-luxury-dark rounded-md overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 hover:shadow-luxury-gold/20 border border-white/10 group cursor-pointer"
                     style={{ 
                       transitionDelay: `${index * 50}ms`
                     }}
@@ -331,7 +330,7 @@ const AllProperties = () => {
                         )}
                         
                         {property.type && (
-                          <div className="absolute top-2 right-2 bg-luxury-gold text-luxury-black py-1 px-2 rounded-sm text-xs font-medium">
+                          <div className="absolute top-2 right-2 bg-luxury-gold text-white py-1 px-2 rounded-sm text-xs font-medium">
                             {property.type}
                           </div>
                         )}
@@ -348,7 +347,7 @@ const AllProperties = () => {
                             
                             {property.mls && (
                               <div>
-                                <p className="text-xs text-luxury-khaki/70">MLS</p>
+                                <p className="text-xs text-white/70">MLS</p>
                                 <p className="font-medium text-white text-sm">{property.mls}</p>
                               </div>
                             )}
@@ -365,7 +364,7 @@ const AllProperties = () => {
                           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-3">
                             {property.size && property.size !== 'Unknown' && (
                               <div>
-                                <p className="text-xs text-luxury-khaki/70">Size</p>
+                                <p className="text-xs text-white/70">Size</p>
                                 <p className="font-medium text-white text-sm">{property.size}</p>
                               </div>
                             )}
@@ -384,7 +383,7 @@ const AllProperties = () => {
                   <PaginationContent>
                     <PaginationItem>
                       <PaginationPrevious 
-                        className={`border-luxury-khaki/30 text-luxury-khaki hover:border-luxury-gold hover:text-luxury-gold ${currentPage === 1 ? 'pointer-events-none opacity-50' : ''}`}
+                        className={`border-white/30 text-white hover:border-luxury-gold hover:text-luxury-gold ${currentPage === 1 ? 'pointer-events-none opacity-50' : ''}`}
                         onClick={() => currentPage > 1 && paginate(currentPage - 1)}
                       />
                     </PaginationItem>
@@ -392,7 +391,7 @@ const AllProperties = () => {
                     {Array.from({ length: totalPages }, (_, i) => (
                       <PaginationItem key={i + 1}>
                         <PaginationLink
-                          className={`${currentPage === i + 1 ? 'border-luxury-gold bg-luxury-gold/10 text-luxury-gold' : 'border-luxury-khaki/30 text-luxury-khaki hover:border-luxury-gold hover:text-luxury-gold'}`}
+                          className={`${currentPage === i + 1 ? 'border-luxury-gold bg-luxury-gold/10 text-luxury-gold' : 'border-white/30 text-white hover:border-luxury-gold hover:text-luxury-gold'}`}
                           onClick={() => paginate(i + 1)}
                           isActive={currentPage === i + 1}
                         >
@@ -403,7 +402,7 @@ const AllProperties = () => {
                     
                     <PaginationItem>
                       <PaginationNext 
-                        className={`border-luxury-khaki/30 text-luxury-khaki hover:border-luxury-gold hover:text-luxury-gold ${currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}`}
+                        className={`border-white/30 text-white hover:border-luxury-gold hover:text-luxury-gold ${currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}`}
                         onClick={() => currentPage < totalPages && paginate(currentPage + 1)}
                       />
                     </PaginationItem>
@@ -414,12 +413,12 @@ const AllProperties = () => {
           </>
         ) : (
           <div className="text-center py-10 container">
-            <Building className="mx-auto h-12 w-12 text-luxury-khaki/30 mb-3" />
+            <Building className="mx-auto h-12 w-12 text-white/30 mb-3" />
             <h3 className="text-xl font-bold text-luxury-gold mb-2">No properties found</h3>
-            <p className="text-luxury-khaki mb-4">Try adjusting your search criteria or browse all properties.</p>
+            <p className="text-white mb-4">Try adjusting your search criteria or browse all properties.</p>
             <Button 
               variant="outline" 
-              className="border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black rounded-sm"
+              className="border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-white rounded-sm"
               onClick={() => {
                 setSearchTerm("");
                 setPropertyType("All");

@@ -116,8 +116,8 @@ const PropertiesSection = () => {
       
       <div className="container relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-8">
-          <h2 className="section-title text-white font-sans">Featured <span className="font-serif text-luxury-gold">Properties</span></h2>
-          <p className="section-subtitle text-luxury-khaki font-sans">
+          <h2 className="text-white font-sans text-4xl font-bold mb-6">Featured <span className="font-serif text-luxury-gold">Properties</span></h2>
+          <p className="text-white font-sans text-xl md:text-2xl font-medium mb-8">
             Explore our selection of premium commercial properties available in Abilene, TX
           </p>
         </div>
@@ -155,7 +155,7 @@ const PropertiesSection = () => {
                               <Building className="h-12 w-12 text-luxury-gold/20" />
                             </div>
                           )}
-                          <div className="absolute top-2 right-2 bg-luxury-gold text-luxury-black py-1 px-2 rounded-sm text-xs font-medium">
+                          <div className="absolute top-2 right-2 bg-luxury-gold text-white py-1 px-2 rounded-sm text-xs font-medium">
                             {property.type}
                           </div>
                         </div>
@@ -170,7 +170,7 @@ const PropertiesSection = () => {
                               
                               {property.mls && (
                                 <div>
-                                  <p className="text-xs text-luxury-khaki/70">MLS</p>
+                                  <p className="text-xs text-white/70">MLS</p>
                                   <p className="font-medium text-white text-sm">{property.mls}</p>
                                 </div>
                               )}
@@ -188,8 +188,8 @@ const PropertiesSection = () => {
                   ))}
                 </CarouselContent>
                 <div className="flex justify-center mt-6 gap-4">
-                  <CarouselPrevious className="static translate-y-0 border-luxury-gold text-luxury-gold hover:text-luxury-black hover:bg-luxury-gold h-8 w-8" />
-                  <CarouselNext className="static translate-y-0 border-luxury-gold text-luxury-gold hover:text-luxury-black hover:bg-luxury-gold h-8 w-8" />
+                  <CarouselPrevious className="static translate-y-0 border-luxury-gold text-luxury-gold hover:text-white hover:bg-luxury-gold h-8 w-8" />
+                  <CarouselNext className="static translate-y-0 border-luxury-gold text-luxury-gold hover:text-white hover:bg-luxury-gold h-8 w-8" />
                 </div>
               </Carousel>
               
@@ -197,7 +197,7 @@ const PropertiesSection = () => {
                 <Link to="/properties">
                   <Button 
                     variant="outline" 
-                    className="border-luxury-gold bg-luxury-dark text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black transition-all duration-300 group"
+                    className="border-luxury-gold bg-luxury-dark text-luxury-gold hover:bg-luxury-gold hover:text-white transition-all duration-300 group"
                   >
                     <span>View All Properties</span>
                     <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -209,12 +209,12 @@ const PropertiesSection = () => {
             <div className="bg-luxury-dark/90 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg border border-luxury-gold/10 min-h-[200px] flex flex-col items-center justify-center p-6 text-center">
               <Building className="h-12 w-12 text-luxury-gold/30 mb-4" />
               <h3 className="text-lg font-bold text-luxury-gold mb-2">No Properties Found</h3>
-              <p className="text-luxury-khaki mb-4">
+              <p className="text-white mb-4">
                 Use the Webhook Tester to send property data to populate this section.
               </p>
               <Button 
                 variant="outline" 
-                className="border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black"
+                className="border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-white"
                 onClick={() => window.location.href = '/webhooks'}
               >
                 Go to Webhook Tester

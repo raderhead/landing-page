@@ -22,8 +22,8 @@ const TestimonialsSection = () => {
   return <section className="section bg-luxury-charcoal py-[50px]">
       <div className="container">
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <h2 className="section-title text-white font-sans">Client <span className="font-serif text-luxury-gold">Testimonials</span></h2>
-          <p className="section-subtitle text-white font-sans">
+          <h2 className="text-white font-sans text-4xl font-bold mb-6">Client <span className="font-serif text-luxury-gold">Testimonials</span></h2>
+          <p className="text-white font-sans text-xl md:text-2xl font-medium mb-8">
             Hear from businesses and investors who have worked with Josh to find their ideal commercial properties
           </p>
         </div>

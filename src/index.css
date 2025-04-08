@@ -57,11 +57,11 @@
   }
 
   .section-title {
-    @apply text-3xl md:text-4xl font-bold mb-6 text-luxury-black;
+    @apply text-3xl md:text-4xl font-bold mb-6 text-white;
   }
 
   .section-subtitle {
-    @apply text-xl md:text-2xl font-medium mb-8 text-luxury-gray;
+    @apply text-xl md:text-2xl font-medium mb-8 text-white;
   }
   
   .luxury-card {

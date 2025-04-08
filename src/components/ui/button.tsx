@@ -19,7 +19,7 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        gold: "bg-luxury-gold text-white hover:bg-luxury-gold/90 shadow-[0_0_15px_rgba(30,87,153,0.3)] hover:shadow-[0_0_25px_rgba(30,87,153,0.5)]", // Updated shadow colors to match blue
+        gold: "bg-luxury-gold text-white hover:bg-luxury-gold/90 shadow-[0_0_15px_rgba(30,87,153,0.3)] hover:shadow-[0_0_25px_rgba(30,87,153,0.5)]",
       },
       size: {
         default: "h-10 px-4 py-2",
