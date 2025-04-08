@@ -81,7 +81,7 @@ const ServicesSection = () => {
       <div className="container relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <h2 className="section-title text-white font-sans">Premium Real Estate <span className="font-serif text-luxury-gold">Services</span></h2>
-          <p className="section-subtitle text-luxury-khaki font-sans">
+          <p className="section-subtitle text-white font-sans">
             Comprehensive services to meet all your commercial property needs in Abilene and surrounding areas
           </p>
         </div>
@@ -98,7 +98,7 @@ const ServicesSection = () => {
                 >
                   <div 
                     className="bg-luxury-charcoal p-8 rounded-md shadow-md hover:shadow-lg transition-all duration-500 
-                    border border-luxury-khaki/10 hover:border-luxury-gold/30 hover:bg-luxury-charcoal/80 hover:-translate-y-2 h-full"
+                    border border-white/10 hover:border-luxury-gold/30 hover:bg-luxury-charcoal/80 hover:-translate-y-2 h-full"
                   >
                     <div className="mb-4 transform transition-transform duration-500 hover:scale-110 hover:text-luxury-gold">
                       {service.icon}
@@ -106,7 +106,7 @@ const ServicesSection = () => {
                     <h3 className="text-xl font-bold mb-3 text-white hover:text-luxury-gold transition-colors font-sans">
                       {service.title}
                     </h3>
-                    <p className="text-luxury-khaki/80 font-sans">
+                    <p className="text-white font-sans">
                       {service.description}
                     </p>
                   </div>

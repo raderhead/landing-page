@@ -70,7 +70,7 @@ export default {
 					'slate': '#404040',
 					'gray': '#707070',
 					'khaki': '#B5A98C',
-					'gold': '#D4B87B',
+					'gold': '#1E5799', // Changed from D4B87B to blue 1E5799
 					'cream': '#F5F5F0',
 					'navy': '#1A2A3A',
 					'white': '#FFFFFF',

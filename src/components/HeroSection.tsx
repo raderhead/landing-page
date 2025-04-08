@@ -45,7 +45,7 @@ const HeroSection = () => {
       
       <div className="container relative z-20 flex md:flex-row flex-col items-center">
         <div className="max-w-2xl">
-          <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-luxury-khaki mb-4 opacity-0 animate-fade-in">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-white mb-4 opacity-0 animate-fade-in">
             <div className="inline-flex items-center">
               
               
@@ -59,7 +59,7 @@ const HeroSection = () => {
             <span className="font-serif text-4xl md:text-5xl lg:text-6xl text-luxury-gold hover-glow inline-block">Commercial Investment</span>
           </h1>
           
-          <p className="text-lg md:text-xl text-white/80 mb-8 max-w-2xl opacity-0 animate-fade-in-delay-2 leading-relaxed">
+          <p className="text-lg md:text-xl text-white mb-8 max-w-2xl opacity-0 animate-fade-in-delay-2 leading-relaxed">
             Josh Rader is a licensed commercial real estate agent specializing in helping businesses and investors find premium locations in Abilene.
           </p>
           
@@ -90,19 +90,19 @@ const HeroSection = () => {
       </div>
       
       {/* Stats banner - Moved from absolute positioning to normal flow at the bottom of the section */}
-      <div className="bg-luxury-dark/80 backdrop-blur-lg py-6 sm:py-8 z-20 border-t border-luxury-khaki/20 w-full absolute bottom-0 left-0 right-0">
+      <div className="bg-luxury-dark/80 backdrop-blur-lg py-6 sm:py-8 z-20 border-t border-white/20 w-full absolute bottom-0 left-0 right-0">
         <div className="container grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8">
           <div className="text-center hover-lift p-2 sm:p-4">
             <p className="text-2xl sm:text-3xl font-bold text-luxury-gold font-serif">10+ Years</p>
-            <p className="text-sm sm:text-base text-luxury-khaki">Experience in Commercial Real Estate</p>
+            <p className="text-sm sm:text-base text-white">Experience in Commercial Real Estate</p>
           </div>
           <div className="text-center hover-lift p-2 sm:p-4">
             <p className="text-2xl sm:text-3xl font-bold text-luxury-gold font-serif">Locally Trusted</p>
-            <p className="text-sm sm:text-base text-luxury-khaki">Known for integrity, relationships, and results in the Abilene area</p>
+            <p className="text-sm sm:text-base text-white">Known for integrity, relationships, and results in the Abilene area</p>
           </div>
           <div className="text-center hover-lift p-2 sm:p-4">
             <p className="text-2xl sm:text-3xl font-bold text-luxury-gold font-serif">Client-First Focus</p>
-            <p className="text-sm sm:text-base text-luxury-khaki">Every transaction guided by clarity, communication, and commitment</p>
+            <p className="text-sm sm:text-base text-white">Every transaction guided by clarity, communication, and commitment</p>
           </div>
         </div>
       </div>

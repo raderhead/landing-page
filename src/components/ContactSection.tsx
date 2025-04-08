@@ -92,14 +92,14 @@ const ContactSection = () => {
       <div className="container">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <h2 className="section-title text-white">Contact Josh</h2>
-          <p className="section-subtitle text-luxury-khaki">
+          <p className="section-subtitle text-white">
             Ready to find your ideal commercial property? Get in touch with Josh today
           </p>
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div>
-            <div className="bg-luxury-black p-8 rounded-md mb-8 border border-luxury-khaki/10">
+            <div className="bg-luxury-black p-8 rounded-md mb-8 border border-white/10">
               <h3 className="text-2xl font-bold mb-6 text-white">Contact Information</h3>
               
               <div className="space-y-6">
@@ -109,7 +109,7 @@ const ContactSection = () => {
                   </div>
                   <div>
                     <p className="font-medium text-white">Phone</p>
-                    <p className="text-luxury-khaki">(325) 665-9244</p>
+                    <p className="text-white">(325) 665-9244</p>
                   </div>
                 </div>
                 
@@ -119,7 +119,7 @@ const ContactSection = () => {
                   </div>
                   <div>
                     <p className="font-medium text-white">Email</p>
-                    <p className="text-luxury-khaki">Josh@McCullarProperties.com</p>
+                    <p className="text-white">Josh@McCullarProperties.com</p>
                   </div>
                 </div>
                 
@@ -129,7 +129,7 @@ const ContactSection = () => {
                   </div>
                   <div>
                     <p className="font-medium text-white">Office Address</p>
-                    <p className="text-luxury-khaki">1500 Industrial Blvd, Suite 300<br />Abilene, TX 79601</p>
+                    <p className="text-white">1500 Industrial Blvd, Suite 300<br />Abilene, TX 79601</p>
                   </div>
                 </div>
                 
@@ -139,7 +139,7 @@ const ContactSection = () => {
                   </div>
                   <div>
                     <p className="font-medium text-white">Business Hours</p>
-                    <p className="text-luxury-khaki">Monday - Friday: 9:00 AM - 5:00 PM<br />Saturday: By appointment</p>
+                    <p className="text-white">Monday - Friday: 9:00 AM - 5:00 PM<br />Saturday: By appointment</p>
                   </div>
                 </div>
               </div>
@@ -147,31 +147,31 @@ const ContactSection = () => {
           </div>
           
           <div>
-            <form onSubmit={handleSubmit} className="bg-luxury-black p-8 rounded-md border border-luxury-khaki/10 shadow-sm">
+            <form onSubmit={handleSubmit} className="bg-luxury-black p-8 rounded-md border border-white/10 shadow-sm">
               <h3 className="text-2xl font-bold mb-6 text-white">Send a Message</h3>
               
               <div className="space-y-4">
                 <div>
                   <label htmlFor="name" className="block mb-2 text-sm font-medium text-white">Your Name</label>
-                  <Input id="name" name="name" value={formData.name} onChange={handleChange} placeholder="John Doe" required className="bg-luxury-charcoal border-luxury-khaki/20 text-white focus:border-luxury-gold focus:ring-luxury-gold/50" />
+                  <Input id="name" name="name" value={formData.name} onChange={handleChange} placeholder="John Doe" required className="bg-luxury-charcoal border-white/20 text-white focus:border-luxury-gold focus:ring-luxury-gold/50" />
                 </div>
                 
                 <div>
                   <label htmlFor="email" className="block mb-2 text-sm font-medium text-white">Email Address</label>
-                  <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} placeholder="john@example.com" required className="bg-luxury-charcoal border-luxury-khaki/20 text-white focus:border-luxury-gold focus:ring-luxury-gold/50" />
+                  <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} placeholder="john@example.com" required className="bg-luxury-charcoal border-white/20 text-white focus:border-luxury-gold focus:ring-luxury-gold/50" />
                 </div>
                 
                 <div>
                   <label htmlFor="phone" className="block mb-2 text-sm font-medium text-white">Phone Number</label>
-                  <Input id="phone" name="phone" value={formData.phone} onChange={handleChange} placeholder="(555) 123-4567" className="bg-luxury-charcoal border-luxury-khaki/20 text-white focus:border-luxury-gold focus:ring-luxury-gold/50" />
+                  <Input id="phone" name="phone" value={formData.phone} onChange={handleChange} placeholder="(555) 123-4567" className="bg-luxury-charcoal border-white/20 text-white focus:border-luxury-gold focus:ring-luxury-gold/50" />
                 </div>
                 
                 <div>
                   <label htmlFor="message" className="block mb-2 text-sm font-medium text-white">Your Message</label>
-                  <Textarea id="message" name="message" value={formData.message} onChange={handleChange} placeholder="I'm interested in commercial property in downtown Abilene..." rows={4} required className="bg-luxury-charcoal border-luxury-khaki/20 text-white focus:border-luxury-gold focus:ring-luxury-gold/50" />
+                  <Textarea id="message" name="message" value={formData.message} onChange={handleChange} placeholder="I'm interested in commercial property in downtown Abilene..." rows={4} required className="bg-luxury-charcoal border-white/20 text-white focus:border-luxury-gold focus:ring-luxury-gold/50" />
                 </div>
                 
-                <div className="text-sm text-luxury-khaki mt-2 mb-4">
+                <div className="text-sm text-white mt-2 mb-4">
                   By submitting, you agree to our <Link to="/privacy-policy" className="text-luxury-gold hover:underline">Privacy Policy</Link>.
                 </div>
                 

@@ -95,7 +95,7 @@ const Navbar = () => {
               <a href="#contact" onClick={e => handleScrollToSection(e, 'contact')} className="text-white hover:text-luxury-gold font-medium transition-colors uppercase text-xs tracking-wider hover-underline-grow drop-shadow-md">
                 Contact
               </a>
-              <Button className="bg-luxury-gold hover:bg-luxury-khaki text-luxury-black flex items-center gap-2 rounded-sm hover-scale group text-xs py-1 h-8">
+              <Button variant="blue" className="text-white flex items-center gap-2 rounded-sm hover-scale group text-xs py-1 h-8">
                 <Phone className="h-3 w-3 group-hover:rotate-12 transition-transform" />
                 <span>Call Josh</span>
               </Button>
@@ -144,7 +144,7 @@ const Navbar = () => {
             <a href="#contact" onClick={e => handleScrollToSection(e, 'contact')} className="text-white font-medium py-2 uppercase text-xs tracking-wider hover:pl-2 hover:text-luxury-gold transition-all">
               Contact
             </a>
-            <Button className="bg-luxury-gold hover:bg-luxury-khaki text-luxury-black flex items-center justify-center gap-2 mt-2 rounded-sm hover-scale group text-xs py-1 h-8">
+            <Button variant="blue" className="text-white flex items-center justify-center gap-2 mt-2 rounded-sm hover-scale group text-xs py-1 h-8">
               <Phone className="h-3 w-3 group-hover:rotate-12 transition-transform" />
               <span>Call Josh</span>
             </Button>

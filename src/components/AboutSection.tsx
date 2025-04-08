@@ -38,11 +38,11 @@ const AboutSection = () => {
           transform: `translateY(${(scrollY - 1800) * 0.03}px)`
         }}>
             <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">Who is Josh Rader?</h2>
-            <p className="text-lg mb-6 text-white/80 leading-relaxed">
+            <p className="text-lg mb-6 text-white leading-relaxed">
               Josh Rader is an experienced, licensed Texas real estate agent specializing in commercial properties across Abilene and surrounding areas.
             </p>
             
-            <div className="mb-6 text-white/80 space-y-4">
+            <div className="mb-6 text-white space-y-4">
               <p className="leading-relaxed">
                 As a multi-business owner (Bodegish, Firehouse Fitness, and others), he deeply understands commercial spaces and helps investors and businesses strategically select and maximize their properties.
               </p>
