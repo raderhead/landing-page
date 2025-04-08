@@ -196,8 +196,8 @@ const PropertiesSection = () => {
               <div className="mt-8 text-center">
                 <Link to="/properties">
                   <Button 
-                    variant="outline" 
-                    className="border-[#1E5799] bg-transparent text-[#1E5799] hover:bg-[#1E5799] hover:text-white transition-all duration-300 group"
+                    variant="outlineWhite" 
+                    className="border-[#1E5799] text-white hover:bg-[#1E5799] hover:border-[#1E5799] transition-all duration-300 group"
                   >
                     <span>View All Properties</span>
                     <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -213,8 +213,8 @@ const PropertiesSection = () => {
                 Use the Webhook Tester to send property data to populate this section.
               </p>
               <Button 
-                variant="outline" 
-                className="border-[#1E5799] text-[#1E5799] hover:bg-[#1E5799] hover:text-white"
+                variant="outlineWhite" 
+                className="border-[#1E5799] text-white hover:bg-[#1E5799] hover:border-[#1E5799]"
                 onClick={() => window.location.href = '/webhooks'}
               >
                 Go to Webhook Tester

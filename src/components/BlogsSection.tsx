@@ -47,11 +47,13 @@ const BlogsSection = () => {
     <section id="blogs" className="section bg-white">
       <div className="container">
         <div className="mb-12 text-center">
-          <Badge variant="outline" className="border-luxury-gold text-luxury-gold px-4 py-1 text-sm mb-4 font-sans">
+          <Badge variant="outline" className="border-[#1E5799] text-[#1E5799] px-4 py-1 text-sm mb-4 font-sans">
             INSIGHTS
           </Badge>
-          <h2 className="section-title mb-4 font-sans">Latest from the <span className="font-serif text-luxury-gold">Blog</span></h2>
-          <p className="text-luxury-gray max-w-2xl mx-auto font-sans">
+          <h2 className="section-title mb-4 font-sans">
+            <span className="text-black">Latest from the</span> <span className="font-serif text-[#1E5799]">Blog</span>
+          </h2>
+          <p className="text-black max-w-2xl mx-auto font-sans">
             Stay informed with the latest insights, trends, and opportunities in Abilene's commercial real estate market.
           </p>
         </div>

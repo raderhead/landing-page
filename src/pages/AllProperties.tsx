@@ -174,41 +174,41 @@ const AllProperties = () => {
             
             <div className="flex flex-wrap gap-2">
               <Button 
-                variant="outline" 
+                variant={propertyType === 'All' ? 'blue' : 'outlineWhite'} 
                 size="sm"
-                className={`rounded-full px-3 py-0 border-white/30 ${propertyType === 'All' ? 'bg-[#1E5799] text-white border-[#1E5799]' : 'text-white hover:border-[#1E5799] hover:text-[#1E5799]'}`}
+                className={`rounded-full px-3 py-0 ${propertyType === 'All' ? '' : 'hover:text-white hover:bg-[#1E5799] hover:border-[#1E5799]'}`}
                 onClick={() => setPropertyType("All")}
               >
                 All
               </Button>
               <Button 
-                variant="outline"
+                variant={propertyType === 'Office' ? 'blue' : 'outlineWhite'}
                 size="sm"
-                className={`rounded-full px-3 py-0 border-white/30 ${propertyType === 'Office' ? 'bg-[#1E5799] text-white border-[#1E5799]' : 'text-white hover:border-[#1E5799] hover:text-[#1E5799]'}`}
+                className={`rounded-full px-3 py-0 ${propertyType === 'Office' ? '' : 'hover:text-white hover:bg-[#1E5799] hover:border-[#1E5799]'}`}
                 onClick={() => setPropertyType("Office")}
               >
                 Office
               </Button>
               <Button 
-                variant="outline"
+                variant={propertyType === 'Retail' ? 'blue' : 'outlineWhite'}
                 size="sm"
-                className={`rounded-full px-3 py-0 border-white/30 ${propertyType === 'Retail' ? 'bg-[#1E5799] text-white border-[#1E5799]' : 'text-white hover:border-[#1E5799] hover:text-[#1E5799]'}`}
+                className={`rounded-full px-3 py-0 ${propertyType === 'Retail' ? '' : 'hover:text-white hover:bg-[#1E5799] hover:border-[#1E5799]'}`}
                 onClick={() => setPropertyType("Retail")}
               >
                 Retail
               </Button>
               <Button 
-                variant="outline"
+                variant={propertyType === 'Industrial' ? 'blue' : 'outlineWhite'}
                 size="sm"
-                className={`rounded-full px-3 py-0 border-white/30 ${propertyType === 'Industrial' ? 'bg-[#1E5799] text-white border-[#1E5799]' : 'text-white hover:border-[#1E5799] hover:text-[#1E5799]'}`}
+                className={`rounded-full px-3 py-0 ${propertyType === 'Industrial' ? '' : 'hover:text-white hover:bg-[#1E5799] hover:border-[#1E5799]'}`}
                 onClick={() => setPropertyType("Industrial")}
               >
                 Industrial
               </Button>
               <Button 
-                variant="outline"
+                variant={propertyType === 'Other' ? 'blue' : 'outlineWhite'}
                 size="sm"
-                className={`rounded-full px-3 py-0 border-white/30 ${propertyType === 'Other' ? 'bg-[#1E5799] text-white border-[#1E5799]' : 'text-white hover:border-[#1E5799] hover:text-[#1E5799]'}`}
+                className={`rounded-full px-3 py-0 ${propertyType === 'Other' ? '' : 'hover:text-white hover:bg-[#1E5799] hover:border-[#1E5799]'}`}
                 onClick={() => setPropertyType("Other")}
               >
                 Other
@@ -418,8 +418,8 @@ const AllProperties = () => {
             <h3 className="text-xl font-bold text-[#1E5799] mb-2">No properties found</h3>
             <p className="text-white mb-4">Try adjusting your search criteria or browse all properties.</p>
             <Button 
-              variant="outline" 
-              className="border-[#1E5799] text-[#1E5799] hover:bg-[#1E5799] hover:text-white rounded-sm"
+              variant="outlineWhite" 
+              className="border-[#1E5799] text-white hover:bg-[#1E5799] hover:text-white rounded-sm"
               onClick={() => {
                 setSearchTerm("");
                 setPropertyType("All");
