@@ -65,7 +65,7 @@
   }
   
   .luxury-card {
-    @apply bg-white rounded-md border border-luxury-khaki/20 shadow-sm hover:shadow-md transition-shadow duration-300;
+    @apply bg-white rounded-md border border-white/20 shadow-sm hover:shadow-md transition-shadow duration-300;
   }
   
   .luxury-button {
@@ -135,7 +135,7 @@
   }
   
   .admin-card-enhanced {
-    @apply bg-white rounded-lg border border-luxury-khaki/20 shadow-sm hover:shadow-md transition-all;
+    @apply bg-white rounded-lg border border-white/20 shadow-sm hover:shadow-md transition-all;
   }
   
   .admin-section-title {
