@@ -228,33 +228,6 @@ const Blog = () => {
             )}
           </div>
         </section>
-
-        {/* Newsletter */}
-        <section className="bg-luxury-dark py-16 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-luxury-black/95 to-luxury-charcoal/90 z-0"></div>
-          <div className="absolute inset-0 opacity-10">
-            <img 
-              src="https://images.unsplash.com/photo-1560520031-3a4dc4e9de0c?ixlib=rb-1.2.1&auto=format&fit=crop&q=80" 
-              alt="Newsletter Background" 
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div className="container relative z-10">
-            <div className="max-w-2xl mx-auto text-center">
-              <Book className="h-10 w-10 text-luxury-gold mx-auto mb-4" />
-              <h2 className="text-3xl font-bold text-white mb-4">Subscribe to Our Newsletter</h2>
-              <p className="text-white/80 mb-6">
-                Get the latest commercial real estate insights, market trends, and investment opportunities delivered to your inbox.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-                <Input placeholder="Your email address" className="bg-white/10 border-white/20 text-white placeholder:text-white/60" />
-                <Button className="bg-luxury-gold hover:bg-luxury-khaki text-luxury-black transition-all duration-300 hover:scale-105">
-                  Subscribe
-                </Button>
-              </div>
-            </div>
-          </div>
-        </section>
       </main>
 
       <Footer />
