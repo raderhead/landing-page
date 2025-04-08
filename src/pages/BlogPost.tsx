@@ -9,18 +9,17 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
 import { BlogPost as BlogPostType, BlogContentBlock } from '@/types/blog';
 import { cn } from '@/lib/utils';
+
 const BlogPost = () => {
-  const {
-    id
-  } = useParams<{
-    id: string;
-  }>();
+  const { id } = useParams<{ id: string; }>();
   const [post, setPost] = useState<BlogPostType | null>(null);
   const [relatedPosts, setRelatedPosts] = useState<BlogPostType[]>([]);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     fetchBlogPost();
   }, [id]);
+
   const fetchBlogPost = async () => {
     try {
       setLoading(true);
@@ -56,6 +55,7 @@ const BlogPost = () => {
       setLoading(false);
     }
   };
+
   const generateShareUrls = () => {
     if (!post) return {
       twitter: '',
@@ -71,6 +71,7 @@ const BlogPost = () => {
       linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${url}`
     };
   };
+
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href).then(() => {
       toast({
@@ -85,6 +86,7 @@ const BlogPost = () => {
       });
     });
   };
+
   const renderFormattedContent = () => {
     if (!post) return null;
     if (post.formattedContent && post.formattedContent.length > 0) {
@@ -142,6 +144,7 @@ const BlogPost = () => {
       __html: post.content
     }} />;
   };
+
   if (loading) {
     return <div className="min-h-screen">
         <Navbar />
@@ -153,6 +156,7 @@ const BlogPost = () => {
         <Footer />
       </div>;
   }
+
   if (!post) {
     return <div className="min-h-screen">
         <Navbar />
@@ -168,7 +172,9 @@ const BlogPost = () => {
         <Footer />
       </div>;
   }
+
   const shareUrls = generateShareUrls();
+
   return <div className="min-h-screen">
       <Navbar />
       <main>
@@ -187,7 +193,7 @@ const BlogPost = () => {
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-4">{post?.title}</h1>
               <div className="flex items-center text-sm text-luxury-khaki gap-6">
                 <div className="flex items-center gap-1">
-                  <Calendar size={16} />
+                  <Calendar size={16} className="text-[#1E5799]" />
                   <span>{post && new Date(post.created_at).toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: 'long',
@@ -195,11 +201,11 @@ const BlogPost = () => {
                   })}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <User size={16} />
+                  <User size={16} className="text-[#1E5799]" />
                   <span>Josh Rader</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Clock size={16} />
+                  <Clock size={16} className="text-[#1E5799]" />
                   <span>{post ? Math.ceil(post.content.length / 1000) : 0} min read</span>
                 </div>
               </div>
@@ -217,16 +223,16 @@ const BlogPost = () => {
               <div className="flex items-center justify-between p-6 luxury-card">
                 <div className="text-luxury-slate font-medium">Share this article:</div>
                 <div className="flex gap-3">
-                  <Button size="sm" variant="outline" className="rounded-full w-10 h-10 p-0 flex items-center justify-center border-luxury-khaki/30 hover:border-luxury-gold hover:bg-luxury-gold/10 transition-colors" onClick={() => window.open(shareUrls.twitter, '_blank')} title="Share on Twitter">
+                  <Button size="sm" variant="outline" className="rounded-full w-10 h-10 p-0 flex items-center justify-center border-luxury-khaki/30 hover:border-[#1E5799] hover:bg-[#1E5799]/10 transition-colors" onClick={() => window.open(shareUrls.twitter, '_blank')} title="Share on Twitter">
                     <Twitter size={18} className="text-luxury-slate" />
                   </Button>
-                  <Button size="sm" variant="outline" className="rounded-full w-10 h-10 p-0 flex items-center justify-center border-luxury-khaki/30 hover:border-luxury-gold hover:bg-luxury-gold/10 transition-colors" onClick={() => window.open(shareUrls.facebook, '_blank')} title="Share on Facebook">
+                  <Button size="sm" variant="outline" className="rounded-full w-10 h-10 p-0 flex items-center justify-center border-luxury-khaki/30 hover:border-[#1E5799] hover:bg-[#1E5799]/10 transition-colors" onClick={() => window.open(shareUrls.facebook, '_blank')} title="Share on Facebook">
                     <Facebook size={18} className="text-luxury-slate" />
                   </Button>
-                  <Button size="sm" variant="outline" className="rounded-full w-10 h-10 p-0 flex items-center justify-center border-luxury-khaki/30 hover:border-luxury-gold hover:bg-luxury-gold/10 transition-colors" onClick={() => window.open(shareUrls.linkedin, '_blank')} title="Share on LinkedIn">
+                  <Button size="sm" variant="outline" className="rounded-full w-10 h-10 p-0 flex items-center justify-center border-luxury-khaki/30 hover:border-[#1E5799] hover:bg-[#1E5799]/10 transition-colors" onClick={() => window.open(shareUrls.linkedin, '_blank')} title="Share on LinkedIn">
                     <Linkedin size={18} className="text-luxury-slate" />
                   </Button>
-                  <Button size="sm" variant="outline" className="rounded-full w-10 h-10 p-0 flex items-center justify-center border-luxury-khaki/30 hover:border-luxury-gold hover:bg-luxury-gold/10 transition-colors" onClick={handleCopyLink} title="Copy link to clipboard">
+                  <Button size="sm" variant="outline" className="rounded-full w-10 h-10 p-0 flex items-center justify-center border-luxury-khaki/30 hover:border-[#1E5799] hover:bg-[#1E5799]/10 transition-colors" onClick={handleCopyLink} title="Copy link to clipboard">
                     <Share2 size={18} className="text-luxury-slate" />
                   </Button>
                 </div>
@@ -237,7 +243,7 @@ const BlogPost = () => {
               <div className="luxury-card p-6 mb-8 sticky top-24">
                 <h3 className="text-xl font-bold mb-4 text-luxury-black">About the Author</h3>
                 <div className="flex items-center gap-4 mb-4">
-                  <img alt="Josh Rader" className="w-16 h-16 rounded-full object-cover border-2 border-luxury-gold" src="/lovable-uploads/a53fd21d-337c-4f2f-90fa-0ca367f3804e.png" />
+                  <img alt="Josh Rader" className="w-16 h-16 rounded-full object-cover border-2 border-[#1E5799]" src="/lovable-uploads/a53fd21d-337c-4f2f-90fa-0ca367f3804e.png" />
                   <div>
                     <h4 className="font-semibold text-luxury-black">Josh Rader</h4>
                     <p className="text-sm text-luxury-gray">Commercial Real Estate Agent</p>
@@ -258,7 +264,7 @@ const BlogPost = () => {
             <div className="container">
               <h3 className="text-2xl font-bold mb-8 text-luxury-black">Continue Reading</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {relatedPosts.map(relatedPost => <Link key={relatedPost.id} to={`/blog/${relatedPost.id}`} className="group block luxury-card overflow-hidden hover-lift transition-all duration-300 border-luxury-khaki/20 hover:border-luxury-gold/40">
+                {relatedPosts.map(relatedPost => <Link key={relatedPost.id} to={`/blog/${relatedPost.id}`} className="group block luxury-card overflow-hidden hover-lift transition-all duration-300 border-luxury-khaki/20 hover:border-[#1E5799]/40">
                     <div className="relative h-48 overflow-hidden">
                       <img src={relatedPost.image_url || "https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-1.2.1&auto=format&fit=crop&q=80"} alt={relatedPost.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                       <div className="absolute top-4 left-4">
@@ -269,14 +275,14 @@ const BlogPost = () => {
                     </div>
                     <div className="p-4">
                       <p className="text-sm text-luxury-gray flex items-center gap-1">
-                        <Calendar size={12} className="text-luxury-gold" />
+                        <Calendar size={12} className="text-[#1E5799]" />
                         {new Date(relatedPost.created_at).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        })}
                       </p>
-                      <h3 className="font-semibold mt-1 group-hover:text-luxury-gold transition-colors">
+                      <h3 className="font-semibold mt-1 group-hover:text-[#1E5799] transition-colors">
                         {relatedPost.title}
                       </h3>
                     </div>
@@ -288,4 +294,5 @@ const BlogPost = () => {
       <Footer />
     </div>;
 };
+
 export default BlogPost;

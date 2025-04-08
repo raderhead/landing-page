@@ -69,7 +69,7 @@ const BlogsSection = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
             {blogs.map((blog) => (
-              <div key={blog.id} className="luxury-card overflow-hidden group hover-lift transition-all duration-300 border-luxury-khaki/20 hover:border-luxury-gold/40">
+              <div key={blog.id} className="luxury-card overflow-hidden group hover-lift transition-all duration-300 border-luxury-khaki/20 hover:border-[#1E5799]/40">
                 <div className="relative h-52 overflow-hidden">
                   <img 
                     src={blog.image_url || "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-1.2.1&auto=format&fit=crop&q=80"} 
@@ -83,12 +83,12 @@ const BlogsSection = () => {
                   </div>
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-bold mb-3 group-hover:text-luxury-gold transition-colors line-clamp-2 font-sans">
+                  <h3 className="text-xl font-bold mb-3 group-hover:text-[#1E5799] transition-colors line-clamp-2 font-sans">
                     {blog.title}
                   </h3>
                   <div className="flex items-center text-sm text-luxury-slate gap-4 mb-3 font-sans">
                     <div className="flex items-center gap-1">
-                      <Calendar size={14} className="text-luxury-gold" />
+                      <Calendar size={14} className="text-[#1E5799]" />
                       <span>{new Date(blog.created_at).toLocaleDateString('en-US', {
                         year: 'numeric',
                         month: 'long',
@@ -96,7 +96,7 @@ const BlogsSection = () => {
                       })}</span>
                     </div>
                     <div className="flex items-center gap-1">
-                      <Clock size={14} className="text-luxury-gold" />
+                      <Clock size={14} className="text-[#1E5799]" />
                       <span>{Math.ceil((blog.content || "").length / 1000)} min read</span>
                     </div>
                   </div>
