@@ -66,8 +66,8 @@ const HeroSection = () => {
           <div className="flex flex-col sm:flex-row gap-4 mb-24 sm:mb-0 opacity-0 animate-fade-in-delay-3">
             <Button size="lg" variant="default" className="bg-luxury-gold/90 backdrop-blur-sm text-luxury-dark rounded-sm px-6 sm:px-8 
                 hover:bg-luxury-gold hover:text-luxury-dark hover:scale-105 
-                transition-all duration-300 group shadow-[0_0_10px_rgba(212,184,123,0.2)]
-                hover:shadow-[0_0_15px_rgba(212,184,123,0.5)]" asChild>
+                transition-all duration-300 group shadow-[0_0_10px_rgba(30,87,153,0.2)]
+                hover:shadow-[0_0_15px_rgba(30,87,153,0.5)]" asChild>
               <Link to="/properties">
                 <Search className="mr-2 h-5 w-5 group-hover:rotate-12 transition-transform" />
                 Browse Prime Listings
@@ -80,7 +80,7 @@ const HeroSection = () => {
               className="border border-white/10 backdrop-blur-lg rounded-sm px-6 sm:px-8 
                 bg-white/5 text-white hover:bg-white/10 hover:text-luxury-gold 
                 hover:scale-105 transition-all duration-300 group
-                hover:shadow-[0_0_15px_rgba(212,184,123,0.3)]"
+                hover:shadow-[0_0_15px_rgba(30,87,153,0.3)]"
             >
               <Phone className="mr-2 h-5 w-5 group-hover:rotate-12 transition-transform text-luxury-gold" />
               Book Your Strategy Call
