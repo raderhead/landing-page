@@ -105,7 +105,7 @@ const BlogsSection = () => {
                   </div>
                   <Link 
                     to={`/blog/${blog.id}`} 
-                    className="text-luxury-gold hover:text-[#1E5799] transition-colors flex items-center gap-1 font-medium group-hover:font-semibold hover-underline-grow font-sans"
+                    className="text-[#1E5799] hover:text-[#1E5799] transition-colors flex items-center gap-1 font-medium group-hover:font-semibold hover-underline-grow font-sans"
                   >
                     Read more <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
                   </Link>
@@ -118,7 +118,7 @@ const BlogsSection = () => {
         <div className="text-center">
           <Button 
             variant="outline" 
-            className="border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-black transition-all duration-300 rounded-sm hover:scale-105 font-sans"
+            className="border-[#1E5799] text-[#1E5799] hover:bg-[#1E5799] hover:text-white transition-all duration-300 rounded-sm hover:scale-105 font-sans"
             asChild
           >
             <Link to="/blog" className="flex items-center gap-2">

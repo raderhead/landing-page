@@ -1,3 +1,4 @@
+
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Clock, Calendar, User, Share2, Twitter, Facebook, Linkedin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -191,7 +192,7 @@ const BlogPost = () => {
               </Button>
               
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-4">{post?.title}</h1>
-              <div className="flex items-center text-sm text-luxury-khaki gap-6">
+              <div className="flex items-center text-sm text-white gap-6">
                 <div className="flex items-center gap-1">
                   <Calendar size={16} className="text-[#1E5799]" />
                   <span>{post && new Date(post.created_at).toLocaleDateString('en-US', {
