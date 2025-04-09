@@ -11,11 +11,6 @@ const testimonials = [{
   name: "Landon Couch",
   title: "Real Estate Investor",
   image: "/lovable-uploads/331f0b08-b598-4594-80fd-793c91cafd82.png"
-}, {
-  quote: "With Josh's guidance, we were able to successfully transition our business and property, securing the equity we had built over the years. His expertise and integrity made the entire process feel seamless and rewarding.",
-  name: "J & Lorraine Wilson",
-  title: "Property Owners",
-  image: "/lovable-uploads/5d165228-18d1-4470-8883-c28d37702b66.png"
 }];
 
 const TestimonialsSection = () => {
@@ -28,7 +23,7 @@ const TestimonialsSection = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {testimonials.map((testimonial, index) => <div key={index} className="bg-luxury-dark p-8 rounded-md shadow-md relative border border-white/10">
               <Quote className="h-12 w-12 text-luxury-gold/20 absolute top-6 right-6" />
               <p className="text-white mb-8 relative z-10 leading-relaxed font-sans">"{testimonial.quote}"</p>
