@@ -35,7 +35,7 @@ const HeroSection = () => {
   
   return <section 
     ref={sectionRef} 
-    className="relative flex items-center overflow-hidden min-h-[calc(100vh-4rem)] md:min-h-screen pt-24 pb-64 md:pt-32 md:pb-52"
+    className="relative flex items-center overflow-hidden min-h-[calc(100vh-4rem)] md:min-h-screen pt-24 pb-80 md:pb-80 lg:pb-52 md:pt-32"
   >
       {/* Background Image with Parallax Effect */}
       <div className="absolute inset-0 z-0">
@@ -68,7 +68,7 @@ const HeroSection = () => {
             Josh Rader is a licensed commercial real estate agent specializing in helping businesses and investors find premium locations in Abilene.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 mb-44 sm:mb-0 opacity-0 animate-fade-in-delay-3">
+          <div className="flex flex-col sm:flex-row gap-4 mb-52 md:mb-32 lg:mb-0 opacity-0 animate-fade-in-delay-3">
             <Button size="lg" variant="default" className="bg-luxury-gold/90 backdrop-blur-sm text-luxury-dark rounded-sm px-6 sm:px-8 
                 hover:bg-luxury-gold hover:text-luxury-dark hover:scale-105 
                 transition-all duration-300 group shadow-[0_0_10px_rgba(212,184,123,0.2)]
