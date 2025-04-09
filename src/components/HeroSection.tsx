@@ -3,10 +3,12 @@ import { useEffect, useState, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, Phone, Search } from "lucide-react";
 import { Link } from 'react-router-dom';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const HeroSection = () => {
   const [scrollY, setScrollY] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
+  const isMobile = useIsMobile();
   
   useEffect(() => {
     const handleScroll = () => {
@@ -31,7 +33,10 @@ const HeroSection = () => {
     }
   };
   
-  return <section ref={sectionRef} className="relative flex items-center overflow-hidden min-h-[calc(100vh-4rem)] md:min-h-screen pt-20 md:pt-32 pb-40 md:pb-52">
+  return <section 
+    ref={sectionRef} 
+    className="relative flex items-center overflow-hidden min-h-[calc(100vh-4rem)] md:min-h-screen pt-16 pb-32 md:pt-32 md:pb-52"
+  >
       {/* Background Image with Parallax Effect */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-r from-luxury-black/95 to-luxury-charcoal/90 z-10" style={{
@@ -63,7 +68,7 @@ const HeroSection = () => {
             Josh Rader is a licensed commercial real estate agent specializing in helping businesses and investors find premium locations in Abilene.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 mb-16 sm:mb-0 opacity-0 animate-fade-in-delay-3">
+          <div className="flex flex-col sm:flex-row gap-4 mb-12 sm:mb-0 opacity-0 animate-fade-in-delay-3">
             <Button size="lg" variant="default" className="bg-luxury-gold/90 backdrop-blur-sm text-luxury-dark rounded-sm px-6 sm:px-8 
                 hover:bg-luxury-gold hover:text-luxury-dark hover:scale-105 
                 transition-all duration-300 group shadow-[0_0_10px_rgba(212,184,123,0.2)]
@@ -90,7 +95,7 @@ const HeroSection = () => {
       </div>
       
       {/* Stats banner - Moved from absolute positioning to normal flow at the bottom of the section */}
-      <div className="bg-luxury-dark/80 backdrop-blur-lg py-6 sm:py-8 z-20 border-t border-white/20 w-full absolute bottom-0 left-0 right-0">
+      <div className={`bg-luxury-dark/80 backdrop-blur-lg py-6 sm:py-8 z-20 border-t border-white/20 w-full absolute ${isMobile ? 'bottom-0' : 'bottom-0'} left-0 right-0`}>
         <div className="container grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8">
           <div className="text-center hover-lift p-2 sm:p-4">
             <p className="text-2xl sm:text-3xl font-bold text-luxury-gold font-serif">10+ Years</p>
