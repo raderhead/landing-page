@@ -4,7 +4,7 @@ import { Quote } from "lucide-react";
 const testimonials = [{
   quote: "Working with Josh made transaction a breeze. The entire process was smooth, efficient, and handled with excellence from start to finish.",
   name: "Tim Smith",
-  title: "Owner, Abilene Boutique",
+  title: "Business Owner",
   image: "/lovable-uploads/44b186ce-f8a4-4d10-b914-71efca66716a.png"
 }, {
   quote: "As an investor and builder to commercial real estate, Josh has helped me find tenants for my properties!",
