@@ -1,5 +1,4 @@
-
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Menu, X, Phone, BookText, User } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -68,7 +67,7 @@ const Navbar = () => {
             <img 
               src="/lovable-uploads/8e0f7a87-fcde-45bb-840a-20ba1452adde.png" 
               alt="Josh Rader" 
-              className="h-20 w-auto group-hover:scale-110 transition-transform drop-shadow-md"
+              className="h-14 w-auto group-hover:scale-110 transition-transform drop-shadow-md"
             />
           </a>
           
