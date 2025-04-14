@@ -21,7 +21,6 @@ const AboutSection = () => {
   }, []);
 
   return <section id="about" ref={sectionRef} className="section bg-luxury-black text-white relative overflow-hidden py-0">
-      {/* Subtle Parallax Background Elements */}
       <div className="absolute top-0 left-1/4 w-32 h-32 rounded-full bg-luxury-gold/5 parallax-layer" style={{
       transform: `translateY(${scrollY * 0.03}px)`
     }}>
@@ -72,7 +71,7 @@ const AboutSection = () => {
             <div className="flex flex-wrap gap-4 mb-8">
               <div className="flex items-center bg-luxury-charcoal px-4 py-2 rounded-sm hover-lift hover:bg-luxury-charcoal/70 group">
                 <Award className="h-5 w-5 text-luxury-gold mr-2 group-hover:rotate-12 transition-transform" />
-                <span className="group-hover:text-luxury-gold transition-colors">Abilene's Top 20 Under 40 2016</span>
+                <span className="group-hover:text-luxury-gold transition-colors">Abilene's Top 20 Under 40 | Class of 2016</span>
               </div>
               <div className="flex items-center bg-luxury-charcoal px-4 py-2 rounded-sm hover-lift hover:bg-luxury-charcoal/70 group">
                 <Briefcase className="h-5 w-5 text-luxury-gold mr-2 group-hover:rotate-12 transition-transform" />
