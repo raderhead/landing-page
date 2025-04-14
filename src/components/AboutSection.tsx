@@ -44,9 +44,6 @@ const AboutSection = () => {
               <p className="leading-relaxed">
                 As a multi-business owner (Bodegish, Firehouse Fitness, and others), he deeply understands commercial spaces and helps investors and businesses strategically select and maximize their properties.
               </p>
-              <p className="leading-relaxed">
-                Recognized as a Top Producer (2022) with 100+ successful transactions, Josh offers expert guidance to lease, buy, or invest in Abilene's thriving commercial market.
-              </p>
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
