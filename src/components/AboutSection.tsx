@@ -7,6 +7,13 @@ const AboutSection = () => {
   const [scrollY, setScrollY] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
 
+  const scrollToContact = () => {
+    const contactForm = document.querySelector('#contact form');
+    if (contactForm) {
+      contactForm.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       if (sectionRef.current) {
@@ -116,7 +123,10 @@ const AboutSection = () => {
               </div>
             </div>
             
-            <Button className="bg-luxury-gold hover:bg-luxury-khaki text-luxury-black border-none rounded-sm hover-scale group">
+            <Button 
+              onClick={scrollToContact}
+              className="bg-luxury-gold hover:bg-luxury-khaki text-luxury-black border-none rounded-sm hover-scale group"
+            >
               Contact Josh Today
             </Button>
           </div>
